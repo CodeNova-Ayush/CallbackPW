@@ -72,33 +72,33 @@ export const ThreeAgentCanvas: React.FC<ThreeAgentCanvasProps> = ({
       return { group, wireframeMat, coreMat };
     };
 
-    // Structure 1: Top-Right Vibrant Icosahedron
+    // Structure 1: Top-Right Vibrant Icosahedron (FlowCV Coral)
     const geo1 = new THREE.IcosahedronGeometry(9, 1);
-    const struct1 = createStructure(geo1, '#048BA2', 1.1);
+    const struct1 = createStructure(geo1, '#FF4B5E', 1.1);
     struct1.group.position.set(32, 18, -8);
     scene.add(struct1.group);
 
-    // Structure 2: Bottom-Left Dynamic Octahedron
+    // Structure 2: Bottom-Left Dynamic Octahedron (FlowCV Obsidian)
     const geo2 = new THREE.OctahedronGeometry(11, 0);
-    const struct2 = createStructure(geo2, '#00A8C6', 1.05);
+    const struct2 = createStructure(geo2, '#1C152E', 1.05);
     struct2.group.position.set(-32, -16, -10);
     scene.add(struct2.group);
 
-    // Structure 3: Bottom-Right Geodesic Dodecahedron
+    // Structure 3: Bottom-Right Geodesic Dodecahedron (FlowCV Deep Midnight)
     const geo3 = new THREE.DodecahedronGeometry(8, 0);
-    const struct3 = createStructure(geo3, '#027A8F', 1.0);
+    const struct3 = createStructure(geo3, '#2B1F45', 1.0);
     struct3.group.position.set(28, -14, -6);
     scene.add(struct3.group);
 
-    // Structure 4: Top-Left Sleek Torus Ring
+    // Structure 4: Top-Left Sleek Torus Ring (FlowCV Coral Accent)
     const geo4 = new THREE.TorusGeometry(8, 1.8, 8, 24);
-    const struct4 = createStructure(geo4, '#007083', 0.95);
+    const struct4 = createStructure(geo4, '#FF4B5E', 0.95);
     struct4.group.position.set(-34, 18, -8);
     scene.add(struct4.group);
 
-    // Structure 5: Center-Floating Ambient Polyhedron
+    // Structure 5: Center-Floating Ambient Polyhedron (FlowCV Obsidian)
     const geo5 = new THREE.TetrahedronGeometry(9, 1);
-    const struct5 = createStructure(geo5, '#048BA2', 0.9);
+    const struct5 = createStructure(geo5, '#1C152E', 0.9);
     struct5.group.position.set(0, 2, -14);
     scene.add(struct5.group);
 

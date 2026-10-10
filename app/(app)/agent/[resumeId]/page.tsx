@@ -504,7 +504,7 @@ export default function AgentPage() {
           {/* Candidate Card */}
           <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-xs flex flex-col gap-4 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#048BA2] text-white flex items-center justify-center font-black text-base shadow-xs shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#1C152E] text-white flex items-center justify-center font-black text-base shadow-xs shrink-0">
                 {candidateName.charAt(0)}
               </div>
               <div className="flex flex-col truncate">
@@ -546,7 +546,7 @@ export default function AgentPage() {
                       }
                       router.push(`/agent/${selectedId}`);
                     }}
-                    className="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 focus:outline-none focus:border-[#048BA2] cursor-pointer appearance-none pr-8"
+                    className="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 focus:outline-none focus:border-[#1C152E] cursor-pointer appearance-none pr-8"
                   >
                     {allResumes
                       .filter((r) => (allResumes.length > 1 ? r.id !== 'demo-resume-alex-1' : true))
@@ -563,9 +563,9 @@ export default function AgentPage() {
 
             {/* Trust Metrics Pill Matrix */}
             <div className="grid grid-cols-2 gap-2">
-              <div className="bg-[#E6F5F8] border border-[#048BA2]/25 rounded-2xl p-2.5 flex flex-col">
-                <span className="text-[9px] font-extrabold text-[#048BA2] uppercase">ATS Grounding</span>
-                <span className="text-base font-black text-[#048BA2]">{atsScore}%</span>
+              <div className="bg-[#FFF0F3] border border-[#FFCCD5] rounded-2xl p-2.5 flex flex-col">
+                <span className="text-[9px] font-extrabold text-[#FF4B5E] uppercase">ATS Grounding</span>
+                <span className="text-base font-black text-[#FF4B5E]">{atsScore}%</span>
                 <span className="text-[9px] text-slate-500">Anti-Hallucination</span>
               </div>
               <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-2.5 flex flex-col">
@@ -580,26 +580,26 @@ export default function AgentPage() {
           <button
             type="button"
             onClick={() => setIsUploadModalOpen(true)}
-            className="bg-white border border-slate-200 hover:border-[#048BA2] rounded-2xl p-3.5 flex items-center justify-between gap-3 cursor-pointer group transition-all shadow-xs shrink-0"
+            className="bg-white border border-slate-200 hover:border-[#1C152E] rounded-2xl p-3.5 flex items-center justify-between gap-3 cursor-pointer group transition-all shadow-xs shrink-0"
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#E6F5F8] text-[#048BA2] flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
                 <FileUp className="w-4 h-4" />
               </div>
               <div className="flex flex-col text-left">
-                <span className="text-xs font-black text-slate-900 group-hover:text-[#048BA2] transition-colors">
+                <span className="text-xs font-black text-slate-900 group-hover:text-[#FF4B5E] transition-colors">
                   Upload Resume from PC
                 </span>
                 <span className="text-[10px] text-slate-500">PDF, DOCX, TXT to chat</span>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-[#048BA2] group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-[#FF4B5E] group-hover:translate-x-0.5 transition-transform" />
           </button>
 
           {/* Categorized Suggested Prompt Library */}
           <div className="flex-1 bg-white border border-slate-200 rounded-3xl p-4 shadow-xs overflow-y-auto flex flex-col gap-3.5">
             <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#048BA2]" /> Question Library
+              <Sparkles className="w-3.5 h-3.5 text-[#FF4B5E]" /> Question Library
             </span>
 
             {promptCategories.map((group, idx) => (
@@ -612,10 +612,10 @@ export default function AgentPage() {
                     <button
                       key={pIdx}
                       onClick={() => handleSendQuestion(p)}
-                      className="text-left text-xs font-semibold text-slate-900 p-2.5 bg-slate-50 hover:bg-[#E6F5F8] border border-slate-200 hover:border-[#048BA2]/40 rounded-xl transition-all flex items-center justify-between group cursor-pointer"
+                      className="text-left text-xs font-semibold text-slate-900 p-2.5 bg-slate-50 hover:bg-[#FFF0F3] border border-slate-200 hover:border-[#FFCCD5] rounded-xl transition-all flex items-center justify-between group cursor-pointer"
                     >
                       <span className="line-clamp-2">{p}</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#048BA2] shrink-0 ml-1" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#FF4B5E] shrink-0 ml-1" />
                     </button>
                   ))}
                 </div>
@@ -634,7 +634,7 @@ export default function AgentPage() {
           {/* Header Bar */}
           <header className="h-16 border-b border-slate-200/80 px-6 flex items-center justify-between bg-white/80 backdrop-blur-md shrink-0 relative z-10">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#048BA2] text-white flex items-center justify-center font-bold shadow-xs">
+              <div className="w-9 h-9 rounded-xl bg-[#1C152E] text-white flex items-center justify-center font-bold shadow-xs">
                 <Bot className="w-4 h-4" />
               </div>
               <div className="flex flex-col">
@@ -683,10 +683,10 @@ export default function AgentPage() {
 
           {/* Docked Modern Command Bar */}
           <div className="p-4 bg-white border-t border-slate-200 shrink-0">
-            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 focus-within:border-[#048BA2] focus-within:bg-white rounded-2xl p-2 transition-all shadow-xs">
+            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 focus-within:border-[#1C152E] focus-within:bg-white rounded-2xl p-2 transition-all shadow-xs">
               <button
                 onClick={() => setIsUploadModalOpen(true)}
-                className="p-2 text-slate-500 hover:text-[#048BA2] hover:bg-white rounded-xl transition-all cursor-pointer"
+                className="p-2 text-slate-500 hover:text-[#FF4B5E] hover:bg-white rounded-xl transition-all cursor-pointer"
                 title="Upload & attach new resume from computer"
               >
                 <Paperclip className="w-4 h-4" />
@@ -759,13 +759,13 @@ export default function AgentPage() {
             onClick={() => fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-2.5 cursor-pointer transition-all ${
               isDragging
-                ? 'border-[#048BA2] bg-[#E6F5F8]'
+                ? 'border-[#1C152E] bg-[#FFF0F3]'
                 : selectedLocalFile
                 ? 'border-emerald-400 bg-emerald-50/50'
-                : 'border-slate-200 hover:border-[#048BA2]/60 bg-slate-50'
+                : 'border-slate-200 hover:border-[#1C152E]/60 bg-slate-50'
             }`}
           >
-            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-[#048BA2] flex items-center justify-center font-bold shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-[#FF4B5E] flex items-center justify-center font-bold shadow-xs">
               <Upload className="w-6 h-6" />
             </div>
 
@@ -797,7 +797,7 @@ export default function AgentPage() {
               placeholder="e.g. Dr. Jane Doe"
               value={customCandidateName}
               onChange={(e) => setCustomCandidateName(e.target.value)}
-              className="w-full px-3.5 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+              className="w-full px-3.5 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
             />
           </div>
 

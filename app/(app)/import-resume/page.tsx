@@ -152,6 +152,8 @@ export default function ImportOldResumePage() {
         if (data.success && data.resumeId) {
           setAnalysisResult(data);
           if (typeof window !== 'undefined' && data.parsedSections) {
+            localStorage.setItem('has_onboarded', 'true');
+            localStorage.setItem('active_resume_id', data.resumeId);
             saveResumeToStore({
               id: data.resumeId,
               title: data.title || `${data.parsedSections.personalInfo?.fullName || 'Candidate'} Resume`,
@@ -211,7 +213,7 @@ export default function ImportOldResumePage() {
                 <button
                   onClick={() => setActiveTab('upload')}
                   className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                    activeTab === 'upload' ? 'bg-[#048BA2] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    activeTab === 'upload' ? 'bg-[#1C152E] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   <Upload className="w-4 h-4" /> Upload File (PDF/DOCX/TXT)
@@ -219,7 +221,7 @@ export default function ImportOldResumePage() {
                 <button
                   onClick={() => setActiveTab('paste')}
                   className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                    activeTab === 'paste' ? 'bg-[#048BA2] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    activeTab === 'paste' ? 'bg-[#1C152E] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   <FileText className="w-4 h-4" /> Paste Raw Text
@@ -234,14 +236,14 @@ export default function ImportOldResumePage() {
               />
 
               {activeTab === 'upload' ? (
-                <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-[#048BA2] rounded-2xl p-10 bg-slate-50/70 transition-colors text-center cursor-pointer relative group">
+                <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-[#1C152E] rounded-2xl p-10 bg-slate-50/70 transition-colors text-center cursor-pointer relative group">
                   <input
                     type="file"
                     accept=".pdf,.docx,.txt"
                     onChange={handleFileUpload}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
-                  <div className="w-12 h-12 rounded-full bg-[#E6F5F8] text-[#048BA2] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-full bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <Upload className="w-6 h-6" />
                   </div>
                   <span className="text-sm font-bold text-slate-900">
@@ -262,7 +264,7 @@ export default function ImportOldResumePage() {
                     value={pastedText}
                     onChange={(e) => setPastedText(e.target.value)}
                     placeholder="Paste full text of your existing resume here..."
-                    className="w-full p-4 text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#048BA2]/20 focus:border-[#048BA2]"
+                    className="w-full p-4 text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1C152E]/15 focus:border-[#1C152E]"
                   />
                 </div>
               )}
@@ -298,7 +300,11 @@ export default function ImportOldResumePage() {
                         });
                       }
                       const data = await res.json();
-                      if (data.resumeId) router.push(`/agent/${data.resumeId}`);
+                      if (data.resumeId) {
+                        localStorage.setItem('has_onboarded', 'true');
+                        localStorage.setItem('active_resume_id', data.resumeId);
+                        router.push(`/builder/${data.resumeId}`);
+                      }
                     } catch (e) {
                       setIsProcessing(false);
                     }
@@ -310,7 +316,7 @@ export default function ImportOldResumePage() {
                 <Button
                   variant="secondary"
                   size="lg"
-                  leftIcon={<Sparkles className="w-5 h-5 text-[#048BA2]" />}
+                  leftIcon={<Sparkles className="w-5 h-5 text-[#FF4B5E]" />}
                   onClick={handleRunATSAudit}
                   className="flex-1"
                 >
@@ -324,7 +330,7 @@ export default function ImportOldResumePage() {
           <div className="flex flex-col gap-5">
             <Card className="p-6 bg-slate-50/80 border border-slate-200 flex flex-col gap-4">
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-[#048BA2]" />
+                <Zap className="w-5 h-5 text-[#FF4B5E]" />
                 <h3 className="text-base font-bold text-slate-900">1-Click Test Drive</h3>
               </div>
               <p className="text-xs text-slate-500">
@@ -336,10 +342,10 @@ export default function ImportOldResumePage() {
                   <div
                     key={sample.id}
                     onClick={() => handleSelectSample(sample)}
-                    className="p-4 bg-white rounded-xl border border-slate-200 hover:border-[#048BA2] cursor-pointer transition-all flex flex-col gap-2 group shadow-2xs"
+                    className="p-4 bg-white rounded-xl border border-slate-200 hover:border-[#1C152E] cursor-pointer transition-all flex flex-col gap-2 group shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-900 group-hover:text-[#048BA2] transition-colors">
+                      <span className="text-xs font-bold text-slate-900 group-hover:text-[#FF4B5E] transition-colors">
                         {sample.title}
                       </span>
                       <Badge variant="aurora" size="sm">{sample.badge}</Badge>
@@ -358,7 +364,7 @@ export default function ImportOldResumePage() {
       {/* Loading & Processing Animation */}
       {isProcessing && (
         <Card className="p-12 bg-white border border-slate-200 flex flex-col items-center justify-center text-center gap-6 min-h-[450px]">
-          <div className="w-16 h-16 rounded-full bg-[#E6F5F8] text-[#048BA2] flex items-center justify-center animate-pulse">
+          <div className="w-16 h-16 rounded-full bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center animate-pulse">
             <RefreshCw className="w-8 h-8 animate-spin" />
           </div>
 
@@ -390,30 +396,30 @@ export default function ImportOldResumePage() {
       {/* Analysis Results & Flagship Features Unlocked */}
       {analysisResult && !isProcessing && (
         <div className="flex flex-col gap-6">
-          {/* Talk with Living Agent Top Callout */}
-          <div className="bg-[#E6F5F8]/40 border-2 border-[#048BA2]/30 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+          {/* Builder Ready Callout */}
+          <div className="bg-[#FFF0F3]/40 border-2 border-[#FFCCD5] rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#048BA2] text-white flex items-center justify-center font-bold shadow-xs shrink-0">
-                <Bot className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#1C152E] text-white flex items-center justify-center font-bold shadow-xs shrink-0">
+                <Layout className="w-6 h-6" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base font-black text-slate-900">Talk with This Candidate's Living Agent Now</h3>
-                  <Badge variant="aurora" size="sm">Zero Hallucination</Badge>
+                  <h3 className="text-base font-black text-slate-900">Your Resume is Parsed & Ready to Build</h3>
+                  <Badge variant="aurora" size="sm">ATS Verified</Badge>
                 </div>
                 <p className="text-xs text-slate-600 mt-0.5">
-                  The LLM has parsed and loaded all work experience, latency metrics, and verified skills into an anti-hallucination conversational agent.
+                  All work experiences, education records, and skills were successfully extracted into your editable builder workspace.
                 </p>
               </div>
             </div>
-            <Link href={analysisResult.flagshipUrls.agentChat}>
+            <Link href={analysisResult.flagshipUrls.builder}>
               <Button
                 variant="primary"
                 size="md"
                 className="whitespace-nowrap shadow-md"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                Open Agent & Start Chatting
+                Open in Resume Builder
               </Button>
             </Link>
           </div>
@@ -440,14 +446,14 @@ export default function ImportOldResumePage() {
 
                 <Card className="p-4 flex flex-col gap-1 bg-white border-slate-200">
                   <span className="text-[10px] font-bold uppercase text-slate-500">Overall Impact</span>
-                  <span className="text-2xl font-extrabold text-[#048BA2]">{analysisResult.overallStrengthScore} / 100</span>
-                  <span className="text-[10px] text-[#048BA2] font-semibold">High metric density</span>
+                  <span className="text-2xl font-extrabold text-[#FF4B5E]">{analysisResult.overallStrengthScore} / 100</span>
+                  <span className="text-[10px] text-[#FF4B5E] font-semibold">High metric density</span>
                 </Card>
 
                 <Card className="p-4 flex flex-col gap-1 bg-white border-slate-200">
                   <span className="text-[10px] font-bold uppercase text-slate-500">Skills Detected</span>
                   <span className="text-2xl font-extrabold text-slate-900">{analysisResult.skillsExtracted.length} Skills</span>
-                  <span className="text-[10px] text-[#048BA2] font-semibold">Added to Skill Graph</span>
+                  <span className="text-[10px] text-[#FF4B5E] font-semibold">Loaded in profile</span>
                 </Card>
               </div>
 
@@ -455,7 +461,7 @@ export default function ImportOldResumePage() {
               <Card className="p-6 bg-white flex flex-col gap-4 border-slate-200">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-[#048BA2]" /> AI Grammar & Impact Enhancements
+                    <Sparkles className="w-5 h-5 text-[#FF4B5E]" /> AI Grammar & Impact Enhancements
                   </h3>
                   <Badge variant="aurora">{analysisResult.grammarIssues.length} Improvements</Badge>
                 </div>
@@ -497,19 +503,19 @@ export default function ImportOldResumePage() {
             </div>
           </div>
 
-          {/* FLAGSHIP FEATURES UNLOCKED LAUNCHPAD */}
+          {/* NEXT STEPS LAUNCHPAD */}
           <div className="flex flex-col gap-4 border-t border-slate-200 pt-8">
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <Badge variant="aurora">All Systems Active</Badge>
-                <h2 className="text-xl font-extrabold text-slate-900">Flagship Features Unlocked for This Resume</h2>
+                <Badge variant="aurora">Ready to Apply</Badge>
+                <h2 className="text-xl font-extrabold text-slate-900">Next Steps with Your Parsed Resume</h2>
               </div>
               <p className="text-xs text-slate-500 mt-1">
-                Your uploaded old resume has been converted into a living digital candidate asset. Use all 6 flagship features below:
+                Choose how you want to proceed with your resume:
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Feature 1: Builder */}
               <Card hoverEffect className="p-5 bg-white border border-slate-200 flex flex-col justify-between gap-4 group">
                 <div className="flex flex-col gap-2">
@@ -517,35 +523,35 @@ export default function ImportOldResumePage() {
                     <Layout className="w-5 h-5" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                    1. 3-Zone Resume Builder
+                    1. Resume Builder & Templates
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Edit your parsed sections in our drag-and-drop builder. Switch between Modern Executive, Classic ATS, Minimalist Tech, and Navy templates.
+                    Edit your parsed sections, format bullet points, and choose from 40+ professional single-page A4 templates.
                   </p>
                 </div>
                 <Link href={analysisResult.flagshipUrls.builder}>
                   <Button variant="primary" size="sm" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                    Open Builder & Templates
+                    Open Builder
                   </Button>
                 </Link>
               </Card>
 
-              {/* Feature 2: Candidate RAG Agent */}
+              {/* Feature 2: ATS Analyzer */}
               <Card hoverEffect className="p-5 bg-white border border-slate-200 flex flex-col justify-between gap-4 group">
                 <div className="flex flex-col gap-2">
-                  <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
-                    <Bot className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+                    <Sparkles className="w-5 h-5" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-purple-700 transition-colors">
-                    2. Living Candidate RAG Agent
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-teal-700 transition-colors">
+                    2. In-Depth ATS Analyzer
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Your old resume experience is now loaded into an AI recruiter chat agent with anti-hallucination source citations.
+                    Review detailed ATS rubrics, keyword density, section completion, and readability breakdown.
                   </p>
                 </div>
-                <Link href={analysisResult.flagshipUrls.agentChat}>
+                <Link href={`/analyzer/${analysisResult.resumeId || ''}`}>
                   <Button variant="secondary" size="sm" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                    Chat with Candidate Agent
+                    View ATS Audit
                   </Button>
                 </Link>
               </Card>
@@ -557,75 +563,15 @@ export default function ImportOldResumePage() {
                     <Target className="w-5 h-5" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    3. JD Matcher & Gap Analyzer
+                    3. Job Description Matcher
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Match your newly imported resume against target job descriptions to identify missing keywords and skill requirements.
+                    Compare your resume against any target job description to pinpoint missing keywords and requirements.
                   </p>
                 </div>
                 <Link href={analysisResult.flagshipUrls.jdMatcher}>
                   <Button variant="secondary" size="sm" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
                     Run JD Matcher
-                  </Button>
-                </Link>
-              </Card>
-
-              {/* Feature 4: Trust Score & Claim Verification */}
-              <Card hoverEffect className="p-5 bg-white border border-slate-200 flex flex-col justify-between gap-4 group">
-                <div className="flex flex-col gap-2">
-                  <div className="w-10 h-10 rounded-full bg-sky-50 text-sky-700 flex items-center justify-center font-bold">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
-                    4. Claim Verification & Trust Score
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Verify technical claims and metrics extracted from your old resume against GitHub repos and code evidence.
-                  </p>
-                </div>
-                <Link href={analysisResult.flagshipUrls.trustScore}>
-                  <Button variant="secondary" size="sm" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                    View Trust Verification
-                  </Button>
-                </Link>
-              </Card>
-
-              {/* Feature 5: Skill Graph */}
-              <Card hoverEffect className="p-5 bg-white border border-slate-200 flex flex-col justify-between gap-4 group">
-                <div className="flex flex-col gap-2">
-                  <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
-                    <GitGraph className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">
-                    5. Persistent Skill Graph
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Explore your automatically populated skill network containing {analysisResult.skillsExtracted.length} technical skills and proficiency signals.
-                  </p>
-                </div>
-                <Link href={analysisResult.flagshipUrls.skillGraph}>
-                  <Button variant="secondary" size="sm" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                    Open Skill Graph
-                  </Button>
-                </Link>
-              </Card>
-
-              {/* Feature 6: Opportunities & Apply */}
-              <Card hoverEffect className="p-5 bg-white border border-slate-200 flex flex-col justify-between gap-4 group">
-                <div className="flex flex-col gap-2">
-                  <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
-                    <Briefcase className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
-                    6. Auto-Tailor Applications
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Generate custom-tailored job application drafts and resume snapshots for targeted roles.
-                  </p>
-                </div>
-                <Link href={analysisResult.flagshipUrls.opportunities}>
-                  <Button variant="secondary" size="sm" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                    Tailor Applications
                   </Button>
                 </Link>
               </Card>

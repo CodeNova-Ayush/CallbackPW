@@ -289,7 +289,7 @@ export default function OpportunitiesPage() {
               <select
                 value={activeResumeId}
                 onChange={(e) => setActiveResumeId(e.target.value)}
-                className="text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2 pr-8 text-slate-900 focus:outline-none focus:border-[#048BA2] cursor-pointer"
+                className="text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2 pr-8 text-slate-900 focus:outline-none focus:border-[#1C152E] cursor-pointer"
               >
                 {allResumes.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -317,13 +317,13 @@ export default function OpportunitiesPage() {
         {jobPostings.map((post) => (
           <Card
             key={post.id}
-            className="p-6 bg-white border border-slate-200 rounded-3xl shadow-xs flex flex-col justify-between gap-4 hover:border-[#048BA2] transition-all"
+            className="p-6 bg-white border border-slate-200 rounded-3xl shadow-xs flex flex-col justify-between gap-4 hover:border-[#1C152E] transition-all"
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex flex-col">
                   <h3 className="text-base font-black text-slate-900">{post.title}</h3>
-                  <span className="text-xs font-bold text-[#048BA2] flex items-center gap-1.5 mt-0.5">
+                  <span className="text-xs font-bold text-[#FF4B5E] flex items-center gap-1.5 mt-0.5">
                     <Building className="w-3.5 h-3.5" /> {post.company} • <MapPin className="w-3.5 h-3.5 text-slate-400" /> {post.location}
                   </span>
                 </div>
@@ -391,15 +391,15 @@ export default function OpportunitiesPage() {
         >
           {isGeneratingTailor ? (
             <div className="p-12 flex flex-col items-center justify-center text-center gap-3">
-              <RefreshCw className="w-8 h-8 text-[#048BA2] animate-spin" />
+              <RefreshCw className="w-8 h-8 text-[#FF4B5E] animate-spin" />
               <span className="text-sm font-bold text-slate-900">
                 Generating company-specific tailored resume snapshot with NVIDIA Llama 3.3...
               </span>
             </div>
           ) : tailoredData ? (
             <div className="flex flex-col gap-5 text-slate-900">
-              <div className="p-4 bg-[#E6F5F8] border border-[#048BA2]/25 rounded-2xl flex flex-col gap-2">
-                <span className="text-xs font-black text-[#048BA2] flex items-center gap-1.5">
+              <div className="p-4 bg-[#FFF0F3] border border-[#FFCCD5] rounded-2xl flex flex-col gap-2">
+                <span className="text-xs font-black text-[#FF4B5E] flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4" /> AI Strategic Positioning ({tailoredData.fitScore}% Match Fit)
                 </span>
                 <p className="text-xs text-slate-700 leading-relaxed">
@@ -468,7 +468,7 @@ export default function OpportunitiesPage() {
                 placeholder="e.g. Senior Machine Learning Engineer"
                 value={customJobTitle}
                 onChange={(e) => setCustomJobTitle(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+                className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -478,7 +478,7 @@ export default function OpportunitiesPage() {
                 placeholder="e.g. Anthropic"
                 value={customCompany}
                 onChange={(e) => setCustomCompany(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+                className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
               />
             </div>
           </div>

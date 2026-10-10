@@ -90,7 +90,7 @@ export default function TrustScorePage() {
   if (isLoading) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center gap-4 bg-[#FAF6F0]">
-        <div className="w-12 h-12 rounded-2xl bg-[#048BA2] text-white flex items-center justify-center shadow-lg shadow-[#048BA2]/25 animate-bounce">
+        <div className="w-12 h-12 rounded-2xl bg-[#1C152E] text-white flex items-center justify-center shadow-lg shadow-slate-900/10 animate-bounce">
           <ShieldCheck className="w-6 h-6" />
         </div>
         <div className="flex flex-col items-center gap-1">
@@ -148,7 +148,7 @@ export default function TrustScorePage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Giant Score Gauge Card */}
         <div className="lg:col-span-5 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-xs flex flex-col items-center text-center justify-between relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[#048BA2]/8 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF4B5E]/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex items-center justify-between w-full">
             <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider">
@@ -163,14 +163,14 @@ export default function TrustScorePage() {
           <div className="my-4 flex flex-col items-center relative">
             <div className="w-36 h-36 rounded-full border-8 border-slate-100 flex items-center justify-center relative shadow-inner">
               <div
-                className="absolute inset-0 rounded-full border-8 border-[#048BA2] transition-all duration-1000"
+                className="absolute inset-0 rounded-full border-8 border-[#1C152E] transition-all duration-1000"
                 style={{
                   clipPath: `polygon(0 0, 100% 0, 100% 100%, 0 ${100 - score}%)`,
                 }}
               />
               <div className="flex flex-col items-center">
                 <span className="text-4xl font-black text-slate-900 tracking-tight">{score}%</span>
-                <span className="text-[10px] font-black uppercase text-[#048BA2] tracking-wider mt-0.5">
+                <span className="text-[10px] font-black uppercase text-[#FF4B5E] tracking-wider mt-0.5">
                   Proof Score
                 </span>
               </div>
@@ -202,10 +202,10 @@ export default function TrustScorePage() {
 
           <Card className="p-5 bg-white border border-slate-200/80 rounded-3xl flex flex-col justify-between shadow-xs">
             <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-xl bg-[#E6F5F8] text-[#048BA2] flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center font-bold">
                 <Clock className="w-5 h-5" />
               </div>
-              <span className="text-xl font-black text-[#048BA2]">100% Valid</span>
+              <span className="text-xl font-black text-[#FF4B5E]">100% Valid</span>
             </div>
             <div className="flex flex-col mt-4">
               <span className="text-xs font-black text-slate-900">Timeline Sanity</span>
@@ -251,7 +251,7 @@ export default function TrustScorePage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-[#048BA2] text-white shadow-xs'
+                  ? 'bg-[#1C152E] text-white shadow-xs'
                   : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
               }`}
             >
@@ -268,7 +268,7 @@ export default function TrustScorePage() {
             placeholder="Search claims or evidence..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3.5 py-1.5 text-xs bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#048BA2]"
+            className="w-full pl-9 pr-3.5 py-1.5 text-xs bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#1C152E]"
           />
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function TrustScorePage() {
         {filteredClaims.map((claim) => (
           <div
             key={claim.id}
-            className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#048BA2]/50 transition-all group"
+            className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#1C152E]/30 transition-all group"
           >
             {/* Left Content */}
             <div className="flex items-start gap-4 flex-1">
@@ -317,7 +317,7 @@ export default function TrustScorePage() {
 
                 {/* Evidence Note */}
                 <div className="flex flex-col gap-0.5 mt-1 pt-2 border-t border-slate-100">
-                  <span className="text-[11px] font-semibold text-[#048BA2]">
+                  <span className="text-[11px] font-semibold text-[#FF4B5E]">
                     Proof Source: {claim.evidenceSource}
                   </span>
                   <span className="text-[10.5px] text-slate-500 font-medium">
@@ -331,7 +331,7 @@ export default function TrustScorePage() {
             <div className="flex items-center gap-2 self-end md:self-center shrink-0">
               <button
                 onClick={() => handleCopyClaim(claim)}
-                className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-[#E6F5F8] text-slate-600 hover:text-[#048BA2] border border-slate-200 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-[#FFF0F3] text-slate-600 hover:text-[#FF4B5E] border border-slate-200 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
                 title="Copy verifiable claim citation"
               >
                 {copiedClaimId === claim.id ? (

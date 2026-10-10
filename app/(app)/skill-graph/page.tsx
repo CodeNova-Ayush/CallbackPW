@@ -272,7 +272,7 @@ export default function SkillGraphPage() {
             Persistent Skill & Evidence Graph
           </h1>
           <p className="text-xs md:text-sm text-[#786F68]">
-            Unlike static bullet points, Callback AI maintains an immutable skill graph linked directly to verified codebase evidence, telemetry benchmarks, and deliverables.
+            Unlike static bullet points, Callback maintains an immutable skill graph linked directly to verified codebase evidence, telemetry benchmarks, and deliverables.
           </p>
         </div>
 
@@ -283,7 +283,7 @@ export default function SkillGraphPage() {
               <select
                 value={activeResumeId}
                 onChange={(e) => setActiveResumeId(e.target.value)}
-                className="text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2 pr-8 text-slate-900 focus:outline-none focus:border-[#048BA2] cursor-pointer"
+                className="text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2 pr-8 text-slate-900 focus:outline-none focus:border-[#1C152E] cursor-pointer"
               >
                 {allResumes.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -333,7 +333,7 @@ export default function SkillGraphPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search skill nodes..."
-            className="w-full text-xs font-medium bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-slate-900 focus:outline-none focus:border-[#048BA2] transition-colors"
+            className="w-full text-xs font-medium bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-slate-900 focus:outline-none focus:border-[#1C152E] transition-colors"
           />
         </div>
       </div>
@@ -341,7 +341,7 @@ export default function SkillGraphPage() {
       {/* Grid of Skill Nodes */}
       {isLoading ? (
         <div className="p-12 flex flex-col items-center justify-center min-h-[300px] gap-3">
-          <RefreshCw className="w-8 h-8 text-[#048BA2] animate-spin" />
+          <RefreshCw className="w-8 h-8 text-[#FF4B5E] animate-spin" />
           <span className="text-sm font-bold text-slate-900">Building persistent skill graph...</span>
         </div>
       ) : (
@@ -349,12 +349,12 @@ export default function SkillGraphPage() {
           {filteredSkills.map((node, idx) => (
             <Card
               key={idx}
-              className="p-6 bg-white border border-slate-200 rounded-3xl shadow-xs flex flex-col justify-between gap-4 hover:border-[#048BA2] transition-all"
+              className="p-6 bg-white border border-slate-200 rounded-3xl shadow-xs flex flex-col justify-between gap-4 hover:border-[#1C152E] transition-all"
             >
               <div className="flex flex-col gap-2.5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-[#E6F5F8] text-[#048BA2] flex items-center justify-center font-bold">
+                    <div className="w-8 h-8 rounded-xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center font-bold">
                       <Cpu className="w-4 h-4" />
                     </div>
                     <h3 className="text-sm font-black text-slate-900">{node.name}</h3>
@@ -371,7 +371,7 @@ export default function SkillGraphPage() {
                 {/* Progress Bar */}
                 <div className="w-full h-2 bg-slate-100 border border-slate-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#048BA2] rounded-full transition-all duration-700"
+                    className="h-full bg-[#1C152E] rounded-full transition-all duration-700"
                     style={{ width: `${node.signal}%` }}
                   />
                 </div>
@@ -414,7 +414,7 @@ export default function SkillGraphPage() {
               placeholder="e.g. pgvector, PyTorch, Kubernetes"
               value={newSkillName}
               onChange={(e) => setNewSkillName(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
             />
           </div>
 
@@ -423,7 +423,7 @@ export default function SkillGraphPage() {
             <select
               value={newSkillCategory}
               onChange={(e) => setNewSkillCategory(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
             >
               {CATEGORIES.filter((c) => c.id !== 'All').map((cat, idx) => (
                 <option key={idx} value={cat.id}>
@@ -440,7 +440,7 @@ export default function SkillGraphPage() {
               placeholder="e.g. Project — Production Vector Search Engine"
               value={newSkillEvidenceTitle}
               onChange={(e) => setNewSkillEvidenceTitle(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
             />
           </div>
 
@@ -451,7 +451,7 @@ export default function SkillGraphPage() {
               placeholder="e.g. Architected nearest neighbor indexing handling 2M vector embeddings"
               value={newSkillEvidenceSnippet}
               onChange={(e) => setNewSkillEvidenceSnippet(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2]"
+              className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#1C152E]"
             />
           </div>
 

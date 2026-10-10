@@ -222,7 +222,7 @@ export default function VoiceIntakePage() {
       <VoiceWaveformThreeCanvas isRecording={isRecording} isExtracting={isExtracting} />
 
       {/* Ambient background glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[850px] h-[500px] bg-gradient-to-b from-[#048BA2]/18 via-[#8B5CF6]/12 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[850px] h-[500px] bg-gradient-to-b from-[#1C152E]/18 via-[#8B5CF6]/12 to-transparent blur-3xl pointer-events-none -z-10" />
 
       <div className="p-6 md:p-8 max-w-4xl mx-auto w-full flex flex-col gap-8 relative z-10">
         {/* Header */}
@@ -245,7 +245,7 @@ export default function VoiceIntakePage() {
               <select
                 value={activeResumeId}
                 onChange={(e) => setActiveResumeId(e.target.value)}
-                className="text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2 pr-8 text-slate-900 focus:outline-none focus:border-[#048BA2] cursor-pointer shadow-xs"
+                className="text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2 pr-8 text-slate-900 focus:outline-none focus:border-[#1C152E] cursor-pointer shadow-xs"
               >
                 {allResumes.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -259,9 +259,9 @@ export default function VoiceIntakePage() {
         </div>
 
         {/* Voice Recorder Card */}
-        <Card className="p-8 md:p-12 bg-white/90 backdrop-blur-2xl border border-slate-200/80 rounded-3xl shadow-xl shadow-[#048BA2]/10 flex flex-col items-center justify-center text-center gap-6 relative overflow-hidden ring-1 ring-slate-900/[0.04]">
+        <Card className="p-8 md:p-12 bg-white/90 backdrop-blur-2xl border border-slate-200/80 rounded-3xl shadow-xl shadow-[#1C152E]/10 flex flex-col items-center justify-center text-center gap-6 relative overflow-hidden ring-1 ring-slate-900/[0.04]">
           {/* Subtle top rainbow aura line */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#048BA2] via-[#00F5D4] to-[#8B5CF6] opacity-80" />
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1C152E] via-[#00F5D4] to-[#8B5CF6] opacity-80" />
 
           {/* Audio Equalizer Frequency Wave Visualizer */}
           <div className="flex items-center justify-center gap-1.5 h-10 w-full max-w-xs mb-1">
@@ -270,9 +270,9 @@ export default function VoiceIntakePage() {
                 key={i}
                 className={`w-1 rounded-full transition-all duration-200 ${
                   isRecording
-                    ? 'bg-gradient-to-t from-[#048BA2] via-[#00F5D4] to-rose-500 animate-pulse'
+                    ? 'bg-gradient-to-t from-[#1C152E] via-[#00F5D4] to-rose-500 animate-pulse'
                     : isExtracting
-                    ? 'bg-gradient-to-t from-[#048BA2] to-[#8B5CF6]'
+                    ? 'bg-gradient-to-t from-[#1C152E] to-[#8B5CF6]'
                     : 'bg-slate-200'
                 }`}
                 style={{
@@ -299,7 +299,7 @@ export default function VoiceIntakePage() {
               className={`w-24 h-24 rounded-3xl flex items-center justify-center transition-all cursor-pointer shadow-xl relative z-10 ${
                 isRecording
                   ? 'bg-gradient-to-tr from-rose-600 to-rose-500 text-white scale-110 shadow-rose-500/40 ring-4 ring-rose-300'
-                  : 'bg-gradient-to-tr from-[#024959] via-[#048BA2] to-[#0FA5BF] text-white hover:scale-105 shadow-[#048BA2]/35 hover:shadow-2xl'
+                  : 'bg-gradient-to-tr from-[#1C152E] to-[#2B1F45] text-white hover:scale-105 shadow-[#1C152E]/35 hover:shadow-2xl'
               }`}
             >
               {isRecording ? <MicOff className="w-10 h-10 animate-pulse" /> : <Mic className="w-10 h-10" />}
@@ -332,8 +332,8 @@ export default function VoiceIntakePage() {
           {transcript && (
             <div className="w-full p-5 bg-slate-50/90 border border-slate-200 rounded-2xl text-left text-xs text-slate-900 leading-relaxed font-mono relative overflow-hidden shadow-2xs">
               <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-[#048BA2] text-[10px] uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#048BA2] animate-pulse" />
+                <span className="font-bold text-[#FF4B5E] text-[10px] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#1C152E] animate-pulse" />
                   Live Speech Transcript:
                 </span>
                 <span className="text-[10px] font-bold text-slate-400">Streamed from Microphone</span>
@@ -345,13 +345,13 @@ export default function VoiceIntakePage() {
 
         {/* Extracting State */}
         {isExtracting && (
-          <div className="flex flex-col items-center justify-center p-8 gap-3 bg-white/90 backdrop-blur-md rounded-3xl border border-[#048BA2]/30 shadow-md">
-            <RefreshCw className="w-8 h-8 text-[#048BA2] animate-spin" />
+          <div className="flex flex-col items-center justify-center p-8 gap-3 bg-white/90 backdrop-blur-md rounded-3xl border border-[#FFCCD5] shadow-md">
+            <RefreshCw className="w-8 h-8 text-[#FF4B5E] animate-spin" />
             <span className="text-sm font-black text-slate-900">
               Formatting executive metrics and extracting skill graph nodes with NVIDIA NIM...
             </span>
             <div className="w-48 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-[#048BA2] to-[#8B5CF6] h-full rounded-full w-3/4 animate-pulse" />
+              <div className="bg-gradient-to-r from-[#1C152E] to-[#8B5CF6] h-full rounded-full w-3/4 animate-pulse" />
             </div>
           </div>
         )}
