@@ -1,60 +1,67 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-brand: #048BA2;
-  --color-primary-hover: #037488;
-  --color-primary-light: #E6F5F8;
-  --color-brand-bg: #F5F9FB;
+  --color-primary-brand: #1C152E;
+  --color-primary-hover: #2B1F45;
+  --color-primary-light: #F3F0F7;
+  --color-brand-bg: #F8F9FA;
+  --color-flow-coral: #FF4B5E;
+  --color-flow-coral-hover: #E62A55;
+  --color-flow-coral-light: #FFF0F3;
+  --color-flow-canvas: #ECEEF2;
 }
 
 @layer base {
   :root {
-    --background: #F5F9FB;
+    --background: #F8F9FA;
     --card: #FFFFFF;
-    --card-border: #E2E8F0;
-    --foreground: #0F172A;
-    --muted-foreground: #64748B;
-    --primary: #048BA2;
-    --primary-hover: #037488;
-    --primary-light: #E6F5F8;
-    --success: #048BA2;
-    --success-bg: #E6F5F8;
+    --card-border: #E5E7EB;
+    --foreground: #1C152E;
+    --muted-foreground: #6B7280;
+    --primary: #1C152E;
+    --primary-hover: #2B1F45;
+    --primary-light: #F3F0F7;
+    --flow-coral: #FF4B5E;
+    --flow-coral-light: #FFF0F3;
+    --flow-canvas: #ECEEF2;
+    --success: #1C152E;
+    --success-bg: #F3F0F7;
     --warning: #D97706;
     --warning-bg: #FFFBEB;
-    --danger: #E11D48;
-    --danger-bg: #FFF1F2;
+    --danger: #FF4B5E;
+    --danger-bg: #FFF0F3;
   }
 
   body {
-    background-color: #F5F9FB;
+    background-color: #F8F9FA;
     color: var(--foreground);
     font-family: 'Plus Jakarta Sans', var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Unified #048BA2 Helpers */
+/* FlowCV Unified Aesthetic Helpers */
 .bg-aurora-mesh {
-  background: radial-gradient(at 0% 0%, rgba(4, 139, 162, 0.12) 0px, transparent 50%),
-              radial-gradient(at 100% 0%, rgba(4, 139, 162, 0.12) 0px, transparent 50%),
-              #F5F9FB;
+  background: radial-gradient(at 0% 0%, rgba(255, 75, 94, 0.05) 0px, transparent 50%),
+              radial-gradient(at 100% 0%, rgba(28, 21, 46, 0.04) 0px, transparent 50%),
+              #F8F9FA;
 }
 
 .text-aurora-gradient {
-  color: #048BA2;
+  color: #1C152E;
 }
 
 .bg-brand-primary {
-  background-color: #048BA2;
+  background-color: #1C152E;
 }
 
 .hover-bg-brand-primary:hover {
-  background-color: #037488;
+  background-color: #2B1F45;
 }
 
 .border-aurora-glow {
-  border-color: rgba(4, 139, 162, 0.3);
-  box-shadow: 0 0 25px -5px rgba(4, 139, 162, 0.2);
+  border-color: rgba(28, 21, 46, 0.15);
+  box-shadow: 0 0 25px -5px rgba(28, 21, 46, 0.08);
 }
 
 /* Custom Scrollbar */
@@ -207,8 +214,8 @@
 }
 
 .pushable-btn:hover .pushable-front {
-  color: #048BA2;
-  border-color: #048BA2;
+  color: #1C152E;
+  border-color: #1C152E;
   transform: translateY(-4px);
   transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1.2);
 }
@@ -228,25 +235,26 @@
   transition: transform 34ms;
 }
 
-/* Primary Teal Pushable Variant */
+/* Primary Obsidian Pushable Variant (FlowCV) */
 .pushable-btn-teal .pushable-edge {
   background: linear-gradient(
     to left,
-    #023642 0%,
-    #035869 8%,
-    #035869 92%,
-    #023642 100%
+    #120D1F 0%,
+    #1C152E 8%,
+    #1C152E 92%,
+    #120D1F 100%
   );
 }
 
 .pushable-btn-teal .pushable-front {
   color: #ffffff;
-  background: #048BA2;
+  background: #1C152E;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .pushable-btn-teal:hover .pushable-front {
   color: #ffffff;
+  background: #2B1F45;
   border-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -331,7 +339,7 @@
   position: absolute;
   width: 2px;
   height: 6px;
-  background: #048BA2;
+  background: #FF4B5E;
   border-radius: 2px;
   transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
   animation: spinner-fzua35 1s calc(var(--delay) * 1s) infinite ease;

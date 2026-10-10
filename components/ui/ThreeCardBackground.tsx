@@ -73,16 +73,16 @@ export const ThreeCardBackground: React.FC<ThreeCardBackgroundProps> = ({
       const positions = new Float32Array(particleCount * 3);
       const colors = new Float32Array(particleCount * 3);
 
-      const tealColor = new THREE.Color('#048BA2');
-      const cyanColor = new THREE.Color('#00E5FF');
-      const blueColor = new THREE.Color('#2563EB');
+      const obsidianColor = new THREE.Color('#1C152E');
+      const coralColor = new THREE.Color('#FF4B5E');
+      const darkPurpleColor = new THREE.Color('#2B1F45');
 
       for (let i = 0; i < particleCount; i++) {
         positions[i * 3] = (Math.random() - 0.5) * 40;
         positions[i * 3 + 1] = (Math.random() - 0.5) * 35;
         positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
 
-        const col = i % 3 === 0 ? tealColor : i % 3 === 1 ? cyanColor : blueColor;
+        const col = i % 3 === 0 ? obsidianColor : i % 3 === 1 ? coralColor : darkPurpleColor;
         colors[i * 3] = col.r;
         colors[i * 3 + 1] = col.g;
         colors[i * 3 + 2] = col.b;
@@ -152,16 +152,16 @@ export const ThreeCardBackground: React.FC<ThreeCardBackgroundProps> = ({
       particlePositions = new Float32Array(count * 3);
       const colors = new Float32Array(count * 3);
 
-      const teal = new THREE.Color('#048BA2');
-      const cyan = new THREE.Color('#00E5FF');
-      const blue = new THREE.Color('#2563EB');
+      const obsidian = new THREE.Color('#1C152E');
+      const coral = new THREE.Color('#FF4B5E');
+      const darkPurple = new THREE.Color('#2B1F45');
 
       for (let i = 0; i < count; i++) {
         particlePositions[i * 3] = (Math.random() - 0.5) * 32;
         particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 26;
         particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 14;
 
-        const col = i % 3 === 0 ? teal : i % 3 === 1 ? cyan : blue;
+        const col = i % 3 === 0 ? obsidian : i % 3 === 1 ? coral : darkPurple;
         colors[i * 3] = col.r;
         colors[i * 3 + 1] = col.g;
         colors[i * 3 + 2] = col.b;
@@ -238,16 +238,16 @@ export const ThreeCardBackground: React.FC<ThreeCardBackgroundProps> = ({
       const pPos = new Float32Array(pCount * 3);
       const pCol = new Float32Array(pCount * 3);
 
-      const teal = new THREE.Color('#048BA2');
-      const cyan = new THREE.Color('#00E5FF');
-      const blue = new THREE.Color('#2563EB');
+      const obsidian = new THREE.Color('#1C152E');
+      const coral = new THREE.Color('#FF4B5E');
+      const darkPurple = new THREE.Color('#2B1F45');
 
       for (let i = 0; i < pCount; i++) {
         pPos[i * 3] = (Math.random() - 0.5) * 20;
         pPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
         pPos[i * 3 + 2] = (Math.random() - 0.5) * 12;
 
-        const col = i % 3 === 0 ? teal : i % 3 === 1 ? cyan : blue;
+        const col = i % 3 === 0 ? obsidian : i % 3 === 1 ? coral : darkPurple;
         pCol[i * 3] = col.r;
         pCol[i * 3 + 1] = col.g;
         pCol[i * 3 + 2] = col.b;
@@ -299,16 +299,16 @@ export const ThreeCardBackground: React.FC<ThreeCardBackgroundProps> = ({
       const pPos = new Float32Array(pCount * 3);
       const pCol = new Float32Array(pCount * 3);
 
-      const teal = new THREE.Color('#048BA2');
-      const cyan = new THREE.Color('#00E5FF');
-      const blue = new THREE.Color('#2563EB');
+      const obsidian = new THREE.Color('#1C152E');
+      const coral = new THREE.Color('#FF4B5E');
+      const darkPurple = new THREE.Color('#2B1F45');
 
       for (let i = 0; i < pCount; i++) {
         pPos[i * 3] = (Math.random() - 0.5) * 30;
         pPos[i * 3 + 1] = (Math.random() - 0.5) * 25;
         pPos[i * 3 + 2] = (Math.random() - 0.5) * 15;
 
-        const col = i % 3 === 0 ? teal : i % 3 === 1 ? cyan : blue;
+        const col = i % 3 === 0 ? obsidian : i % 3 === 1 ? coral : darkPurple;
         pCol[i * 3] = col.r;
         pCol[i * 3 + 1] = col.g;
         pCol[i * 3 + 2] = col.b;

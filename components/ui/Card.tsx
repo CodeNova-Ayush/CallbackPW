@@ -10,7 +10,7 @@ export const Card: React.FC<CardProps> = ({ children, className, hoverEffect = f
     <div
       className={clsx(
         'bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 shadow-xs transition-all',
-        hoverEffect && 'hover:border-[#048BA2] hover:shadow-lg hover:shadow-[#048BA2]/5 cursor-pointer',
+        hoverEffect && 'hover:border-[#1C152E] hover:shadow-lg hover:shadow-slate-900/5 cursor-pointer',
         className
       )}
       {...props}
@@ -41,13 +41,13 @@ export const Badge: React.FC<BadgeProps> = ({
   };
 
   const variantStyles = {
-    aurora: 'bg-[#E6F5F8] text-[#048BA2] border border-[#048BA2]/30',
-    terracotta: 'bg-[#E6F5F8] text-[#048BA2] border border-[#048BA2]/30',
-    indigo: 'bg-[#E6F5F8] text-[#048BA2] border border-[#048BA2]/30',
+    aurora: 'bg-[#FFF0F3] text-[#FF4B5E] border border-[#FFCCD5]',
+    terracotta: 'bg-[#FFF0F3] text-[#FF4B5E] border border-[#FFCCD5]',
+    indigo: 'bg-[#1C152E] text-white border border-[#1C152E]',
     success: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
     warning: 'bg-amber-50 text-amber-800 border border-amber-200/80',
     danger: 'bg-rose-50 text-rose-800 border border-rose-200/80',
-    info: 'bg-[#E6F5F8] text-[#048BA2] border border-[#048BA2]/30',
+    info: 'bg-[#FFF0F3] text-[#FF4B5E] border border-[#FFCCD5]',
     neutral: 'bg-slate-100 text-slate-700 border border-slate-200',
   };
 
@@ -85,8 +85,8 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
-  let colorClass = '#048BA2';
-  if (score < 60) colorClass = '#E11D48';
+  let colorClass = '#1C152E';
+  if (score < 60) colorClass = '#FF4B5E';
   else if (score < 80) colorClass = '#D97706';
 
   return (

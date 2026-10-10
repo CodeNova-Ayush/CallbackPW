@@ -79,29 +79,29 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'group/btn relative inline-flex items-center justify-center font-black rounded-full transition-all duration-300 ease-out active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer overflow-hidden';
+    'group/btn relative inline-flex items-center justify-center font-bold rounded-xl transition-all duration-300 ease-out active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer overflow-hidden';
 
   const sizeStyles = {
-    sm: 'px-4 py-2 text-xs gap-2 min-h-[38px]',
-    md: 'px-6 py-2.5 text-sm gap-2.5 min-h-[44px]',
-    lg: 'px-8 py-3.5 text-base gap-3 min-h-[52px]',
+    sm: 'px-3.5 py-2 text-xs gap-1.5 min-h-[38px] h-[38px]',
+    md: 'px-5 py-2.5 text-xs sm:text-sm gap-2 min-h-[42px] h-[42px]',
+    lg: 'px-7 py-3 text-sm sm:text-base gap-2.5 min-h-[48px] h-[48px]',
   };
 
   const variantStyles = {
     primary:
-      'bg-[#048BA2] hover:bg-[#037488] text-white shadow-md shadow-[#048BA2]/30 hover:shadow-lg hover:shadow-[#048BA2]/50 focus:ring-[#048BA2]',
+      'bg-[#1C152E] hover:bg-[#2B1F45] text-white shadow-sm focus:ring-[#1C152E]',
     secondary:
-      'bg-white hover:bg-[#E6F5F8] text-slate-900 border-2 border-slate-200 hover:border-[#048BA2] shadow-2xs focus:ring-[#048BA2]',
+      'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/90 hover:border-slate-300 shadow-2xs focus:ring-[#1C152E]',
     tertiary:
-      'bg-transparent hover:bg-[#E6F5F8] text-slate-800 hover:text-[#048BA2] focus:ring-[#048BA2]',
+      'bg-transparent hover:bg-slate-100 text-slate-700 hover:text-slate-900 focus:ring-[#1C152E]',
     danger:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-600',
+      'bg-[#FF4B5E] hover:bg-[#E62A55] text-white shadow-xs focus:ring-[#FF4B5E]',
     glass:
-      'bg-white/80 hover:bg-white backdrop-blur-xl text-slate-950 hover:text-[#048BA2] border-2 border-white/80 hover:border-[#048BA2] shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(4,139,162,0.2)] focus:ring-[#048BA2]',
+      'bg-white/90 hover:bg-white backdrop-blur-xl text-slate-900 hover:text-[#1C152E] border border-slate-200/90 hover:border-slate-300 shadow-2xs focus:ring-[#1C152E]',
     'glass-teal':
-      'bg-[#048BA2]/15 hover:bg-[#048BA2] backdrop-blur-xl text-[#007083] hover:text-white border-2 border-[#048BA2]/30 hover:border-transparent shadow-[0_4px_20px_rgba(4,139,162,0.12)] hover:shadow-[0_8px_25px_rgba(4,139,162,0.35)] focus:ring-[#048BA2]',
+      'bg-[#FFF0F3] hover:bg-[#FF4B5E] text-[#FF4B5E] hover:text-white border border-[#FFCCD5] hover:border-transparent shadow-2xs focus:ring-[#FF4B5E]',
     'slide-teal':
-      'bg-[#048BA2] hover:bg-[#037488] text-white border border-white/25 shadow-[0_10px_25px_-4px_rgba(4,139,162,0.4)] hover:shadow-[0_15px_30px_-4px_rgba(4,139,162,0.6)] focus:ring-[#048BA2]',
+      'bg-[#1C152E] hover:bg-[#2B1F45] text-white border border-[#1C152E]/25 shadow-sm focus:ring-[#1C152E]',
   };
 
   const isSlideVariant = variant === 'slide-teal' || !!slideText;
@@ -113,7 +113,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Text color based on variant
   const textColor = variant === 'secondary' || variant === 'tertiary' || variant === 'glass' 
-    ? 'text-slate-950 group-hover/btn:text-[#048BA2]' 
+    ? 'text-slate-800 group-hover/btn:text-slate-950' 
     : 'text-white';
 
   if (isSlideVariant && !isLoading) {
