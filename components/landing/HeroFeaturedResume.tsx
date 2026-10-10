@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Mail, Phone, MapPin, Globe, Sparkles, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, CheckCircle2 } from 'lucide-react';
 
 export function HeroFeaturedResume() {
-  const containerRef = useRef<HTMLAnchorElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number>(0.56);
 
   useEffect(() => {
@@ -26,32 +25,18 @@ export function HeroFeaturedResume() {
 
   return (
     <div className="w-full relative z-10 flex flex-col items-center">
-      {/* Floating Trust Floating Micro-Badges for Depth */}
-      <div className="absolute -top-3.5 -left-3 sm:-left-6 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-lg rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] font-bold text-slate-800 animate-bounce" style={{ animationDuration: '4s' }}>
+      {/* Floating Trust Micro-Badge */}
+      <div className="absolute -top-3.5 -left-3 sm:-left-6 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-lg rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
         <span>98.4% ATS Pass Rate</span>
       </div>
 
-      <div className="absolute -bottom-3 -right-2 sm:-right-4 z-20 bg-[#1C152E] text-white shadow-xl rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] font-bold">
-        <Sparkles className="w-3.5 h-3.5 text-[#FF4B5E] shrink-0" />
-        <span>FlowCV Signature Layout</span>
-      </div>
-
-      {/* Main A4 Locked Aspect Ratio Container */}
-      <Link
-        href="/welcome"
+      {/* Static Fixed A4 Aspect Ratio Container (No hover effects, no template chooser) */}
+      <div
         ref={containerRef}
-        className="group relative w-full max-w-[380px] sm:max-w-[430px] lg:max-w-[470px] aspect-[794/1123] rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl border border-slate-200/90 bg-white transition-all duration-300 hover:-translate-y-1 block text-left cursor-pointer"
+        className="relative w-full max-w-[380px] sm:max-w-[430px] lg:max-w-[470px] aspect-[794/1123] rounded-2xl overflow-hidden shadow-2xl border border-slate-200/90 bg-white block text-left select-none pointer-events-none"
         style={{ aspectRatio: '794 / 1123' }}
       >
-        {/* Hover Action Overlay Pill */}
-        <div className="absolute inset-0 z-30 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-          <div className="bg-[#1C152E] text-white text-xs font-bold px-4 py-2 rounded-full shadow-2xl flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform">
-            <span>Use This Template</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#FF4B5E]" />
-          </div>
-        </div>
-
         {/* Fixed Standard A4 Canvas (794px x 1123px) perfectly scaled */}
         <div
           style={{
@@ -150,7 +135,7 @@ export function HeroFeaturedResume() {
                   <ul className="mt-1 list-disc list-outside ml-4 space-y-1 text-[12.5px] text-slate-700 leading-relaxed">
                     <li>Led integrated GTM campaigns across digital acquisition channels, delivering a 38% lift in marketing pipeline and $2.4M incremental revenue.</li>
                     <li>Architected automated lifecycle email journeys and customer onboarding funnels, increasing active user retention from 52% to 74%.</li>
-                    <li>Managed a cross-functional marketing and design team of 6, reducing campaign cycle turnaround by 2 weeks.</li>
+                    <li>Managed a cross-functional marketing and design team of 5, reducing campaign cycle turnaround by 2 weeks.</li>
                   </ul>
                 </div>
 
@@ -253,7 +238,7 @@ export function HeroFeaturedResume() {
 
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

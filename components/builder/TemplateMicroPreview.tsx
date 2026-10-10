@@ -22,12 +22,8 @@ export const TemplateMicroPreview: React.FC<TemplateMicroPreviewProps> = memo(({
     const updateScale = () => {
       if (containerRef.current) {
         const cw = containerRef.current.clientWidth;
-        const ch = containerRef.current.clientHeight;
-        if (cw > 0 && ch > 0) {
-          // Exactly cover the card container width and height edge-to-edge (no margins, no empty borders)
-          const targetScale = Math.max(cw / 794, ch / 1123);
-          setScale(targetScale);
-        } else if (cw > 0) {
+        if (cw > 0) {
+          // Exactly scale 794px A4 width to card container width
           setScale(cw / 794);
         }
       }
@@ -42,15 +38,17 @@ export const TemplateMicroPreview: React.FC<TemplateMicroPreviewProps> = memo(({
   return (
     <div
       ref={containerRef}
-      className={`w-full h-full relative overflow-hidden bg-white select-none pointer-events-none flex justify-center items-start ${className}`}
+      className={`w-full h-full relative overflow-hidden bg-white select-none pointer-events-none ${className}`}
     >
       <div
         style={{
           width: '794px',
-          minHeight: '1123px',
+          height: '1123px',
           transform: `scale(${scale})`,
-          transformOrigin: 'top center',
-          flexShrink: 0,
+          transformOrigin: 'top left',
+          position: 'absolute',
+          top: 0,
+          left: 0,
         }}
         className="bg-white shadow-none"
       >

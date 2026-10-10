@@ -296,6 +296,780 @@ export const MOCK_PERSONA = {
   ],
 };
 
+// FlowCV Specific Showcase Personas matching exact FlowCV.com gallery references
+export const FLOWCV_PERSONAS: Record<string, any> = {
+  flowcv_atlantic_blue: {
+    fullName: 'Brian T. Wayne',
+    title: 'Business Development Consultant',
+    avatar: '/images/templates/brian-avatar.jpg',
+    email: 'brian@wayne.com',
+    phone: '+1 541 754 3010',
+    location: '22611 Pacific Coast Hwy, Malibu, California, 9022, USA',
+    linkedin: 'linkedin.com/wayne-2345',
+    website: 'wayne.com',
+    summary:
+      "I'm Brian Thomas Wayne, a business development consultant with a passion for helping companies achieve their growth potential. With my MBA degree and extensive experience in strategy and relationship building, I strive to provide innovative solutions that drive success for my clients.",
+    experiences: [
+      {
+        id: 'ab-1',
+        role: 'Business Development Consultant',
+        company: 'Applied Tech Inc.',
+        location: 'New York',
+        startDate: '2012',
+        endDate: 'Present',
+        bullets: [
+          'Developed and implemented strategic plans resulting in a 36% increase in new business opportunities.',
+          'Collaborated with cross-functional teams to drive business growth and expansion.',
+          'Established and maintained relationships with key partners resulting in a 25% increase in sales revenue.',
+          'Conducted market research and analysis to identify new market opportunities resulting in the successful launch of a new product line.',
+        ],
+      },
+      {
+        id: 'ab-2',
+        role: 'Business Development',
+        company: 'Axxus',
+        location: 'Los Angeles, USA',
+        startDate: '2005',
+        endDate: '2012',
+        bullets: [
+          'Worked closely with tech and software companies to provide expert sales outsourcing services.',
+          'Built and managed dedicated sales teams in Europe, the Americas, and Asia Pacific.',
+          'Contributed to Axxus Sales Outsourcing\'s proven track record of success in acting as an extension to the sales force of over 500+ vendors of new and innovative software and tech products, services, and solutions since the year 2000.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'ab-edu-1',
+        degree: 'Master of Business Administration',
+        institution: 'Harvard Business School',
+        location: 'Boston',
+        startDate: '2016',
+        endDate: '2018',
+      },
+      {
+        id: 'ab-edu-2',
+        degree: 'Bachelor of Business Administration',
+        institution: 'Harvard Business School',
+        location: 'Boston',
+        startDate: '2012',
+        endDate: '2015',
+      },
+    ],
+    skills: [
+      'Strategic thinking and problem solving',
+      'Relationship building and networking',
+      'Effective communication and negotiation',
+      'Sales and business development strategy',
+      'Team management and leadership',
+      'Creative and innovative thinking',
+    ],
+    languages: [
+      { language: 'English', dots: 5 },
+      { language: 'Spanish', dots: 4 },
+    ],
+    awards: [
+      { title: 'Outstanding Business Student Award', org: 'University of Southern California, 2014' },
+      { title: "Dean's List", org: 'University of California, Los Angeles, 2015-2016' },
+    ],
+  },
+  flowcv_mercury_flow: {
+    fullName: 'Camila Rivera',
+    title: 'Sales Manager',
+    avatar: '/images/templates/female-avatar.jpg',
+    email: 'camila.rivera@email.com',
+    phone: '+1 305 555 0184',
+    location: 'Miami, United States',
+    linkedin: 'linkedin.com/in/camila-rivera',
+    summary:
+      'Results-driven sales professional with 6+ years of experience in account growth, client relationship management, and pipeline development across B2B environments. Strong track record of improving conversion rates, supporting revenue targets, and building trust with diverse customer groups in English- and Spanish-speaking markets. Brings a practical, people-focused approach to sales planning, team coordination, and long-term customer retention.',
+    experiences: [
+      {
+        id: 'mf-1',
+        role: 'Sales Manager',
+        company: 'BrightPath Business Solutions',
+        location: 'Miami, United States',
+        startDate: '01/2023',
+        endDate: 'Present',
+        bullets: [
+          'Manage a portfolio of mid-market clients across retail and service sectors.',
+          'Lead quarterly sales planning and improved team conversion rates by 14%.',
+          'Build strong client relationships that increased renewals and upsell.',
+        ],
+      },
+      {
+        id: 'mf-2',
+        role: 'Account Manager',
+        company: 'Horizon Office Supply',
+        location: 'Orlando, United States',
+        startDate: '03/2020',
+        endDate: '12/2022',
+        bullets: [
+          'Owned inbound and outbound sales activity for regional business accounts.',
+          'Delivered tailored product proposals and consistently exceeded revenue goals.',
+          'Coordinated with operations teams to improve customer satisfaction.',
+        ],
+      },
+      {
+        id: 'mf-3',
+        role: 'Sales Coordinator',
+        company: 'SunPeak Telecom',
+        location: 'Miami, United States',
+        startDate: '05/2018',
+        endDate: '02/2020',
+        bullets: [
+          'Supported account execs with lead tracking, reporting, and proposal preparation.',
+          'Contributed to pipeline organization and improved follow-up consistency.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'mf-edu-1',
+        degree: 'Bachelor of Business Administration',
+        institution: 'Florida International University',
+        location: 'Miami, United States',
+        startDate: '2014',
+        endDate: '2018',
+      },
+      {
+        id: 'mf-edu-2',
+        degree: 'Associate Degree in Marketing',
+        institution: 'Miami Dade College',
+        location: 'Miami, United States',
+        startDate: '2012',
+        endDate: '2014',
+      },
+    ],
+    skills: [
+      'Account Management',
+      'CRM Management',
+      'Sales Forecasting',
+      'Negotiation',
+      'Client Retention',
+      'Pipeline Development',
+    ],
+    languages: [
+      { language: 'English', dots: 5 },
+      { language: 'Spanish', dots: 4 },
+    ],
+  },
+  flowcv_steady_form: {
+    fullName: 'Rohan K. Patel',
+    title: 'Project Engineer',
+    avatar: '/images/templates/rohan-avatar.jpg',
+    email: 'rohan.patel@email.com',
+    phone: '+91 98765 43210',
+    location: 'Ahmedabad, India',
+    linkedin: 'linkedin.com/in/rohan-patel',
+    nationality: 'Indian',
+    dob: '15.07.2002',
+    summary:
+      'Project Engineer with 6+ years of experience supporting industrial and infrastructure projects in fast-paced engineering environments. Strong background in project coordination, vendor management, technical documentation, and site execution, with a consistent focus on quality, safety, and on-time delivery. Brings practical approach to cross-functional collaboration and process improvement across design, procurement, and installation.',
+    experiences: [
+      {
+        id: 'sf-1',
+        role: 'Project Engineer',
+        company: 'Adani Infrastructure',
+        location: 'Ahmedabad, India',
+        startDate: '01/2022',
+        endDate: 'Present',
+        bullets: [
+          'Lead project coordination across teams for utility infrastructure upgrades.',
+          'Improved project tracking accuracy by standardizing reporting formats and reviews.',
+          'Managed vendor communication, material schedules, and technical documentation.',
+        ],
+      },
+      {
+        id: 'sf-2',
+        role: 'Mechanical Engineer',
+        company: 'Larsen & Toubro',
+        location: 'Vadodara, India',
+        startDate: '07/2019',
+        endDate: '12/2021',
+        bullets: [
+          'Delivered equipment installation support for manufacturing projects while maintaining compliance with safety standards.',
+          'Coordinated inspections and contractor activities to reduce commissioning delays.',
+          'Owned reporting and supported issue resolution between engineering and site teams.',
+        ],
+      },
+      {
+        id: 'sf-3',
+        role: 'Graduate Engineer Trainee',
+        company: 'Tata Projects',
+        location: 'Surat, India',
+        startDate: '06/2017',
+        endDate: '06/2019',
+        bullets: [
+          'Assisted engineers with BOQ preparation, site measurements, and progress updates.',
+          'Contributed to control and material planning for civil and mechanical work packages.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'sf-edu-1',
+        degree: 'Bachelor of Engineering in Mechanical Engineering',
+        institution: 'Gujarat Technological University',
+        location: 'Ahmedabad, India',
+        startDate: '2013',
+        endDate: '2017',
+      },
+      {
+        id: 'sf-edu-2',
+        degree: 'Diploma in Mechanical Engineering',
+        institution: 'Government Polytechnic Ahmedabad',
+        location: 'Ahmedabad, India',
+        startDate: '2010',
+        endDate: '2013',
+      },
+    ],
+    skills: [
+      'Project Coordination',
+      'Mechanical Systems',
+      'Technical Documentation',
+      'Vendor Management',
+      'Quality Assurance',
+      'Site Execution',
+    ],
+    languages: [
+      { language: 'English' },
+      { language: 'Hindi' },
+      { language: 'Gujarati' },
+    ],
+    certificates: [
+      'AutoCAD Professional Certificate',
+      'Primavera P6 Fundamentals',
+      'Occupational Health and Safety',
+    ],
+  },
+  flowcv_classic_serif: {
+    fullName: "Andrew O'Sullivan",
+    title: 'Product Manager',
+    email: 'andrew.osullivan@email.com',
+    phone: '+353 87 411 6849',
+    location: 'Dublin, Ireland',
+    linkedin: 'linkedin.com/in/andrew-osullivan',
+    summary:
+      'Product Manager with experience leading digital product initiatives across customer-facing and internal business platforms. Strong background in roadmap planning, stakeholder alignment, and translating user needs into clear product requirements that support measurable outcomes. Brings a practical, collaborative approach to cross-functional delivery and continuous product improvement in fast-paced environments.',
+    experiences: [
+      {
+        id: 'cs-1',
+        role: 'Product Manager',
+        company: 'BrightLane Technologies',
+        location: 'Dublin, Ireland',
+        startDate: '2021/03',
+        endDate: 'Present',
+        bullets: [
+          'Own product roadmap for onboarding and account management features.',
+          'Partner with design and engineering to deliver quarterly releases on schedule.',
+          'Analyze user feedback and usage trends to prioritize high-impact improvements.',
+        ],
+      },
+      {
+        id: 'cs-2',
+        role: 'Associate Product Manager',
+        company: 'Northridge Digital',
+        location: 'Cork, Ireland',
+        startDate: '2019/07',
+        endDate: '2021/01',
+        bullets: [
+          'Coordinated backlog refinement and sprint planning across product teams.',
+          'Supported launch of self-service tools that reduced support requests significantly.',
+          'Worked with stakeholders to define requirements, success metrics, and priorities.',
+        ],
+      },
+      {
+        id: 'cs-3',
+        role: 'Product Analyst',
+        company: 'CloudWave Solutions',
+        location: 'Galway, Ireland',
+        startDate: '2017/09',
+        endDate: '2019/06',
+        bullets: [
+          'Conducted competitor research to inform feature recommendations.',
+          'Built performance reports to track adoption, retention, and product engagement.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'cs-edu-1',
+        degree: 'MSc in Digital Innovation',
+        institution: 'University College Dublin',
+        location: 'Dublin, Ireland',
+        startDate: '2016',
+        endDate: '2017',
+      },
+      {
+        id: 'cs-edu-2',
+        degree: 'BA in Business and Management',
+        institution: 'University of Galway',
+        location: 'Galway, Ireland',
+        startDate: '2012',
+        endDate: '2016',
+      },
+    ],
+    skills: [
+      'Product Roadmapping',
+      'User Research',
+      'Agile Delivery',
+      'Backlog Prioritization',
+      'Data Analysis',
+      'Go-to-Market Planning',
+      'Project Management',
+      'Cross-Functional Collaboration',
+    ],
+    languages: [
+      { language: 'English', dots: 5 },
+      { language: 'Irish', dots: 5 },
+      { language: 'French', dots: 3 },
+      { language: 'Spanish', dots: 2 },
+    ],
+    certificates: [
+      'Professional Scrum Product Owner I (PSPO I)',
+      'Certified ScrumMaster (CSM)',
+      'Google Analytics Certification',
+    ],
+  },
+  flowcv_leaves: {
+    fullName: 'Catherine Bale',
+    title: 'Marketing Assistant',
+    avatar: '/images/templates/catherine-avatar.png',
+    email: 'c.bale@bale.com',
+    phone: '+15 417 543 010',
+    location: '22611 Pacific Coast Hwy, Malibu California 9022 USA',
+    website: 'bale2345',
+    summary:
+      'To obtain a challenging marketing position with a reputable company where I can utilize my marketing skills and experience to drive business growth.',
+    experiences: [
+      {
+        id: 'cl-1',
+        role: 'Marketing Manager',
+        company: 'Acme Corporation',
+        location: 'Milwaukee',
+        startDate: '2019',
+        endDate: 'Present',
+        bullets: [
+          'Developed and executed marketing strategies to increase brand awareness and drive sales.',
+          'Supervised omnichannel campaign rollouts across digital and print media.',
+        ],
+      },
+      {
+        id: 'cl-2',
+        role: 'Marketing Coordinator',
+        company: 'Global Industries',
+        location: 'Grand Island',
+        startDate: '2017',
+        endDate: '2019',
+        bullets: [
+          'Assisted in the development and execution of marketing campaigns to promote products and services.',
+          'Conducted market research and competitor benchmarking to optimize campaign spend.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'cl-edu-1',
+        degree: 'Business Marketing',
+        institution: 'University of Wisconsin',
+        location: 'Milwaukee',
+        startDate: '2014',
+        endDate: '2017',
+      },
+    ],
+    certificates: [
+      'Google Analytics Certified',
+      'HubSpot Inbound Marketing Certified',
+    ],
+    languages: [
+      { language: 'English', proficiency: 'C2' },
+      { language: 'Spanish', proficiency: 'C2' },
+    ],
+    skillsCategories: [
+      {
+        name: 'Market research',
+        desc: 'Strong marketing skills with experience in developing marketing strategies, conducting market research and executing campaigns.',
+      },
+      {
+        name: 'Analytical thinking',
+        desc: 'Analytical thinking with experience in analyzing data and market trends to identify opportunities and make informed decisions.',
+      },
+      {
+        name: 'Project management',
+        desc: 'Experience in managing multiple projects and prioritizing tasks effectively.',
+      },
+      {
+        name: 'Tools',
+        desc: 'Proficiency in software tools such as Microsoft Office, Google Analytics, and social media platforms.',
+      },
+    ],
+  },
+  modern_executive: {
+    fullName: "Andrew O'Sullivan",
+    title: 'Product Manager',
+    avatar: '/images/templates/andrew-avatar.jpg',
+    location: 'Obere Lände 23, 12345 Berlin',
+    email: 'andrew@sullivan.com',
+    phone: '+01 11111155',
+    linkedin: 'andrewsullivan',
+    summary:
+      'Experienced Product Manager with a proven track record in the development and management of products throughout their lifecycle. Passionate, creative, and results-oriented.',
+    experiences: [
+      {
+        id: 'me-1',
+        role: 'Product Manager',
+        company: 'TechGen GmbH',
+        location: 'Berlin, Germany',
+        startDate: '2018/08',
+        endDate: '2023/07',
+        bullets: [
+          'Led a cross-functional team of 10 people in the development of a new product line, resulting in a 20% increase in revenue.',
+          'Conducted market analysis and competitive studies to identify new product opportunities and expand the product portfolio.',
+          'Successfully launched two new products in the market, leading to a 15% increase in market share.',
+        ],
+      },
+      {
+        id: 'me-2',
+        role: 'Product Specialist',
+        company: 'Solutions Inc',
+        location: 'Munich, Germany',
+        startDate: '2015/04',
+        endDate: '2018/07',
+        bullets: [
+          'Developed and implemented a product strategy for the European market, resulting in a 25% revenue growth.',
+          'Conducted training sessions and presentations for customers and sales teams to enhance product knowledge.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'me-edu-1',
+        degree: 'Master of Business Administration (MBA)',
+        institution: 'Tech University Munich',
+        location: 'Munich, Germany',
+        startDate: '2013/08',
+        endDate: '2015/07',
+      },
+      {
+        id: 'me-edu-2',
+        degree: 'Bachelor of Engineering in Information Technology',
+        institution: 'Technical University Vienna',
+        location: 'Vienna, Austria',
+        startDate: '2009/09',
+        endDate: '2013/07',
+      },
+    ],
+    skills: [
+      { name: 'Product development and strategy', dots: 5 },
+      { name: 'Project management and team leadership', dots: 5 },
+      { name: 'Customer needs analysis and market research', dots: 4 },
+      { name: 'Agile methods and Scrum', dots: 4 },
+      { name: 'Data analysis', dots: 4 },
+      { name: 'Presentation and communication', dots: 4 },
+    ],
+    languages: ['German', 'English', 'Spanish'],
+    awards: ['Product Manager of the Year, Delta Solutions'],
+    quote: {
+      text: 'The best product is the one that solves a problem for the customer.',
+      author: 'Eric Ries',
+    },
+  },
+  flowcv_editorial_rule: {
+    fullName: 'Lena Hoffmann',
+    title: 'Operations Manager',
+    email: 'lena.hoffmann@email.com',
+    phone: '+49 151 4827 6391',
+    location: 'Berlin, Germany',
+    linkedin: 'linkedin.com/in/lena-hoffmann',
+    summary:
+      'Operations professional with 7+ years of experience supporting logistics, process improvement, and cross-functional coordination in fast-paced business environments. Strong track record of improving workflows, managing vendors, and delivering reliable service levels across daily operations. Combines analytical thinking with hands-on leadership to help growing organizations scale efficiently.',
+    experiences: [
+      {
+        id: 'er-1',
+        role: 'Operations Manager',
+        company: 'Nova Retail Group',
+        location: 'Berlin, Germany',
+        startDate: '2022',
+        endDate: 'Present',
+        bullets: [
+          'Lead daily operations across warehousing, procurement, and support teams.',
+          'Improved order accuracy by redesigning internal handoff procedures.',
+          'Managed vendor contracts and reduced annual service costs.',
+          'Built KPI dashboards for capacity, service, and productivity tracking.',
+        ],
+      },
+      {
+        id: 'er-2',
+        role: 'Operations Coordinator',
+        company: 'Urban Freight Solutions',
+        location: 'Hamburg, Germany',
+        startDate: '2019',
+        endDate: '2022',
+        bullets: [
+          'Coordinated transport schedules and resolved delivery escalations promptly.',
+          'Standardized reporting processes for weekly management reviews.',
+          'Supported onboarding and training for new team members.',
+        ],
+      },
+      {
+        id: 'er-3',
+        role: 'Operations Analyst',
+        company: 'GreenLine Services',
+        location: 'Berlin, Germany',
+        startDate: '2017',
+        endDate: '2019',
+        bullets: [
+          'Analyzed process data to identify delays and waste.',
+          'Implemented automated inventory reporting across regional depots.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'er-edu-1',
+        degree: 'M.Sc. Management',
+        institution: 'Humboldt University of Berlin',
+        location: 'Berlin, Germany',
+        startDate: '2015',
+        endDate: '2017',
+      },
+      {
+        id: 'er-edu-2',
+        degree: 'B.A. Business Administration',
+        institution: 'University of Cologne',
+        location: 'Cologne, Germany',
+        startDate: '2011',
+        endDate: '2015',
+      },
+    ],
+    skills: [
+      'Process Improvement',
+      'Supply Chain Coordination',
+      'Vendor Management',
+      'KPI Reporting',
+      'Budget Tracking',
+      'ERP Systems',
+      'Inventory Planning',
+      'SAP',
+      'Excel & Google Sheets',
+      'Team Leadership',
+      'Continuous Improvement',
+      'Stakeholder Management',
+    ],
+    languages: ['German (Native)', 'English (Fluent)', 'French (Conversational)'],
+    certificates: [
+      'Lean Six Sigma Green Belt',
+      'APICS Certified in Logistics, Transportation and Distribution',
+      'PRINCE2 Foundation Certificate',
+      'SAP Certified Application Associate',
+    ],
+  },
+  flowcv_precision_line: {
+    fullName: 'Daniel Mercer',
+    title: 'Vice President of Sales',
+    email: 'daniel.mercer@email.com',
+    phone: '+1 312 555 0187',
+    location: 'Chicago, IL',
+    linkedin: 'linkedin.com/in/daniel-mercer',
+    summary:
+      'Sales professional with 8+ years of experience supporting revenue growth in B2B technology and business services environments. Skilled in account management, pipeline development, team coordination, and client relationship building. Brings a practical, performance-focused approach to sales execution and is well aligned with mid-level commercial leadership roles.',
+    experiences: [
+      {
+        id: 'pl-1',
+        role: 'Sales Manager',
+        company: 'Nevero Solutions',
+        location: 'Chicago, Illinois',
+        startDate: '2022',
+        endDate: 'Present',
+        bullets: [
+          'Manage a team of account executives across mid-market accounts.',
+          'Improve pipeline tracking and weekly forecast reporting accuracy.',
+          'Lead client negotiations and support renewal growth opportunities.',
+        ],
+      },
+      {
+        id: 'pl-2',
+        role: 'Senior Sales Specialist',
+        company: 'BrightPath Systems',
+        location: 'Chicago, Illinois',
+        startDate: '2019',
+        endDate: '2022',
+        bullets: [
+          'Delivered quarterly targets through consultative selling and account expansion.',
+          'Built strong relationships with regional clients in healthcare and finance.',
+          'Coordinated with marketing to improve lead follow-up and conversion rates.',
+        ],
+      },
+      {
+        id: 'pl-3',
+        role: 'Sales Coordinator',
+        company: 'Horizon Logic',
+        location: 'Milwaukee, Wisconsin',
+        startDate: '2016',
+        endDate: '2019',
+        bullets: [
+          'Supported outbound campaigns and maintained CRM data quality.',
+          'Assisted with proposal preparation, reporting, and sales meeting coordination.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'pl-edu-1',
+        degree: 'Professional Certificate in Sales Management',
+        institution: 'DePaul University',
+        location: 'Chicago, Illinois',
+        startDate: '2018',
+        endDate: '2018',
+      },
+      {
+        id: 'pl-edu-2',
+        degree: 'Bachelor of Science in Marketing',
+        institution: 'Indiana University Bloomington',
+        location: 'Bloomington, Indiana',
+        startDate: '2012',
+        endDate: '2016',
+      },
+    ],
+    skills: [
+      'Sales Strategy',
+      'Revenue Growth',
+      'Enterprise Account Management',
+      'Team Leadership',
+      'Pipeline Management',
+      'Forecasting and Reporting',
+      'Negotiation',
+      'Cross-Functional Collaboration',
+    ],
+    languages: ['English (Native)', 'Spanish (Proficient)', 'French (Conversational)'],
+    certificates: [
+      'Certified Sales Leadership Professional',
+      'HubSpot Sales Software Certification',
+      'Salesforce Certified Sales Representative',
+      'Strategic Account Management Certification',
+    ],
+  },
+  classic_ats: {
+    fullName: 'Emily Carter',
+    title: 'Project Manager',
+    email: 'emily.carter@email.com',
+    phone: '+1 416 555 2847',
+    location: 'Toronto, Canada',
+    linkedin: 'linkedin.com/in/emily-carter',
+    summary:
+      'Project Manager with six years of experience coordinating cross-functional initiatives in technology and business operations. Skilled in stakeholder communication, project planning, risk tracking, and delivery governance across complex environments. Known for building practical workflows, improving team alignment, and keeping priorities moving under tight deadlines.',
+    experiences: [
+      {
+        id: 'ca-1',
+        role: 'Project Manager',
+        company: 'NorthBridge Digital',
+        location: 'Toronto, Canada',
+        startDate: '2022/03',
+        endDate: 'Present',
+        bullets: [
+          'Managed release plans across product, engineering, and operations teams.',
+          'Coordinated stakeholder updates, risk reviews, and milestone reporting.',
+          'Improved delivery tracking, reducing gaps across concurrent workstreams.',
+        ],
+      },
+      {
+        id: 'ca-2',
+        role: 'Project Coordinator',
+        company: 'MapleWorks Solutions',
+        location: 'Toronto, Canada',
+        startDate: '2019/07',
+        endDate: '2022/01',
+        bullets: [
+          'Supported schedules, budgets, and documentation for transformation initiatives.',
+          'Facilitated team meetings and maintained cross-department action logs.',
+          'Escalated risks before blockers affected delivery timelines.',
+        ],
+      },
+      {
+        id: 'ca-3',
+        role: 'Operations Analyst',
+        company: 'BrightPath Services',
+        location: 'Ottawa, Canada',
+        startDate: '2017/09',
+        endDate: '2019/06',
+        bullets: [
+          'Analyzed workflow data to identify service delivery delays.',
+          'Prepared reports supporting resource planning and prioritization.',
+          'Documented process improvements for managers and project teams.',
+        ],
+      },
+      {
+        id: 'ca-4',
+        role: 'Project Management Student Assistant',
+        company: 'University of Toronto',
+        location: 'Toronto, Canada',
+        startDate: '2016/09',
+        endDate: '2017/06',
+        bullets: [
+          'Supported project timelines, meeting notes, and team follow-ups.',
+          'Updated task boards and tracked deadlines for student initiatives.',
+        ],
+      },
+    ],
+    education: [
+      {
+        id: 'ca-edu-1',
+        degree: 'Bachelor of Commerce in Management',
+        institution: 'Toronto Metropolitan University',
+        location: 'Toronto, Canada',
+        startDate: '2013',
+        endDate: '2017',
+      },
+      {
+        id: 'ca-edu-2',
+        degree: 'Diploma in Business Administration',
+        institution: 'Algonquin College',
+        location: 'Ottawa, Canada',
+        startDate: '2011',
+        endDate: '2013',
+      },
+    ],
+    skills: [
+      'Project Planning',
+      'Stakeholder Management',
+      'Risk Management',
+      'Agile Delivery',
+      'Budget Tracking',
+      'Process Improvement',
+      'Jira',
+      'Microsoft Project',
+    ],
+    certificates: [
+      'Project Management Professional (PMP)',
+      'Certified ScrumMaster (CSM)',
+      'Google Project Management Certificate',
+    ],
+    languages: ['English', 'French'],
+  },
+};
+
+// Helper to render FlowCV rating dots
+const renderRatingDots = (
+  rating: number,
+  max = 5,
+  activeClass = 'bg-slate-900',
+  inactiveClass = 'bg-slate-200'
+) => {
+  return (
+    <div className="flex items-center gap-1 shrink-0">
+      {Array.from({ length: max }).map((_, i) => (
+        <span
+          key={i}
+          className={`w-2 h-2 rounded-full inline-block ${
+            i < rating ? activeClass : inactiveClass
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
+
 export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
   templateId,
   data,
@@ -305,43 +1079,90 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
   const safeData = data || (MOCK_PERSONA as any);
   const pInfo = safeData?.personalInfo || (safeData as any) || MOCK_PERSONA.personalInfo;
 
-  // Always ensure rich, fully-filled resume presentation (matching Image 3 professional density)
-  const fullName = pInfo?.fullName || (safeData as any)?.fullName || MOCK_PERSONA.fullName;
-  const email = pInfo?.email || (safeData as any)?.email || MOCK_PERSONA.email;
-  const phone = pInfo?.phone || (safeData as any)?.phone || MOCK_PERSONA.phone;
-  const location = pInfo?.location || (safeData as any)?.location || MOCK_PERSONA.location;
-  const linkedin = pInfo?.linkedin || (safeData as any)?.linkedin || MOCK_PERSONA.linkedin;
+  // Check if we should use persona defaults (during micro preview or default mock data)
+  const isDefaultPersona = !data || pInfo?.fullName === 'Alex Morgan' || !pInfo?.fullName;
+  const flowcvPersona = (FLOWCV_PERSONAS as any)[templateId];
+  const useFlowPersona = flowcvPersona && (isMicroPreview || isDefaultPersona);
+
+  // Candidate basic attributes
+  const fullName = useFlowPersona
+    ? flowcvPersona.fullName
+    : pInfo?.fullName || (safeData as any)?.fullName || MOCK_PERSONA.fullName;
+  const email = useFlowPersona
+    ? flowcvPersona.email
+    : pInfo?.email || (safeData as any)?.email || MOCK_PERSONA.email;
+  const phone = useFlowPersona
+    ? flowcvPersona.phone
+    : pInfo?.phone || (safeData as any)?.phone || MOCK_PERSONA.phone;
+  const location = useFlowPersona
+    ? flowcvPersona.location
+    : pInfo?.location || (safeData as any)?.location || MOCK_PERSONA.location;
+  const linkedin = useFlowPersona
+    ? flowcvPersona.linkedin
+    : pInfo?.linkedin || (safeData as any)?.linkedin || MOCK_PERSONA.linkedin;
   const github = pInfo?.github || (safeData as any)?.github || MOCK_PERSONA.github;
-  const website = pInfo?.website || (safeData as any)?.website || MOCK_PERSONA.website;
-  const summary = pInfo?.summary || (safeData as any)?.summary || MOCK_PERSONA.summary;
+  const website = useFlowPersona
+    ? flowcvPersona.website || MOCK_PERSONA.website
+    : pInfo?.website || (safeData as any)?.website || MOCK_PERSONA.website;
+  const summary = useFlowPersona
+    ? flowcvPersona.summary
+    : pInfo?.summary || (safeData as any)?.summary || MOCK_PERSONA.summary;
 
-  const personalInfo = {
-    fullName,
-    email,
-    phone,
-    location,
-    linkedin,
-    github,
-    website,
-    summary,
-  };
-
-  const rawExp = safeData?.experiences;
-  const rawEdu = safeData?.education;
+  const rawExp = useFlowPersona ? flowcvPersona.experiences : safeData?.experiences;
+  const rawEdu = useFlowPersona ? flowcvPersona.education : safeData?.education;
   const rawProj = safeData?.projects;
-  const rawSkills = safeData?.skills;
-  const rawCerts = safeData?.certifications;
+  const rawSkills = useFlowPersona ? flowcvPersona.skills : safeData?.skills;
+  const rawCerts = useFlowPersona ? flowcvPersona.certificates : safeData?.certifications;
 
-  const expList = Array.isArray(rawExp) && rawExp.length > 0 ? rawExp : MOCK_PERSONA.experiences;
-  const eduList = Array.isArray(rawEdu) && rawEdu.length > 0 ? rawEdu : MOCK_PERSONA.education;
-  const projList = Array.isArray(rawProj) && rawProj.length > 0 ? rawProj : MOCK_PERSONA.projects;
-  const skillList = Array.isArray(rawSkills) && rawSkills.length > 0 ? rawSkills : MOCK_PERSONA.skills;
-  const certList =
+  interface ResumeExpItem {
+    id?: string;
+    role: string;
+    company: string;
+    location?: string;
+    startDate?: string;
+    endDate?: string;
+    bullets?: string[];
+  }
+  interface ResumeEduItem {
+    id?: string;
+    degree: string;
+    institution: string;
+    location?: string;
+    startDate?: string;
+    endDate?: string;
+    gpa?: string;
+  }
+  interface ResumeProjItem {
+    id?: string;
+    title: string;
+    techStack?: string;
+    bullets?: string[];
+  }
+
+  const expList: ResumeExpItem[] = (Array.isArray(rawExp) && rawExp.length > 0 ? rawExp : MOCK_PERSONA.experiences) as ResumeExpItem[];
+  const eduList: ResumeEduItem[] = (Array.isArray(rawEdu) && rawEdu.length > 0 ? rawEdu : MOCK_PERSONA.education) as ResumeEduItem[];
+  const projList: ResumeProjItem[] = (Array.isArray(rawProj) && rawProj.length > 0 ? rawProj : MOCK_PERSONA.projects) as ResumeProjItem[];
+  const skillList: string[] = (Array.isArray(rawSkills) && rawSkills.length > 0 ? rawSkills : MOCK_PERSONA.skills) as string[];
+  const certList: string[] = (
     Array.isArray(rawCerts) && rawCerts.length > 0
       ? rawCerts
-      : MOCK_PERSONA.certifications;
+      : MOCK_PERSONA.certifications
+  ) as string[];
 
-  const candidateRole = expList.length > 0 ? expList[0].role : MOCK_PERSONA.title;
+  const candidateRole = useFlowPersona
+    ? flowcvPersona.title
+    : expList.length > 0
+    ? expList[0].role
+    : MOCK_PERSONA.title;
+
+  const isFullBleed = [
+    'flowcv_atlantic_blue',
+    'flowcv_leaves',
+    'flowcv_silver_banner',
+    'navy_sidebar',
+    'navy_header',
+    'teal_executive',
+  ].includes(templateId);
 
   return (
     <div
@@ -352,16 +1173,19 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
         isMicroPreview ? 'shadow-none' : 'shadow-2xl rounded-xs print:shadow-none'
       } transition-transform origin-top select-text box-border font-sans focus:outline-none focus:ring-1 focus:ring-emerald-500/20`}
       style={{
-        width: '210mm',
-        minHeight: '297mm',
-        maxWidth: '210mm',
-        padding: isMicroPreview ? '8mm 10mm' : '12mm 14mm',
-        transform: `scale(${zoomLevel / 100})`,
+        width: '794px',
+        minHeight: '1123px',
+        height: isMicroPreview ? '1123px' : undefined,
+        maxWidth: '794px',
+        padding: isFullBleed ? 0 : (isMicroPreview ? '30px 36px' : '40px 44px'),
+        transform: isMicroPreview ? undefined : `scale(${zoomLevel / 100})`,
+        overflow: 'hidden',
+        boxSizing: 'border-box',
       }}
     >
       {/* =========================================================================
           1. SPLIT DUO (Cobalt Blue Balanced 2-Column Grid)
-         ========================================================================= */}
+          ========================================================================= */}
       {templateId === 'split_duo' && (
         <div className="flex flex-col gap-3.5">
           {/* Header */}
@@ -2386,44 +3210,157 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
       )}
 
       {/* =========================================================================
-          23. MODERN EXECUTIVE (Item 29 in Gallery - Royal Blue Accent Border)
+          23. MODERN EXECUTIVE (FlowCV Executive Reference - Top-Right Avatar & Rating Dots)
          ========================================================================= */}
       {templateId === 'modern_executive' && (
-        <div className="flex flex-col gap-4 border-l-4 border-blue-600 pl-6">
-          <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">{fullName || 'YOUR NAME'}</h1>
-            <p className="text-xs text-blue-600 font-bold mt-0.5">{candidateRole}</p>
-            <div className="text-xs text-slate-600 font-semibold flex flex-wrap gap-2 mt-1">
-              {email && <span>{email}</span>}
-              {phone && <span>• {phone}</span>}
-              {location && <span>• {location}</span>}
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-serif text-slate-800">
+          {/* Header */}
+          <div className="flex justify-between items-start border-b border-slate-900 pb-3">
+            <div>
+              <div className="flex items-baseline gap-3">
+                <h1 className="text-[26px] font-bold text-slate-950 tracking-tight">
+                  {useFlowPersona ? flowcvPersona.fullName : fullName}
+                </h1>
+                <span className="text-[14px] italic text-slate-600 font-sans">
+                  {useFlowPersona ? flowcvPersona.title : candidateRole}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-[10.5px] text-slate-600 font-sans mt-2.5">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.location : location}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.email : email}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.phone : phone}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.linkedin : linkedin}
+                </span>
+              </div>
             </div>
+            <img
+              src="/images/templates/andrew-avatar.jpg"
+              alt="Avatar"
+              className="w-20 h-20 rounded-full object-cover shadow-sm border border-slate-200 shrink-0"
+            />
           </div>
-          {summary && (
-            <div className="bg-blue-50/50 border-l-2 border-blue-600 p-3 rounded-r">
-              <p className="text-xs text-slate-800 leading-relaxed italic">{summary}</p>
-            </div>
-          )}
-          {expList.length > 0 && (
-            <div className="flex flex-col gap-3">
-              <h3 className="text-xs font-black text-blue-600 uppercase tracking-wider border-b border-slate-200 pb-1">
-                Work Experience
-              </h3>
-              {expList.map((exp) => (
-                <div key={exp.id} className="flex flex-col gap-0.5">
-                  <div className="flex justify-between font-bold text-gray-900 text-xs">
-                    <span>{exp.role} @ {exp.company}</span>
-                    <span className="text-gray-500 text-[11px]">{exp.startDate} – {exp.endDate}</span>
+
+          {/* Profile */}
+          <div className="flex flex-col gap-1">
+            <h2 className="text-[12px] font-bold uppercase tracking-wider text-slate-950 font-sans border-b border-slate-300 pb-0.5">
+              Profile
+            </h2>
+            <p className="text-[10.5px] text-slate-700 font-sans leading-relaxed">
+              {useFlowPersona ? flowcvPersona.summary : summary}
+            </p>
+          </div>
+
+          {/* Professional Experience */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold uppercase tracking-wider text-slate-950 font-sans border-b border-slate-300 pb-0.5">
+              Professional Experience
+            </h2>
+            <div className="flex flex-col gap-3 font-sans">
+              {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 2).map((exp: any, idx: number) => (
+                <div key={exp.id || idx} className="grid grid-cols-12 gap-4 text-[10.5px]">
+                  <div className="col-span-3 text-slate-500 font-medium">
+                    <span>{exp.startDate} – {exp.endDate}</span>
+                    <span className="block text-[9.5px] text-slate-400 mt-0.5">{exp.location || 'Berlin, Germany'}</span>
                   </div>
-                  <ul className="list-disc list-inside text-xs text-gray-700">
-                    {exp.bullets?.map((b, idx) => (
-                      <li key={idx}>{b}</li>
-                    ))}
-                  </ul>
+                  <div className="col-span-9 flex flex-col gap-1">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-bold text-slate-900 text-[11px]">{exp.company}</span>
+                      <span className="text-slate-600 font-serif italic">{exp.role}</span>
+                    </div>
+                    <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-1 leading-relaxed">
+                      {exp.bullets?.map((b: string, bIdx: number) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ))}
             </div>
-          )}
+          </div>
+
+          {/* Education */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold uppercase tracking-wider text-slate-950 font-sans border-b border-slate-300 pb-0.5">
+              Education
+            </h2>
+            <div className="flex flex-col gap-2.5 font-sans">
+              {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+                <div key={edu.id || idx} className="grid grid-cols-12 gap-4 text-[10.5px]">
+                  <div className="col-span-3 text-slate-500 font-medium">
+                    <span>{edu.startDate} – {edu.endDate}</span>
+                  </div>
+                  <div className="col-span-9">
+                    <span className="font-bold text-slate-900 text-[11px] block">{edu.degree}</span>
+                    <span className="text-slate-600">{edu.institution}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills with Rating Dots */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold uppercase tracking-wider text-slate-950 font-sans border-b border-slate-300 pb-0.5">
+              Skills
+            </h2>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 font-sans text-[10.5px] text-slate-700">
+              <div className="flex justify-between items-center">
+                <span>Product development and strategy</span>
+                {renderRatingDots(5)}
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Project management and team leadership</span>
+                {renderRatingDots(5)}
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Customer needs analysis and market research</span>
+                {renderRatingDots(4)}
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Agile methods and Scrum</span>
+                {renderRatingDots(4)}
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Data analysis</span>
+                {renderRatingDots(4)}
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Presentation and communication</span>
+                {renderRatingDots(4)}
+              </div>
+            </div>
+          </div>
+
+          {/* Languages, Awards & Quote */}
+          <div className="grid grid-cols-12 gap-4 pt-2 border-t border-slate-300 font-sans text-[10.5px]">
+            <div className="col-span-4 flex flex-col gap-1">
+              <span className="font-bold text-slate-900 uppercase text-[10px] tracking-wider">Languages</span>
+              <span className="text-slate-700">German • English • Spanish</span>
+            </div>
+            <div className="col-span-4 flex flex-col gap-1">
+              <span className="font-bold text-slate-900 uppercase text-[10px] tracking-wider">Awards</span>
+              <span className="text-slate-700">Product Manager of the Year</span>
+              <span className="text-slate-500 text-[9.5px]">Delta Solutions</span>
+            </div>
+            <div className="col-span-4 flex flex-col gap-1 border-l border-slate-200 pl-3">
+              <span className="font-bold text-slate-900 uppercase text-[10px] tracking-wider">Favorite Quote</span>
+              <span className="text-slate-600 italic text-[10px] leading-tight">
+                "The best product is the one that solves a problem for the customer."
+              </span>
+              <span className="text-slate-500 text-[9px]">— Eric Ries</span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -2591,446 +3528,505 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
       )}
 
       {/* =========================================================================
-          26. FLOWCV ATLANTIC BLUE (Multi-Column Left Navy Sidebar)
+          26. FLOWCV ATLANTIC BLUE (Multi-Column Left Navy Sidebar - Brian T. Wayne Reference)
          ========================================================================= */}
       {templateId === 'flowcv_atlantic_blue' && (
-        <div className="grid grid-cols-12 gap-6 h-full min-h-[900px] -mx-[14mm] -my-[12mm]">
-          <div className="col-span-4 bg-[#0B2545] text-white p-6 flex flex-col gap-5 text-xs">
-            <div>
-              <h1 className="text-xl font-black text-white leading-tight">{fullName || 'YOUR NAME'}</h1>
-              <span className="text-sky-300 font-medium text-[10.5px] block mt-1">{candidateRole}</span>
-              <span className="text-sky-300 font-medium text-[10.5px]">{location}</span>
-            </div>
-            <div className="flex flex-col gap-1.5 border-t border-sky-900 pt-3">
-              <span className="font-bold uppercase text-[10px] text-sky-400">Contact</span>
-              <span className="text-gray-300 break-all">{email}</span>
-              <span className="text-gray-300">{phone}</span>
-            </div>
-            {eduList.length > 0 && (
-              <div className="flex flex-col gap-2 border-t border-sky-900 pt-3">
-                <span className="font-bold uppercase text-[10px] text-sky-400">Education</span>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="flex flex-col text-[10.5px]">
-                    <span className="font-bold text-white">{edu.institution}</span>
-                    <span className="text-gray-300">{edu.degree}</span>
-                  </div>
-                ))}
+        <div className="grid grid-cols-12 h-full min-h-[1123px] w-full text-slate-800">
+          {/* Left Navy Column */}
+          <div className="col-span-4 bg-[#0F2841] text-white p-7 flex flex-col justify-between text-xs">
+            <div className="flex flex-col gap-4">
+              <div>
+                <h1 className="text-[22px] font-black text-white leading-tight">
+                  {useFlowPersona ? flowcvPersona.fullName : fullName}
+                </h1>
+                <span className="text-sky-300 font-semibold text-[12px] block mt-1">
+                  {useFlowPersona ? flowcvPersona.title : candidateRole}
+                </span>
               </div>
-            )}
-            {skillList.length > 0 && (
-              <div className="flex flex-col gap-2 border-t border-sky-900 pt-3">
-                <span className="font-bold uppercase text-[10px] text-sky-400">Skills</span>
-                <div className="flex flex-wrap gap-1">
-                  {skillList.map((sk, idx) => (
-                    <span key={idx} className="px-1.5 py-0.5 bg-[#133C55] text-sky-200 border border-sky-700/60 rounded text-[9px] font-semibold">
-                      {sk}
-                    </span>
-                  ))}
+
+              {/* Avatar Photo */}
+              <div className="py-1">
+                <img
+                  src="/images/templates/brian-avatar.jpg"
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full object-cover border-2 border-white/20 mx-auto shadow-md"
+                />
+              </div>
+
+              {/* Contact with Icons */}
+              <div className="flex flex-col gap-2 pt-2 border-t border-sky-800/60 text-[10.5px]">
+                <div className="flex items-center gap-2 text-slate-200">
+                  <Mail className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <span className="break-all">{useFlowPersona ? flowcvPersona.email : email}</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-200">
+                  <Phone className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <span>{useFlowPersona ? flowcvPersona.phone : phone}</span>
+                </div>
+                <div className="flex items-start gap-2 text-slate-200">
+                  <MapPin className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
+                  <span className="leading-snug">{useFlowPersona ? flowcvPersona.location : location}</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-200">
+                  <Globe className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <span>{useFlowPersona ? flowcvPersona.linkedin : linkedin}</span>
                 </div>
               </div>
-            )}
-          </div>
-          <div className="col-span-8 p-6 pl-2 flex flex-col gap-4 text-xs">
-            {summary && (
-              <div>
-                <h3 className="font-black text-[#0B2545] uppercase text-[11px] border-b border-gray-200 pb-0.5">
-                  Summary
-                </h3>
-                <p className="text-gray-800 leading-relaxed mt-1">{summary}</p>
+
+              {/* Profile */}
+              <div className="flex flex-col gap-1.5 pt-2 border-t border-sky-800/60">
+                <div className="flex items-center gap-1.5 text-sky-300 font-bold uppercase tracking-wider text-[11px]">
+                  <Briefcase className="w-3.5 h-3.5" />
+                  <span>Profile</span>
+                </div>
+                <p className="text-[10.5px] text-slate-200 leading-relaxed">
+                  {useFlowPersona ? flowcvPersona.summary : summary}
+                </p>
               </div>
-            )}
-            {expList.length > 0 && (
-              <div className="flex flex-col gap-3">
-                <h3 className="font-black text-[#0B2545] uppercase text-[11px] border-b border-gray-200 pb-0.5">
-                  Experience
-                </h3>
-                {expList.map((exp) => (
-                  <div key={exp.id} className="flex flex-col gap-0.5">
-                    <div className="flex justify-between font-bold text-gray-900">
-                      <span>{exp.role} — <span className="text-[#0B2545]">{exp.company}</span></span>
-                      <span className="text-gray-500 font-normal text-[10.5px]">{exp.startDate} – {exp.endDate}</span>
+
+              {/* Languages */}
+              <div className="flex flex-col gap-2 pt-2 border-t border-sky-800/60">
+                <div className="flex items-center gap-1.5 text-sky-300 font-bold uppercase tracking-wider text-[11px]">
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Languages</span>
+                </div>
+                <div className="flex flex-col gap-2 text-[10.5px]">
+                  <div className="flex justify-between items-center text-slate-200">
+                    <span>English</span>
+                    {renderRatingDots(5, 5, 'bg-white', 'bg-white/20')}
+                  </div>
+                  <div className="flex justify-between items-center text-slate-200">
+                    <span>Spanish</span>
+                    {renderRatingDots(4, 5, 'bg-white', 'bg-white/20')}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Awards at bottom */}
+            <div className="flex flex-col gap-2 pt-3 border-t border-sky-800/60">
+              <div className="flex items-center gap-1.5 text-sky-300 font-bold uppercase tracking-wider text-[11px]">
+                <Award className="w-3.5 h-3.5" />
+                <span>Awards</span>
+              </div>
+              <div className="flex flex-col gap-1.5 text-[10px] text-slate-200">
+                <div>
+                  <span className="font-bold block text-white">Outstanding Business Student Award</span>
+                  <span className="text-slate-300 text-[9.5px]">University of Southern California, 2014</span>
+                </div>
+                <div>
+                  <span className="font-bold block text-white">Dean's List</span>
+                  <span className="text-slate-300 text-[9.5px]">University of California, Los Angeles, 2015-2016</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right White Column */}
+          <div className="col-span-8 bg-white p-8 pl-6 flex flex-col justify-between text-slate-800">
+            {/* Work Experience */}
+            <div className="flex flex-col gap-2.5">
+              <div className="flex items-center gap-2 border-b-2 border-slate-900 pb-1">
+                <Briefcase className="w-4 h-4 text-slate-900" />
+                <h2 className="text-[13px] font-black uppercase tracking-wider text-slate-900">
+                  Work Experience
+                </h2>
+              </div>
+              <div className="flex flex-col gap-4">
+                {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 2).map((exp: any, idx: number) => (
+                  <div key={exp.id || idx} className="flex flex-col gap-1">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-extrabold text-[12px] text-slate-900">{exp.company}</span>
+                      <span className="text-[10px] font-medium text-slate-500">{exp.startDate} – {exp.endDate}</span>
                     </div>
-                    <ul className="list-disc list-inside text-gray-700">
-                      {exp.bullets?.map((b, idx) => (
-                        <li key={idx}>{b}</li>
+                    <span className="text-[11px] font-bold text-sky-800">{exp.role}</span>
+                    <ul className="list-disc list-outside ml-4 text-[10.5px] text-slate-700 flex flex-col gap-1 mt-1 leading-relaxed">
+                      {exp.bullets?.map((b: string, bIdx: number) => (
+                        <li key={bIdx}>{b}</li>
                       ))}
                     </ul>
                   </div>
                 ))}
               </div>
-            )}
+            </div>
+
+            {/* Education */}
+            <div className="flex flex-col gap-2 pt-2">
+              <div className="flex items-center gap-2 border-b-2 border-slate-900 pb-1">
+                <GraduationCap className="w-4 h-4 text-slate-900" />
+                <h2 className="text-[13px] font-black uppercase tracking-wider text-slate-900">
+                  Education
+                </h2>
+              </div>
+              <div className="flex flex-col gap-3">
+                {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+                  <div key={edu.id || idx} className="flex flex-col text-[11px]">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-bold text-slate-900">{edu.degree}</span>
+                      <span className="text-[10px] text-slate-500">{edu.startDate} – {edu.endDate} | {edu.location || 'Boston'}</span>
+                    </div>
+                    <span className="text-slate-600 text-[10.5px]">{edu.institution}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div className="flex flex-col gap-2 pt-2">
+              <div className="flex items-center gap-2 border-b-2 border-slate-900 pb-1">
+                <Wrench className="w-4 h-4 text-slate-900" />
+                <h2 className="text-[13px] font-black uppercase tracking-wider text-slate-900">
+                  Skills
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[10.5px] text-slate-700">
+                {(useFlowPersona ? flowcvPersona.skills : skillList.slice(0, 8)).map((sk: string, idx: number) => (
+                  <div key={idx} className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" />
+                    <span>{sk}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {/* =========================================================================
-          27. FLOWCV MERCURY FLOW (Fluid 1-Column Minimalist)
+          27. FLOWCV MERCURY FLOW (Fluid 1-Column Minimalist - Camila Rivera Reference)
          ========================================================================= */}
       {templateId === 'flowcv_mercury_flow' && (
-        <div className="flex flex-col gap-3.5 font-sans">
-          <div className="border-b border-slate-900 pb-2">
-            <h1 className="text-[25px] font-black tracking-tight text-slate-950 uppercase">{fullName || 'YOUR NAME'}</h1>
-            <p className="text-[11.5px] font-bold text-slate-700 mt-0.5">{candidateRole}</p>
-            <div className="text-[9.5px] text-slate-500 flex flex-wrap gap-2.5 mt-1 font-medium">
-              {email && <span>{email}</span>}
-              {phone && <span>• {phone}</span>}
-              {location && <span>• {location}</span>}
-              {linkedin && <span>• {linkedin}</span>}
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-sans text-slate-800">
+          {/* Header */}
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="/images/templates/female-avatar.jpg"
+              alt="Avatar"
+              className="w-20 h-20 rounded-full object-cover shadow-sm border border-slate-200"
+            />
+            <h1 className="text-[25px] font-bold text-slate-900 tracking-tight mt-2">
+              {useFlowPersona ? flowcvPersona.fullName : fullName}
+            </h1>
+            <p className="text-[12.5px] font-medium text-slate-600 mt-0.5">
+              {useFlowPersona ? flowcvPersona.title : candidateRole}
+            </p>
+            <div className="flex items-center justify-center flex-wrap gap-4 text-[10.5px] text-slate-600 mt-2">
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-slate-400" />
+                {useFlowPersona ? flowcvPersona.email : email}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-slate-400" />
+                {useFlowPersona ? flowcvPersona.phone : phone}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-slate-400" />
+                {useFlowPersona ? flowcvPersona.linkedin : linkedin}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                {useFlowPersona ? flowcvPersona.location : location}
+              </span>
             </div>
           </div>
 
-          {summary && (
-            <p className="text-[9.5px] text-slate-800 leading-relaxed italic border-l-2 border-slate-900 pl-2">
-              {summary}
+          {/* Summary */}
+          <div className="flex flex-col gap-1.5">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center border-b border-slate-200 pb-1">
+              Summary
+            </h2>
+            <p className="text-[10.5px] text-slate-700 leading-relaxed text-center px-4">
+              {useFlowPersona ? flowcvPersona.summary : summary}
             </p>
-          )}
+          </div>
 
-          {expList.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h2 className="text-[11px] font-black uppercase tracking-wider text-slate-950 border-b border-slate-200 pb-0.5">
-                Work Experience
-              </h2>
-              <div className="flex flex-col gap-2.5">
-                {expList.map((exp) => (
-                  <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
-                    <div className="flex justify-between items-baseline font-bold text-slate-950">
-                      <span>{exp.role} @ {exp.company}</span>
-                      <span className="text-slate-500 text-[8.5px] font-normal">{exp.startDate} – {exp.endDate}</span>
-                    </div>
-                    {exp.bullets && (
-                      <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
-                        {exp.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
+          {/* Professional Experience */}
+          <div className="flex flex-col gap-2.5">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center border-b border-slate-200 pb-1">
+              Professional Experience
+            </h2>
+            <div className="flex flex-col gap-3.5">
+              {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 3).map((exp: any, idx: number) => (
+                <div key={exp.id || idx} className="grid grid-cols-12 gap-4 text-[10.5px]">
+                  <div className="col-span-3 text-right text-slate-500 font-medium leading-tight">
+                    <span>{exp.startDate} – {exp.endDate}</span>
+                    <span className="block text-[9.5px] text-slate-400 mt-0.5">{exp.location || 'Miami, United States'}</span>
                   </div>
-                ))}
+                  <div className="col-span-9 flex flex-col gap-1">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-bold text-slate-900 text-[11px]">{exp.company}</span>
+                      <span className="text-slate-600 font-medium text-[10.5px] italic">{exp.role}</span>
+                    </div>
+                    <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 leading-relaxed">
+                      {exp.bullets?.map((b: string, bIdx: number) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Education */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center border-b border-slate-200 pb-1">
+              Education
+            </h2>
+            <div className="flex flex-col gap-2.5">
+              {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+                <div key={edu.id || idx} className="grid grid-cols-12 gap-4 text-[10.5px]">
+                  <div className="col-span-3 text-right text-slate-500 font-medium leading-tight">
+                    <span>{edu.startDate} – {edu.endDate}</span>
+                    <span className="block text-[9.5px] text-slate-400 mt-0.5">{edu.location || 'Miami, United States'}</span>
+                  </div>
+                  <div className="col-span-9">
+                    <span className="font-bold text-slate-900 text-[11px] block">{edu.degree}</span>
+                    <span className="text-slate-600">{edu.institution}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center border-b border-slate-200 pb-1">
+              Skills
+            </h2>
+            <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 text-center text-[10.5px] text-slate-700">
+              {(useFlowPersona ? flowcvPersona.skills : skillList.slice(0, 6)).map((sk: string, idx: number) => (
+                <div key={idx} className="flex items-center justify-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" />
+                  <span>{sk}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Languages */}
+          <div className="flex flex-col gap-2 border-t border-slate-200 pt-2">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center">
+              Languages
+            </h2>
+            <div className="flex justify-center items-center gap-12 text-[10.5px] text-slate-700">
+              <div className="flex items-center gap-3">
+                <span className="font-medium">English</span>
+                {renderRatingDots(5, 5, 'bg-slate-900', 'bg-slate-200')}
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="font-medium">Spanish</span>
+                {renderRatingDots(4, 5, 'bg-slate-900', 'bg-slate-200')}
               </div>
             </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 pt-1">
-            {skillList.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-black uppercase tracking-wider text-slate-950 border-b border-slate-200 pb-0.5">
-                  Skills
-                </h3>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {skillList.map((sk, idx) => (
-                    <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-slate-900 rounded-md text-[8.5px] font-semibold">
-                      {sk}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {eduList.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-black uppercase tracking-wider text-slate-950 border-b border-slate-200 pb-0.5">
-                  Education
-                </h3>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="text-[9px] mt-1">
-                    <span className="font-bold text-slate-950 block">{edu.institution}</span>
-                    <span className="text-slate-600">{edu.degree}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       )}
 
       {/* =========================================================================
-          28. FLOWCV LEAVES (Dark Forest Green Accent Border)
+          28. FLOWCV LEAVES (Botanical Leaf Strip Margin - Catherine Bale Reference)
          ========================================================================= */}
       {templateId === 'flowcv_leaves' && (
-        <div className="flex flex-col gap-3.5 font-sans border-l-4 border-[#1B4332] pl-5">
-          <div>
-            <h1 className="text-[24px] font-black tracking-tight text-[#1B4332] uppercase">{fullName || 'YOUR NAME'}</h1>
-            <p className="text-[11.5px] font-bold text-[#2D6A4F] mt-0.5">{candidateRole}</p>
-            <div className="text-[9.5px] text-slate-600 flex flex-wrap gap-2.5 mt-1">
-              {email && <span>{email}</span>}
-              {phone && <span>• {phone}</span>}
-              {location && <span>• {location}</span>}
-            </div>
+        <div className="flex h-full min-h-[1123px] w-full text-slate-800">
+          {/* Left Botanical Strip */}
+          <div className="w-[34px] shrink-0 bg-emerald-950 overflow-hidden">
+            <img
+              src="/images/templates/leaves-strip.png"
+              alt="Leaves Accent"
+              className="w-full h-full object-cover"
+            />
           </div>
 
-          {summary && (
-            <div className="bg-[#D8F3DC]/40 border-l-2 border-[#2D6A4F] p-2.5 rounded-r text-[9.5px] text-slate-800 leading-relaxed">
-              {summary}
-            </div>
-          )}
-
-          {expList.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h2 className="text-[11px] font-black uppercase tracking-wider text-[#1B4332] border-b border-[#D8F3DC] pb-0.5">
-                Professional Experience
-              </h2>
-              <div className="flex flex-col gap-2.5">
-                {expList.map((exp) => (
-                  <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
-                    <div className="flex justify-between items-baseline font-bold text-slate-950">
-                      <span>{exp.role} @ <span className="text-[#2D6A4F]">{exp.company}</span></span>
-                      <span className="text-slate-500 text-[8.5px] font-normal">{exp.startDate} – {exp.endDate}</span>
-                    </div>
-                    {exp.bullets && (
-                      <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
-                        {exp.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 pt-1">
-            {skillList.length > 0 && (
+          {/* Main Content Area */}
+          <div className="flex-1 p-8 pl-6 flex flex-col justify-between">
+            {/* Header */}
+            <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-[10px] font-black uppercase tracking-wider text-[#1B4332] border-b border-[#D8F3DC] pb-0.5">
-                  Core Skills
-                </h3>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {skillList.map((sk, idx) => (
-                    <span key={idx} className="px-1.5 py-0.5 bg-[#D8F3DC]/60 text-[#1B4332] rounded text-[8.5px] font-bold">
-                      {sk}
+                <h1 className="text-[25px] font-bold text-slate-900 tracking-tight leading-tight">
+                  {useFlowPersona ? flowcvPersona.fullName : fullName}
+                </h1>
+                <p className="text-[12.5px] font-medium text-slate-600 mt-0.5">
+                  {useFlowPersona ? flowcvPersona.title : candidateRole}
+                </p>
+                <div className="flex flex-col gap-1 text-[10.5px] text-slate-600 mt-2">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5 text-slate-400" />
+                      {useFlowPersona ? flowcvPersona.email : email}
                     </span>
-                  ))}
+                    <span className="flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-slate-400" />
+                      {useFlowPersona ? flowcvPersona.phone : phone}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                      {useFlowPersona ? flowcvPersona.location : location}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5 text-slate-400" />
+                      {useFlowPersona ? flowcvPersona.website : website}
+                    </span>
+                  </div>
                 </div>
               </div>
-            )}
+              <img
+                src="/images/templates/catherine-avatar.png"
+                alt="Avatar"
+                className="w-20 h-20 rounded-md object-cover shadow-xs border border-slate-200 shrink-0"
+              />
+            </div>
 
-            {eduList.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-black uppercase tracking-wider text-[#1B4332] border-b border-[#D8F3DC] pb-0.5">
-                  Education
-                </h3>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="text-[9px] mt-1">
-                    <span className="font-bold text-slate-950 block">{edu.institution}</span>
-                    <span className="text-slate-600">{edu.degree}</span>
+            {/* Profile */}
+            <div className="flex flex-col gap-1">
+              <h2 className="text-[12px] font-bold text-slate-900 border-b border-slate-900 pb-0.5 uppercase tracking-wider">
+                Profile
+              </h2>
+              <p className="text-[10.5px] text-slate-700 leading-relaxed">
+                {useFlowPersona ? flowcvPersona.summary : summary}
+              </p>
+            </div>
+
+            {/* Professional Experience */}
+            <div className="flex flex-col gap-2">
+              <h2 className="text-[12px] font-bold text-slate-900 border-b border-slate-900 pb-0.5 uppercase tracking-wider">
+                Professional Experience
+              </h2>
+              <div className="flex flex-col gap-3">
+                {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 2).map((exp: any, idx: number) => (
+                  <div key={exp.id || idx} className="flex flex-col gap-1 text-[10.5px]">
+                    <div className="flex justify-between items-baseline font-bold text-slate-900">
+                      <span>{exp.company}, {exp.role}</span>
+                      <span className="text-slate-500 font-normal text-[10px]">{exp.startDate} – {exp.endDate}</span>
+                    </div>
+                    <span className="text-slate-500 text-[10px]">{exp.location || 'Milwaukee'}</span>
+                    <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
+                      {exp.bullets?.map((b: string, bIdx: number) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
-            )}
+            </div>
+
+            {/* Education */}
+            <div className="flex flex-col gap-2">
+              <h2 className="text-[12px] font-bold text-slate-900 border-b border-slate-900 pb-0.5 uppercase tracking-wider">
+                Education
+              </h2>
+              {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 1).map((edu: any, idx: number) => (
+                <div key={edu.id || idx} className="flex justify-between items-baseline text-[10.5px]">
+                  <div>
+                    <span className="font-bold text-slate-900 block">{edu.institution}</span>
+                    <span className="text-slate-600">{edu.degree}</span>
+                  </div>
+                  <span className="text-slate-500 text-[10px]">{edu.startDate} – {edu.endDate}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Certificates & Languages */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <h2 className="text-[12px] font-bold text-slate-900 border-b border-slate-900 pb-0.5 uppercase tracking-wider">
+                  Certificates
+                </h2>
+                <div className="text-[10px] text-slate-700 flex flex-col gap-0.5">
+                  <span>Google Analytics Certified</span>
+                  <span>HubSpot Inbound Marketing Certified</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <h2 className="text-[12px] font-bold text-slate-900 border-b border-slate-900 pb-0.5 uppercase tracking-wider">
+                  Languages
+                </h2>
+                <div className="text-[10px] text-slate-700 flex items-center gap-4">
+                  <span>English (C2)</span>
+                  <span>Spanish (C2)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div className="flex flex-col gap-2">
+              <h2 className="text-[12px] font-bold text-slate-900 border-b border-slate-900 pb-0.5 uppercase tracking-wider">
+                Skills
+              </h2>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[10px] text-slate-700">
+                <div>
+                  <span className="font-bold block text-slate-900">Market research</span>
+                  <span className="text-slate-600 leading-snug">
+                    Strong marketing skills with experience in developing marketing strategies, conducting market research.
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold block text-slate-900">Analytical thinking</span>
+                  <span className="text-slate-600 leading-snug">
+                    Analytical thinking with experience in analyzing data and market trends to identify opportunities.
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold block text-slate-900">Project management</span>
+                  <span className="text-slate-600 leading-snug">
+                    Experience in managing multiple projects and prioritizing tasks effectively.
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold block text-slate-900">Tools</span>
+                  <span className="text-slate-600 leading-snug">
+                    Proficiency in software tools such as Microsoft Office, Google Analytics, social media.
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {/* =========================================================================
-          29. TEALHQ MODERN (Signature Teal #0D9488 Layout)
+          29. TEALHQ MODERN & ATS VERIFIED (Teal Accent Layout)
          ========================================================================= */}
       {(templateId === 'teal_modern' || templateId === 'teal_clean_ats') && (
-        <div className="flex flex-col gap-3.5 font-sans">
-          <div className="border-b-2 border-[#0D9488] pb-2.5 flex justify-between items-start">
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-sans text-slate-800">
+          <div className="border-b-2 border-[#0D9488] pb-3 flex justify-between items-start">
             <div>
-              <span className="text-[9px] font-black uppercase text-[#0D9488] bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
-                TEALHQ ATS VERIFIED
+              <span className="text-[9px] font-black uppercase text-[#0D9488] bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
+                TEALHQ ATS OPTIMIZED
               </span>
-              <h1 className="text-[23px] font-black uppercase text-slate-900 tracking-tight leading-none mt-1">
+              <h1 className="text-[25px] font-black uppercase text-slate-950 tracking-tight leading-none mt-1.5">
                 {fullName || 'YOUR NAME'}
               </h1>
-              <p className="text-[11.5px] font-bold text-[#0D9488] mt-0.5">{candidateRole}</p>
+              <p className="text-[12.5px] font-bold text-[#0D9488] mt-1">{candidateRole}</p>
             </div>
-            <div className="text-[9.5px] text-slate-600 flex flex-col items-end gap-0.5">
+            <div className="text-[10px] text-slate-600 flex flex-col items-end gap-1">
               {email && <span>{email}</span>}
               {phone && <span>{phone} • {location}</span>}
-              {linkedin && <span className="text-[#0D9488]">{linkedin}</span>}
+              {linkedin && <span className="text-[#0D9488] font-medium">{linkedin}</span>}
             </div>
           </div>
 
           {summary && (
-            <div className="bg-teal-50/60 border-l-3 border-[#0D9488] p-2.5 rounded-r">
-              <p className="text-[9.5px] text-slate-800 leading-relaxed">{summary}</p>
+            <div className="bg-teal-50/60 border-l-4 border-[#0D9488] p-3 rounded-r">
+              <p className="text-[10.5px] text-slate-800 leading-relaxed">{summary}</p>
             </div>
           )}
 
           {expList.length > 0 && (
             <div className="flex flex-col gap-2">
-              <h2 className="text-[10.5px] font-black uppercase text-[#0D9488] tracking-wider border-b border-teal-100 pb-0.5">
-                Work Experience
-              </h2>
-              <div className="flex flex-col gap-2.5">
-                {expList.map((exp) => (
-                  <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
-                    <div className="flex justify-between items-baseline font-bold text-slate-900">
-                      <span>{exp.role} @ <span className="text-[#0D9488]">{exp.company}</span></span>
-                      <span className="text-slate-500 text-[8.5px] font-normal">{exp.startDate} – {exp.endDate}</span>
-                    </div>
-                    {exp.bullets && (
-                      <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
-                        {exp.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 pt-1">
-            {skillList.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-black uppercase text-[#0D9488] tracking-wider border-b border-teal-100 pb-0.5">
-                  Key Skills & Competencies
-                </h3>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {skillList.map((sk, idx) => (
-                    <span key={idx} className="px-1.5 py-0.5 bg-teal-50 text-teal-900 border border-teal-200 rounded text-[8.5px] font-bold">
-                      {sk}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {eduList.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-black uppercase text-[#0D9488] tracking-wider border-b border-teal-100 pb-0.5">
-                  Education
-                </h3>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="text-[9px] mt-1">
-                    <span className="font-bold text-slate-900 block">{edu.institution}</span>
-                    <span className="text-slate-600">{edu.degree}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          30. FLOWCV STEADY FORM (Balanced 60/40 Split)
-         ========================================================================= */}
-      {templateId === 'flowcv_steady_form' && (
-        <div className="flex flex-col gap-4 font-sans text-slate-800">
-          <div className="border-b-2 border-slate-800 pb-3 flex justify-between items-end">
-            <div>
-              <h1 className="text-[24px] font-black uppercase text-slate-950 tracking-tight leading-none">
-                {fullName || 'YOUR NAME'}
-              </h1>
-              <p className="text-[12px] font-semibold text-slate-700 mt-1">{candidateRole}</p>
-            </div>
-            <div className="text-[9.5px] text-slate-600 flex flex-col items-end gap-0.5">
-              {email && <span>{email}</span>}
-              {phone && <span>{phone} • {location}</span>}
-              {linkedin && <span className="text-slate-800 font-medium">{linkedin}</span>}
-            </div>
-          </div>
-
-          {summary && (
-            <p className="text-[9.5px] text-slate-700 leading-relaxed border-b border-slate-200 pb-2.5">
-              {summary}
-            </p>
-          )}
-
-          <div className="grid grid-cols-12 gap-5">
-            <div className="col-span-8 flex flex-col gap-3">
-              {expList.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <h2 className="text-[10px] font-black uppercase text-slate-950 tracking-wider border-b border-slate-300 pb-0.5">
-                    Experience
-                  </h2>
-                  <div className="flex flex-col gap-2.5">
-                    {expList.map((exp) => (
-                      <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
-                        <div className="flex justify-between font-bold text-slate-900">
-                          <span>{exp.role} — <span className="text-slate-700">{exp.company}</span></span>
-                          <span className="text-slate-500 font-normal text-[8.5px]">{exp.startDate} – {exp.endDate}</span>
-                        </div>
-                        {exp.bullets && (
-                          <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
-                            {exp.bullets.map((b, idx) => (
-                              <li key={idx}>{b}</li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="col-span-4 flex flex-col gap-3.5 border-l border-slate-200 pl-4">
-              {skillList.length > 0 && (
-                <div>
-                  <h3 className="text-[10px] font-black uppercase text-slate-950 tracking-wider border-b border-slate-300 pb-0.5">
-                    Skills
-                  </h3>
-                  <div className="flex flex-wrap gap-1 mt-1.5">
-                    {skillList.map((sk, idx) => (
-                      <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded text-[8.5px] font-semibold border border-slate-200">
-                        {sk}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {eduList.length > 0 && (
-                <div>
-                  <h3 className="text-[10px] font-black uppercase text-slate-950 tracking-wider border-b border-slate-300 pb-0.5">
-                    Education
-                  </h3>
-                  {eduList.map((edu) => (
-                    <div key={edu.id} className="text-[9px] mt-1.5">
-                      <span className="font-bold text-slate-900 block">{edu.institution}</span>
-                      <span className="text-slate-600">{edu.degree}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          31. FLOWCV CLASSIC SERIF (Formal Publication & Legal Standard)
-         ========================================================================= */}
-      {templateId === 'flowcv_classic_serif' && (
-        <div className="flex flex-col gap-3.5 font-serif text-slate-900">
-          <div className="text-center border-b border-t border-slate-900 py-2.5">
-            <h1 className="text-[25px] font-bold tracking-wider text-slate-950 uppercase">{fullName || 'YOUR NAME'}</h1>
-            <p className="text-[11px] italic text-slate-700 mt-0.5">{candidateRole}</p>
-            <div className="text-[9px] text-slate-600 flex justify-center flex-wrap gap-3 mt-1 font-sans">
-              {email && <span>{email}</span>}
-              {phone && <span>• {phone}</span>}
-              {location && <span>• {location}</span>}
-              {linkedin && <span>• {linkedin}</span>}
-            </div>
-          </div>
-
-          {summary && (
-            <p className="text-[9.5px] text-slate-800 leading-relaxed text-center italic px-4">
-              "{summary}"
-            </p>
-          )}
-
-          {expList.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h2 className="text-[10.5px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 text-center">
+              <h2 className="text-[12px] font-black uppercase text-[#0D9488] tracking-wider border-b border-teal-100 pb-0.5">
                 Professional Experience
               </h2>
-              <div className="flex flex-col gap-2.5 font-sans">
-                {expList.map((exp) => (
-                  <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
+              <div className="flex flex-col gap-3">
+                {expList.slice(0, 3).map((exp) => (
+                  <div key={exp.id} className="flex flex-col gap-1 text-[10.5px]">
                     <div className="flex justify-between items-baseline font-bold text-slate-900">
-                      <span><span className="font-serif italic font-semibold">{exp.role}</span>, {exp.company}</span>
-                      <span className="text-slate-500 text-[8.5px] font-normal">{exp.startDate} – {exp.endDate}</span>
+                      <span>{exp.role} @ <span className="text-[#0D9488]">{exp.company}</span></span>
+                      <span className="text-slate-500 text-[10px] font-normal">{exp.startDate} – {exp.endDate}</span>
                     </div>
                     {exp.bullets && (
-                      <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
+                      <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 leading-relaxed">
                         {exp.bullets.map((b, idx) => (
                           <li key={idx}>{b}</li>
                         ))}
@@ -3042,181 +4038,509 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-5 pt-1">
-            {eduList.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5">
-                  Education & Honors
-                </h3>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="text-[9px] mt-1 font-sans">
-                    <span className="font-bold text-slate-900 block font-serif">{edu.institution}</span>
-                    <span className="text-slate-600">{edu.degree}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
+          <div className="grid grid-cols-2 gap-5 pt-2 border-t border-teal-100">
             {skillList.length > 0 && (
               <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5">
-                  Areas of Expertise
+                <h3 className="text-[11px] font-black uppercase text-[#0D9488] tracking-wider mb-2">
+                  Key Skills & Competencies
                 </h3>
-                <div className="flex flex-wrap gap-1 mt-1 font-sans">
-                  {skillList.map((sk, idx) => (
-                    <span key={idx} className="px-1.5 py-0.5 bg-slate-50 border border-slate-300 text-slate-800 rounded text-[8.5px]">
+                <div className="flex flex-wrap gap-1.5">
+                  {skillList.slice(0, 10).map((sk, idx) => (
+                    <span key={idx} className="px-2 py-0.5 bg-teal-50 text-teal-900 border border-teal-200 rounded text-[9.5px] font-bold">
                       {sk}
                     </span>
                   ))}
                 </div>
               </div>
             )}
-          </div>
-        </div>
-      )}
 
-      {/* =========================================================================
-          32. FLOWCV EDITORIAL RULE (Clean Horizontal Dividers)
-         ========================================================================= */}
-      {templateId === 'flowcv_editorial_rule' && (
-        <div className="flex flex-col gap-3 font-sans text-slate-900">
-          <div className="flex justify-between items-baseline border-b-2 border-slate-900 pb-2">
-            <div>
-              <h1 className="text-[22px] font-black uppercase tracking-tight text-slate-900">{fullName || 'YOUR NAME'}</h1>
-              <p className="text-[11px] font-bold text-slate-600 uppercase tracking-widest mt-0.5">{candidateRole}</p>
-            </div>
-            <div className="text-[9px] text-slate-500 text-right flex flex-col gap-0.5">
-              <span>{email} • {phone}</span>
-              <span>{location}</span>
-            </div>
-          </div>
-
-          {summary && (
-            <div className="border-b border-slate-200 pb-2">
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">Profile</span>
-              <p className="text-[9.5px] text-slate-700 leading-relaxed">{summary}</p>
-            </div>
-          )}
-
-          {expList.length > 0 && (
-            <div className="flex flex-col gap-2 border-b border-slate-200 pb-2">
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block">Experience</span>
-              <div className="flex flex-col gap-2">
-                {expList.map((exp) => (
-                  <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
-                    <div className="flex justify-between font-bold text-slate-900">
-                      <span>{exp.role} <span className="font-normal text-slate-500">at</span> {exp.company}</span>
-                      <span className="text-slate-400 text-[8.5px] font-normal">{exp.startDate} – {exp.endDate}</span>
-                    </div>
-                    {exp.bullets && (
-                      <ul className="list-disc list-outside ml-3 text-slate-700 flex flex-col gap-0.5 text-[9px] leading-relaxed">
-                        {exp.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4">
-            {skillList.length > 0 && (
-              <div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Skills</span>
-                <p className="text-[9px] text-slate-700 leading-relaxed">{skillList.join(' • ')}</p>
-              </div>
-            )}
             {eduList.length > 0 && (
               <div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Education</span>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="text-[9px] leading-tight mb-1">
-                    <span className="font-bold text-slate-900">{edu.institution}</span> — <span className="text-slate-600">{edu.degree}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          33. FLOWCV PRECISION LINE (High-Density Engineering)
-         ========================================================================= */}
-      {templateId === 'flowcv_precision_line' && (
-        <div className="flex flex-col gap-2.5 font-sans text-slate-900">
-          <div className="bg-slate-900 text-white p-3 rounded-lg flex justify-between items-center -mx-2 -mt-2">
-            <div>
-              <h1 className="text-[20px] font-mono font-bold tracking-tight text-white leading-none">{fullName || 'YOUR NAME'}</h1>
-              <p className="text-[10.5px] font-mono text-teal-400 mt-1">{candidateRole}</p>
-            </div>
-            <div className="text-[8.5px] font-mono text-slate-300 text-right flex flex-col gap-0.5">
-              <span>{email}</span>
-              <span>{phone} • {location}</span>
-            </div>
-          </div>
-
-          {summary && (
-            <p className="text-[9px] text-slate-700 leading-tight bg-slate-50 p-2 rounded border border-slate-200">
-              {summary}
-            </p>
-          )}
-
-          {expList.length > 0 && (
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[9.5px] font-mono font-bold uppercase text-slate-900 border-b border-slate-900 pb-0.5 flex items-center gap-1">
-                <span className="w-2 h-2 bg-slate-900 inline-block" /> WORK EXPERIENCE
-              </span>
-              <div className="flex flex-col gap-2">
-                {expList.map((exp) => (
-                  <div key={exp.id} className="text-[9px]">
-                    <div className="flex justify-between font-bold text-slate-900 font-mono">
-                      <span>{exp.role} // <span className="text-teal-700">{exp.company}</span></span>
-                      <span className="text-slate-500 font-normal text-[8px]">{exp.startDate} – {exp.endDate}</span>
-                    </div>
-                    {exp.bullets && (
-                      <ul className="list-disc list-outside ml-3 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-tight">
-                        {exp.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-3 pt-1">
-            {skillList.length > 0 && (
-              <div>
-                <span className="text-[9px] font-mono font-bold uppercase text-slate-900 border-b border-slate-300 pb-0.5 block">
-                  TECHNICAL ARSENAL
-                </span>
-                <div className="flex flex-wrap gap-1 mt-1 font-mono">
-                  {skillList.map((sk, idx) => (
-                    <span key={idx} className="px-1 py-0.5 bg-slate-100 text-slate-800 border border-slate-300 rounded text-[8px]">
-                      {sk}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {eduList.length > 0 && (
-              <div>
-                <span className="text-[9px] font-mono font-bold uppercase text-slate-900 border-b border-slate-300 pb-0.5 block">
-                  ACADEMICS
-                </span>
-                {eduList.map((edu) => (
-                  <div key={edu.id} className="text-[8.5px] font-mono mt-1">
+                <h3 className="text-[11px] font-black uppercase text-[#0D9488] tracking-wider mb-2">
+                  Education & Credentials
+                </h3>
+                {eduList.slice(0, 2).map((edu) => (
+                  <div key={edu.id} className="text-[10.5px] mb-2">
                     <span className="font-bold text-slate-900 block">{edu.institution}</span>
                     <span className="text-slate-600">{edu.degree}</span>
                   </div>
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          30. FLOWCV STEADY FORM (Balanced 60/40 Split - Rohan K. Patel Reference)
+         ========================================================================= */}
+      {templateId === 'flowcv_steady_form' && (
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-sans text-slate-800">
+          {/* Header */}
+          <div className="flex justify-between items-start pb-3 border-b-2 border-slate-900">
+            <div>
+              <div className="flex items-baseline gap-3">
+                <h1 className="text-[25px] font-black text-slate-950 tracking-tight">
+                  {useFlowPersona ? flowcvPersona.fullName : fullName}
+                </h1>
+                <span className="text-[13px] text-slate-600 font-medium">
+                  {useFlowPersona ? flowcvPersona.title : candidateRole}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-[10px] text-slate-600 mt-2">
+                <span className="flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.email : email}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.phone : phone}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.linkedin : linkedin}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  {useFlowPersona ? flowcvPersona.location : location}
+                </span>
+              </div>
+            </div>
+            <img
+              src="/images/templates/rohan-avatar.jpg"
+              alt="Avatar"
+              className="w-20 h-20 rounded-full object-cover shadow-sm border border-slate-200 shrink-0"
+            />
+          </div>
+
+          {/* Summary */}
+          <div className="flex flex-col gap-1.5">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center bg-slate-100 py-1 rounded">
+              Summary
+            </h2>
+            <p className="text-[10.5px] text-slate-700 leading-relaxed text-center px-4">
+              {useFlowPersona ? flowcvPersona.summary : summary}
+            </p>
+          </div>
+
+          {/* Professional Experience */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center bg-slate-100 py-1 rounded">
+              Professional Experience
+            </h2>
+            <div className="flex flex-col gap-3">
+              {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 3).map((exp: any, idx: number) => (
+                <div key={exp.id || idx} className="grid grid-cols-12 gap-4 text-[10.5px]">
+                  <div className="col-span-3 text-right text-slate-500 font-medium">
+                    <span>{exp.startDate} – {exp.endDate}</span>
+                    <span className="block text-[9.5px] text-slate-400 mt-0.5">{exp.location || 'Ahmedabad, India'}</span>
+                  </div>
+                  <div className="col-span-9 flex flex-col gap-0.5">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-bold text-slate-900 text-[11px]">{exp.company}</span>
+                      <span className="text-slate-600 italic text-[10.5px]">{exp.role}</span>
+                    </div>
+                    <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
+                      {exp.bullets?.map((b: string, bIdx: number) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Education */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center bg-slate-100 py-1 rounded">
+              Education
+            </h2>
+            <div className="flex flex-col gap-2">
+              {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+                <div key={edu.id || idx} className="grid grid-cols-12 gap-4 text-[10.5px]">
+                  <div className="col-span-3 text-right text-slate-500 font-medium">
+                    <span>{edu.startDate} – {edu.endDate}</span>
+                  </div>
+                  <div className="col-span-9">
+                    <span className="font-bold text-slate-900 text-[11px] block">{edu.degree}</span>
+                    <span className="text-slate-600">{edu.institution}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-black uppercase text-slate-900 tracking-wider text-center bg-slate-100 py-1 rounded">
+              Skills
+            </h2>
+            <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 text-center text-[10.5px] text-slate-700">
+              {(useFlowPersona ? flowcvPersona.skills : skillList.slice(0, 6)).map((sk: string, idx: number) => (
+                <div key={idx} className="flex items-center justify-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" />
+                  <span>{sk}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Languages & Certificates */}
+          <div className="grid grid-cols-2 gap-6 pt-2 border-t border-slate-200 text-[10.5px]">
+            <div className="flex flex-col items-center">
+              <span className="font-black uppercase text-slate-900 text-[11px] tracking-wider mb-1">Languages</span>
+              <span className="text-slate-700">English • Hindi • Gujarati</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-black uppercase text-slate-900 text-[11px] tracking-wider mb-1">Certificates</span>
+              <span className="text-slate-700 text-center leading-snug">AutoCAD Professional • Primavera P6 • Safety</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          31. FLOWCV CLASSIC SERIF (Formal Publication - Andrew O'Sullivan Reference)
+         ========================================================================= */}
+      {templateId === 'flowcv_classic_serif' && (
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-serif text-slate-900">
+          {/* Header */}
+          <div className="text-center border-b-2 border-slate-900 pb-3">
+            <h1 className="text-[26px] font-bold tracking-wider uppercase text-slate-950">
+              {useFlowPersona ? flowcvPersona.fullName : fullName}
+            </h1>
+            <p className="text-[12px] italic text-slate-700 mt-0.5">
+              {useFlowPersona ? flowcvPersona.title : candidateRole}
+            </p>
+            <div className="text-[10px] text-slate-600 flex justify-center flex-wrap gap-4 mt-2 font-sans">
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3 h-3 text-slate-500" />
+                {useFlowPersona ? flowcvPersona.location : location}
+              </span>
+              <span className="flex items-center gap-1">
+                <Mail className="w-3 h-3 text-slate-500" />
+                {useFlowPersona ? flowcvPersona.email : email}
+              </span>
+              <span className="flex items-center gap-1">
+                <Phone className="w-3 h-3 text-slate-500" />
+                {useFlowPersona ? flowcvPersona.phone : phone}
+              </span>
+              <span className="flex items-center gap-1">
+                <Globe className="w-3 h-3 text-slate-500" />
+                {useFlowPersona ? flowcvPersona.linkedin : linkedin}
+              </span>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="flex flex-col gap-1">
+            <h2 className="text-[12px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 text-center">
+              Summary
+            </h2>
+            <p className="text-[10.5px] text-slate-700 leading-relaxed text-center px-4 font-sans">
+              {useFlowPersona ? flowcvPersona.summary : summary}
+            </p>
+          </div>
+
+          {/* Professional Experience */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 text-center">
+              Professional Experience
+            </h2>
+            <div className="flex flex-col gap-3 font-sans">
+              {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 3).map((exp: any, idx: number) => (
+                <div key={exp.id || idx} className="flex flex-col gap-1 text-[10.5px]">
+                  <div className="flex justify-between items-baseline">
+                    <span className="font-bold text-slate-900 text-[11px] font-serif">{exp.role}</span>
+                    <span className="text-slate-500 text-[10px]">{exp.startDate} – {exp.endDate}</span>
+                  </div>
+                  <div className="flex justify-between items-baseline text-slate-600 italic">
+                    <span>{exp.company}</span>
+                    <span className="text-[9.5px] not-italic">{exp.location || 'Dublin, Ireland'}</span>
+                  </div>
+                  <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
+                    {exp.bullets?.map((b: string, bIdx: number) => (
+                      <li key={bIdx}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Education */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 text-center">
+              Education
+            </h2>
+            <div className="flex flex-col gap-2 font-sans">
+              {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+                <div key={edu.id || idx} className="flex justify-between items-baseline text-[10.5px]">
+                  <div>
+                    <span className="font-bold text-slate-900 font-serif block">{edu.degree}</span>
+                    <span className="text-slate-600">{edu.institution}</span>
+                  </div>
+                  <span className="text-slate-500 text-[10px]">{edu.startDate} – {edu.endDate}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 text-center">
+              Skills
+            </h2>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-[10.5px] text-slate-700 font-sans">
+              {(useFlowPersona ? flowcvPersona.skills : skillList.slice(0, 8)).map((sk: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" />
+                  <span>{sk}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Languages & Certificates */}
+          <div className="grid grid-cols-2 gap-8 pt-2 border-t border-slate-900 font-sans text-[10.5px]">
+            <div>
+              <span className="font-bold text-slate-900 block uppercase text-[10.5px] tracking-wider mb-2">Languages</span>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex justify-between items-center pr-2">
+                  <span>English</span>
+                  {renderRatingDots(5)}
+                </div>
+                <div className="flex justify-between items-center pr-2">
+                  <span>Irish</span>
+                  {renderRatingDots(5)}
+                </div>
+                <div className="flex justify-between items-center pr-2">
+                  <span>French</span>
+                  {renderRatingDots(3)}
+                </div>
+                <div className="flex justify-between items-center pr-2">
+                  <span>Spanish</span>
+                  {renderRatingDots(2)}
+                </div>
+              </div>
+            </div>
+            <div>
+              <span className="font-bold text-slate-900 block uppercase text-[10.5px] tracking-wider mb-2">Certificates</span>
+              <div className="flex flex-col gap-1 text-[10px] text-slate-700">
+                <span>• Professional Scrum Product Owner I (PSPO I)</span>
+                <span>• Certified ScrumMaster (CSM)</span>
+                <span>• Google Analytics Certification</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          32. FLOWCV EDITORIAL RULE (Clean Horizontal Hairlines - Lena Hoffmann Reference)
+         ========================================================================= */}
+      {templateId === 'flowcv_editorial_rule' && (
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-sans text-slate-900">
+          {/* Header */}
+          <div className="text-center border-b-2 border-slate-900 pb-3">
+            <h1 className="text-[26px] font-bold uppercase tracking-tight text-slate-950">
+              {useFlowPersona ? flowcvPersona.fullName : fullName}
+            </h1>
+            <p className="text-[12.5px] font-medium text-slate-600 mt-0.5">
+              {useFlowPersona ? flowcvPersona.title : candidateRole}
+            </p>
+            <div className="text-[10.5px] text-slate-600 flex justify-center flex-wrap gap-4 mt-2">
+              <span>{useFlowPersona ? flowcvPersona.location : location}</span>
+              <span>•</span>
+              <span>{useFlowPersona ? flowcvPersona.email : email}</span>
+              <span>•</span>
+              <span>{useFlowPersona ? flowcvPersona.phone : phone}</span>
+              <span>•</span>
+              <span>{useFlowPersona ? flowcvPersona.linkedin : linkedin}</span>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="flex flex-col gap-1 border-b border-slate-300 pb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Summary</span>
+            <p className="text-[10.5px] text-slate-800 leading-relaxed">
+              {useFlowPersona ? flowcvPersona.summary : summary}
+            </p>
+          </div>
+
+          {/* Professional Experience */}
+          <div className="flex flex-col gap-2.5 border-b border-slate-300 pb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Professional Experience</span>
+            <div className="flex flex-col gap-3">
+              {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 3).map((exp: any, idx: number) => (
+                <div key={exp.id || idx} className="flex flex-col gap-1 text-[10.5px]">
+                  <div className="flex justify-between items-baseline font-bold text-slate-950">
+                    <span>{exp.company}, <span className="font-medium text-slate-700 italic">{exp.role}</span></span>
+                    <span className="text-slate-500 text-[10px] font-normal">{exp.startDate} – {exp.endDate} | {exp.location || 'Berlin'}</span>
+                  </div>
+                  <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 leading-relaxed">
+                    {exp.bullets?.map((b: string, bIdx: number) => (
+                      <li key={bIdx}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Education */}
+          <div className="flex flex-col gap-2 border-b border-slate-300 pb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Education</span>
+            {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+              <div key={edu.id || idx} className="flex justify-between items-baseline text-[10.5px]">
+                <div>
+                  <span className="font-bold text-slate-900">{edu.institution}</span>
+                  <span className="text-slate-600 ml-2">— {edu.degree}</span>
+                </div>
+                <span className="text-slate-500 text-[10px]">{edu.startDate} – {edu.endDate}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Skills */}
+          <div className="flex flex-col gap-1.5 border-b border-slate-300 pb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Skills</span>
+            <p className="text-[10px] text-slate-800 leading-relaxed font-medium">
+              {(useFlowPersona ? flowcvPersona.skills : skillList.slice(0, 12)).join(' | ')}
+            </p>
+          </div>
+
+          {/* Languages & Certificates */}
+          <div className="grid grid-cols-2 gap-4 text-[10.5px]">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Languages</span>
+              <span className="text-slate-800">German (Native) | English (Fluent) | French (Conversational)</span>
+            </div>
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Certificates</span>
+              <span className="text-slate-800 text-[10px]">Lean Six Sigma Green Belt | APICS | PRINCE2 | SAP Certified</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          33. FLOWCV PRECISION LINE / TRUE BLUE (Daniel Mercer Reference)
+         ========================================================================= */}
+      {templateId === 'flowcv_precision_line' && (
+        <div className="h-full min-h-[1050px] flex flex-col justify-between font-sans text-slate-800">
+          {/* Header */}
+          <div className="border-b-2 border-blue-700 pb-3">
+            <h1 className="text-[26px] font-bold text-blue-700 tracking-tight leading-none">
+              {useFlowPersona ? flowcvPersona.fullName : fullName}
+            </h1>
+            <p className="text-[13px] font-semibold text-slate-700 mt-1">
+              {useFlowPersona ? flowcvPersona.title : candidateRole}
+            </p>
+            <div className="flex items-center flex-wrap gap-4 text-[10.5px] text-slate-600 mt-2">
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-blue-600" />
+                {useFlowPersona ? flowcvPersona.email : email}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-blue-600" />
+                {useFlowPersona ? flowcvPersona.phone : phone}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-blue-600" />
+                {useFlowPersona ? flowcvPersona.location : location}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-blue-600" />
+                {useFlowPersona ? flowcvPersona.linkedin : linkedin}
+              </span>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="flex flex-col gap-1">
+            <h2 className="text-[12px] font-bold text-blue-700 uppercase tracking-wider border-b border-slate-200 pb-0.5">
+              Summary
+            </h2>
+            <p className="text-[10.5px] text-slate-700 leading-relaxed">
+              {useFlowPersona ? flowcvPersona.summary : summary}
+            </p>
+          </div>
+
+          {/* Professional Experience */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold text-blue-700 uppercase tracking-wider border-b border-slate-200 pb-0.5">
+              Professional Experience
+            </h2>
+            <div className="flex flex-col gap-3">
+              {(useFlowPersona ? flowcvPersona.experiences : expList).slice(0, 3).map((exp: any, idx: number) => (
+                <div key={exp.id || idx} className="flex flex-col gap-1 text-[10.5px]">
+                  <div className="flex justify-between items-baseline font-bold text-slate-900">
+                    <span>{exp.role}, <span className="text-blue-800">{exp.company}</span></span>
+                    <span className="text-slate-500 font-normal text-[10px]">{exp.startDate} – {exp.endDate}</span>
+                  </div>
+                  <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 leading-relaxed">
+                    {exp.bullets?.map((b: string, bIdx: number) => (
+                      <li key={bIdx}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Education */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold text-blue-700 uppercase tracking-wider border-b border-slate-200 pb-0.5">
+              Education
+            </h2>
+            <div className="flex flex-col gap-1.5">
+              {(useFlowPersona ? flowcvPersona.education : eduList).slice(0, 2).map((edu: any, idx: number) => (
+                <div key={edu.id || idx} className="flex justify-between items-baseline text-[10.5px]">
+                  <div>
+                    <span className="font-bold text-slate-900">{edu.degree}</span>
+                    <span className="text-slate-600 ml-2">, {edu.institution}</span>
+                  </div>
+                  <span className="text-slate-500 text-[10px]">{edu.startDate} – {edu.endDate}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[12px] font-bold text-blue-700 uppercase tracking-wider border-b border-slate-200 pb-0.5">
+              Skills
+            </h2>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-[10.5px] text-slate-700">
+              {(useFlowPersona ? flowcvPersona.skills : skillList.slice(0, 8)).map((sk: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-700 shrink-0" />
+                  <span>{sk}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Languages & Certificates */}
+          <div className="grid grid-cols-2 gap-6 pt-2 border-t border-slate-200 text-[10.5px]">
+            <div>
+              <span className="font-bold text-blue-700 uppercase text-[11px] block mb-1">Languages</span>
+              <div className="flex flex-col gap-0.5 text-slate-700">
+                <span>English (Native)</span>
+                <span>Spanish (Proficient)</span>
+                <span>French (Conversational)</span>
+              </div>
+            </div>
+            <div>
+              <span className="font-bold text-blue-700 uppercase text-[11px] block mb-1">Certificates</span>
+              <div className="flex flex-col gap-0.5 text-slate-700 text-[10px]">
+                <span>Certified Sales Leadership Professional</span>
+                <span>HubSpot Sales Software Certification</span>
+                <span>Salesforce Certified Sales Representative</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -3225,11 +4549,13 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
           34. FLOWCV SILVER BANNER (Sleek Slate Corporate Header)
          ========================================================================= */}
       {templateId === 'flowcv_silver_banner' && (
-        <div className="flex flex-col gap-3 font-sans text-slate-900 -mx-[14mm] -my-[12mm]">
-          <div className="bg-[#334155] text-white p-6 pb-5">
-            <h1 className="text-[23px] font-black tracking-tight uppercase leading-none">{fullName || 'YOUR NAME'}</h1>
-            <p className="text-[12px] font-bold text-slate-200 mt-1">{candidateRole}</p>
-            <div className="text-[9.5px] text-slate-300 flex flex-wrap gap-3 mt-2 font-medium">
+        <div className="flex flex-col h-full min-h-[1123px] w-full text-slate-800">
+          <div className="bg-[#334155] text-white p-7 pb-6">
+            <h1 className="text-[25px] font-black tracking-tight uppercase leading-none">
+              {fullName || 'YOUR NAME'}
+            </h1>
+            <p className="text-[13px] font-bold text-slate-200 mt-1">{candidateRole}</p>
+            <div className="text-[10.5px] text-slate-300 flex flex-wrap gap-4 mt-2.5 font-medium">
               {email && <span>{email}</span>}
               {phone && <span>• {phone}</span>}
               {location && <span>• {location}</span>}
@@ -3237,27 +4563,28 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
             </div>
           </div>
 
-          <div className="p-6 pt-2 flex flex-col gap-3">
+          <div className="p-8 pt-6 flex-1 flex flex-col justify-between">
             {summary && (
-              <p className="text-[9.5px] text-slate-700 leading-relaxed border-b border-slate-200 pb-2">
-                {summary}
-              </p>
+              <div className="flex flex-col gap-1 border-b border-slate-200 pb-3">
+                <span className="text-[11px] font-black uppercase text-[#334155] tracking-wider">Executive Overview</span>
+                <p className="text-[10.5px] text-slate-700 leading-relaxed">{summary}</p>
+              </div>
             )}
 
             {expList.length > 0 && (
-              <div className="flex flex-col gap-2">
-                <h2 className="text-[10.5px] font-black uppercase text-[#334155] tracking-wider border-b border-slate-200 pb-0.5">
-                  Experience
+              <div className="flex flex-col gap-2 border-b border-slate-200 pb-3">
+                <h2 className="text-[12px] font-black uppercase text-[#334155] tracking-wider">
+                  Experience & Leadership
                 </h2>
-                <div className="flex flex-col gap-2.5">
-                  {expList.map((exp) => (
-                    <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
+                <div className="flex flex-col gap-3">
+                  {expList.slice(0, 3).map((exp) => (
+                    <div key={exp.id} className="flex flex-col gap-0.5 text-[10.5px]">
                       <div className="flex justify-between font-bold text-slate-900">
                         <span>{exp.role} — <span className="text-[#334155]">{exp.company}</span></span>
-                        <span className="text-slate-500 font-normal text-[8.5px]">{exp.startDate} – {exp.endDate}</span>
+                        <span className="text-slate-500 font-normal text-[10px]">{exp.startDate} – {exp.endDate}</span>
                       </div>
                       {exp.bullets && (
-                        <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
+                        <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
                           {exp.bullets.map((b, idx) => (
                             <li key={idx}>{b}</li>
                           ))}
@@ -3269,28 +4596,29 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4 pt-1">
+            <div className="grid grid-cols-2 gap-6 pt-2">
               {skillList.length > 0 && (
                 <div>
-                  <h3 className="text-[10px] font-black uppercase text-[#334155] tracking-wider border-b border-slate-200 pb-0.5">
-                    Skills
+                  <h3 className="text-[11px] font-black uppercase text-[#334155] tracking-wider mb-2">
+                    Skills & Core Competencies
                   </h3>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {skillList.map((sk, idx) => (
-                      <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded text-[8.5px] font-bold">
+                  <div className="flex flex-wrap gap-1.5">
+                    {skillList.slice(0, 10).map((sk, idx) => (
+                      <span key={idx} className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[9.5px] font-bold border border-slate-200">
                         {sk}
                       </span>
                     ))}
                   </div>
                 </div>
               )}
+
               {eduList.length > 0 && (
                 <div>
-                  <h3 className="text-[10px] font-black uppercase text-[#334155] tracking-wider border-b border-slate-200 pb-0.5">
-                    Education
+                  <h3 className="text-[11px] font-black uppercase text-[#334155] tracking-wider mb-2">
+                    Academic Background
                   </h3>
-                  {eduList.map((edu) => (
-                    <div key={edu.id} className="text-[9px] mt-1">
+                  {eduList.slice(0, 2).map((edu) => (
+                    <div key={edu.id} className="text-[10.5px] mb-2">
                       <span className="font-bold text-slate-900 block">{edu.institution}</span>
                       <span className="text-slate-600">{edu.degree}</span>
                     </div>
@@ -3306,14 +4634,16 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
           35. TEALHQ EXECUTIVE LEADERSHIP (Dark Teal #115E59)
          ========================================================================= */}
       {templateId === 'teal_executive' && (
-        <div className="flex flex-col gap-3 font-sans text-slate-900 -mx-[14mm] -my-[12mm]">
-          <div className="bg-[#115E59] text-white p-6 pb-5">
-            <span className="text-[9px] font-black tracking-widest uppercase text-teal-200 bg-teal-800/80 px-2 py-0.5 rounded-full inline-block mb-1">
+        <div className="flex flex-col h-full min-h-[1123px] w-full text-slate-800">
+          <div className="bg-[#115E59] text-white p-7 pb-6">
+            <span className="text-[9px] font-black tracking-widest uppercase text-teal-200 bg-teal-800/80 px-2.5 py-0.5 rounded-full inline-block mb-1.5">
               TEALHQ EXECUTIVE C-SUITE
             </span>
-            <h1 className="text-[23px] font-black tracking-tight uppercase leading-none text-white">{fullName || 'YOUR NAME'}</h1>
-            <p className="text-[12px] font-bold text-teal-100 mt-1">{candidateRole}</p>
-            <div className="text-[9.5px] text-teal-200 flex flex-wrap gap-3 mt-2 font-medium">
+            <h1 className="text-[25px] font-black tracking-tight uppercase leading-none text-white">
+              {fullName || 'YOUR NAME'}
+            </h1>
+            <p className="text-[13px] font-bold text-teal-100 mt-1">{candidateRole}</p>
+            <div className="text-[10px] text-teal-200 flex flex-wrap gap-4 mt-2.5 font-medium">
               {email && <span>{email}</span>}
               {phone && <span>• {phone}</span>}
               {location && <span>• {location}</span>}
@@ -3321,27 +4651,27 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
             </div>
           </div>
 
-          <div className="p-6 pt-2 flex flex-col gap-3">
+          <div className="p-8 pt-6 flex-1 flex flex-col justify-between">
             {summary && (
-              <div className="bg-teal-50/70 border-l-4 border-[#115E59] p-2.5 rounded-r">
-                <p className="text-[9.5px] text-slate-800 leading-relaxed font-medium">{summary}</p>
+              <div className="bg-teal-50/70 border-l-4 border-[#115E59] p-3 rounded-r">
+                <p className="text-[10.5px] text-slate-800 leading-relaxed font-medium">{summary}</p>
               </div>
             )}
 
             {expList.length > 0 && (
               <div className="flex flex-col gap-2">
-                <h2 className="text-[10.5px] font-black uppercase text-[#115E59] tracking-wider border-b-2 border-teal-200 pb-0.5">
-                  Executive Leadership & Career History
+                <h2 className="text-[12px] font-black uppercase text-[#115E59] tracking-wider border-b-2 border-teal-200 pb-0.5">
+                  Executive Career History
                 </h2>
-                <div className="flex flex-col gap-2.5">
-                  {expList.map((exp) => (
-                    <div key={exp.id} className="flex flex-col gap-0.5 text-[9.5px]">
+                <div className="flex flex-col gap-3">
+                  {expList.slice(0, 3).map((exp) => (
+                    <div key={exp.id} className="flex flex-col gap-0.5 text-[10.5px]">
                       <div className="flex justify-between font-bold text-slate-900">
                         <span>{exp.role} — <span className="text-[#115E59]">{exp.company}</span></span>
-                        <span className="text-slate-500 font-normal text-[8.5px]">{exp.startDate} – {exp.endDate}</span>
+                        <span className="text-slate-500 font-normal text-[10px]">{exp.startDate} – {exp.endDate}</span>
                       </div>
                       {exp.bullets && (
-                        <ul className="list-disc list-outside ml-3.5 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
+                        <ul className="list-disc list-outside ml-4 text-slate-700 flex flex-col gap-0.5 mt-0.5 leading-relaxed">
                           {exp.bullets.map((b, idx) => (
                             <li key={idx}>{b}</li>
                           ))}
@@ -3353,15 +4683,15 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4 pt-1">
+            <div className="grid grid-cols-2 gap-6 pt-2 border-t border-teal-100">
               {skillList.length > 0 && (
                 <div>
-                  <h3 className="text-[10px] font-black uppercase text-[#115E59] tracking-wider border-b border-teal-200 pb-0.5">
+                  <h3 className="text-[11px] font-black uppercase text-[#115E59] tracking-wider mb-2">
                     Core Competencies
                   </h3>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {skillList.map((sk, idx) => (
-                      <span key={idx} className="px-1.5 py-0.5 bg-teal-50 text-teal-900 border border-teal-200 rounded text-[8.5px] font-bold">
+                  <div className="flex flex-wrap gap-1.5">
+                    {skillList.slice(0, 10).map((sk, idx) => (
+                      <span key={idx} className="px-2 py-0.5 bg-teal-50 text-teal-900 border border-teal-200 rounded text-[9.5px] font-bold">
                         {sk}
                       </span>
                     ))}
@@ -3370,11 +4700,11 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
               )}
               {eduList.length > 0 && (
                 <div>
-                  <h3 className="text-[10px] font-black uppercase text-[#115E59] tracking-wider border-b border-teal-200 pb-0.5">
+                  <h3 className="text-[11px] font-black uppercase text-[#115E59] tracking-wider mb-2">
                     Education & Credentials
                   </h3>
-                  {eduList.map((edu) => (
-                    <div key={edu.id} className="text-[9px] mt-1">
+                  {eduList.slice(0, 2).map((edu) => (
+                    <div key={edu.id} className="text-[10.5px] mb-2">
                       <span className="font-bold text-slate-900 block">{edu.institution}</span>
                       <span className="text-slate-600">{edu.degree}</span>
                     </div>
@@ -3388,3 +4718,4 @@ export const ResumeTemplateRenderer: React.FC<ResumeTemplateProps> = ({
     </div>
   );
 };
+

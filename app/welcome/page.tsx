@@ -596,14 +596,6 @@ export default function WelcomePage() {
     }
   };
 
-  // 3. Instant Demo Resume Load
-  const handleLoadDemoResume = () => {
-    const demoId = 'ayush-mishra-canonical';
-    localStorage.setItem('has_onboarded', 'true');
-    localStorage.setItem('active_resume_id', demoId);
-    window.dispatchEvent(new Event('active_resume_changed'));
-    router.push(`/builder/${demoId}`);
-  };
 
   const filteredTemplates = TEMPLATES_GALLERY.filter((t) => {
     const matchesCat = selectedCategory === 'All' || t.category === selectedCategory;
@@ -747,19 +739,6 @@ export default function WelcomePage() {
             </div>
           )}
 
-          {/* Quick Demo Resume Option */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 text-xs text-slate-500">
-            <span>Looking to test first?</span>
-            <button
-              type="button"
-              onClick={handleLoadDemoResume}
-              className="text-[#FF4B5E] font-bold hover:underline cursor-pointer flex items-center gap-1"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#FF4B5E]" />
-              <span>Open pre-filled demo resume in builder</span>
-            </button>
-          </div>
-
         </main>
       )}
 
@@ -820,8 +799,8 @@ export default function WelcomePage() {
                 key={`${template.id}-${idx}`}
                 className="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#1C152E] overflow-hidden shadow-2xs hover:shadow-lg transition-all flex flex-col justify-between group"
               >
-                {/* Authentic Scaled Mini-DOM Template Preview */}
-                <div className="relative aspect-[3/4] bg-slate-100 overflow-hidden flex items-center justify-center p-0">
+                {/* Authentic Scaled Mini-DOM Template Preview in True A4 Aspect Ratio */}
+                <div className="relative aspect-[210/297] bg-white overflow-hidden flex items-center justify-center p-0">
                   <TemplateMicroPreview
                     templateId={template.id}
                     className="w-full h-full"
