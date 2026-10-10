@@ -1,4 +1,15 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || '';
+const isRealClerkKey = Boolean(
+  clerkKey &&
+  clerkKey.startsWith('pk_') &&
+  !clerkKey.includes('callback.ai') &&
+  !clerkKey.includes('your_clerk') &&
+  clerkKey !== 'pk_test_Y2xlcmsuY2FsbGJhY2suYWkk'
+);
 
 const isPublicRoute = createRouteMatcher([
   '/',
@@ -19,11 +30,17 @@ const isPublicRoute = createRouteMatcher([
   '/dashboard(.*)',
 ]);
 
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth.protect();
-  }
-});
+const middlewareHandler = isRealClerkKey
+  ? clerkMiddleware(async (auth, request) => {
+      if (!isPublicRoute(request)) {
+        await auth.protect();
+      }
+    })
+  : function fallbackMiddleware(req: NextRequest) {
+      return NextResponse.next();
+    };
+
+export default middlewareHandler;
 
 export const config = {
   matcher: [
