@@ -208,6 +208,7 @@ export function saveResumeToStore(item: StoredResumeItem): void {
       projects: item.parsedSections.projects,
       skills: item.parsedSections.skills,
       certifications: item.parsedSections.certifications,
+      selectedTemplate: item.template || 'classic_ats',
     }));
 
     window.dispatchEvent(new Event('active_resume_changed'));

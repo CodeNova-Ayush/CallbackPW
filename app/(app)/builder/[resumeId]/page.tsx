@@ -30,12 +30,29 @@ import {
   Maximize2,
   Minimize2,
   SlidersHorizontal,
+  Smartphone,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Edit3,
+  Layers,
+  Search,
+  X,
+  Pencil,
+  Star,
+  Printer,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Card, Badge } from '@/components/ui/Card';
 import { Modal } from '@/components/ui/Modal';
 import { ResumeTemplateRenderer, TemplateId, ResumeData } from '@/components/builder/ResumeTemplates';
+import { ResumeSectionEditor } from '@/components/builder/ResumeSectionEditor';
+import { TemplateMicroPreview } from '@/components/builder/TemplateMicroPreview';
+import { useAppAuth, useAppUser } from '@/components/auth/AuthProvider';
+import { AuthModal } from '@/components/auth/AuthModal';
+import { saveResumeToStore } from '@/lib/client-resume-store';
 
 const DEMO_DATA: ResumeData = {
   personalInfo: {
@@ -180,8 +197,8 @@ export default function BuilderPage(props: { params: Promise<{ resumeId: string 
   const resumeId = params.resumeId || 'demo-resume-alex-1';
   const isDemoResume = resumeId === 'demo-resume-alex-1';
 
-  // Start with default data if demo resume
-  const initialData = isDemoResume ? DEMO_DATA : EMPTY_DATA;
+  // Start with default rich executive data so the resume is always fully filled like top templates
+  const initialData = DEMO_DATA;
 
   const [activeSection, setActiveSection] = useState<string>('personal_info');
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('classic_ats');
@@ -198,6 +215,45 @@ export default function BuilderPage(props: { params: Promise<{ resumeId: string 
   const [isEditorCollapsed, setIsEditorCollapsed] = useState<boolean>(false);
   const [previewWidthPreset, setPreviewWidthPreset] = useState<'standard' | 'wide' | 'expanded'>('wide');
 
+  const router = useRouter();
+
+  // Auth Protection for Export / Download / Completion
+  const { isSignedIn } = useAppAuth();
+  const { user } = useAppUser();
+  const isUserAuthenticated = Boolean(
+    isSignedIn &&
+    user?.primaryEmailAddress?.emailAddress &&
+    typeof window !== 'undefined' &&
+    localStorage.getItem('is_authenticated') === 'true' &&
+    localStorage.getItem('user_email') &&
+    !localStorage.getItem('user_email')?.includes('neuralflow.ai')
+  );
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authModalTitle, setAuthModalTitle] = useState<string>('Save Your Resume');
+  const [authModalSubtitle, setAuthModalSubtitle] = useState<string>(
+    'Sign in or create a free account to continue.'
+  );
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+  // Mobile Responsiveness & Phone Simulator States
+  const [isMobileScreen, setIsMobileScreen] = useState<boolean>(false);
+  const [isMobileSimulator, setIsMobileSimulator] = useState<boolean>(false);
+  const [mobileTab, setMobileTab] = useState<'form' | 'preview' | 'sections'>('form');
+  const [mobilePreviewZoom, setMobilePreviewZoom] = useState<'fit' | '100'>('fit');
+  const [mobileContainerWidth, setMobileContainerWidth] = useState<number>(380);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobileScreen(window.innerWidth < 1024);
+        setMobileContainerWidth(window.innerWidth);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Resume State
   const [personalInfo, setPersonalInfo] = useState(initialData.personalInfo);
   const [experiences, setExperiences] = useState(initialData.experiences);
@@ -211,15 +267,47 @@ export default function BuilderPage(props: { params: Promise<{ resumeId: string 
     let loadedFromLocal = false;
     if (typeof window !== 'undefined') {
       try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const templateFromUrl = urlParams.get('template') as TemplateId | null;
+        if (templateFromUrl) {
+          setSelectedTemplate(templateFromUrl);
+        }
+
         const saved = localStorage.getItem('callback_ai_saved_resume_' + resumeId);
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (parsed.personalInfo) setPersonalInfo(parsed.personalInfo);
-          if (parsed.experiences && parsed.experiences.length > 0) setExperiences(parsed.experiences);
-          if (parsed.education && parsed.education.length > 0) setEducation(parsed.education);
-          if (parsed.projects && parsed.projects.length > 0) setProjects(parsed.projects);
-          if (parsed.skills && parsed.skills.length > 0) setSkills(parsed.skills);
-          if (parsed.selectedTemplate) setSelectedTemplate(parsed.selectedTemplate);
+          if (parsed.personalInfo) {
+            setPersonalInfo({
+              ...DEMO_DATA.personalInfo,
+              ...parsed.personalInfo,
+              summary: parsed.personalInfo.summary || DEMO_DATA.personalInfo.summary,
+            });
+          }
+          if (parsed.experiences && parsed.experiences.length > 0) {
+            setExperiences(parsed.experiences);
+          } else {
+            setExperiences(DEMO_DATA.experiences);
+          }
+          if (parsed.education && parsed.education.length > 0) {
+            setEducation(parsed.education);
+          } else {
+            setEducation(DEMO_DATA.education);
+          }
+          if (parsed.projects && parsed.projects.length > 0) {
+            setProjects(parsed.projects);
+          } else {
+            setProjects(DEMO_DATA.projects);
+          }
+          if (parsed.skills && parsed.skills.length > 0) {
+            setSkills(parsed.skills);
+          } else {
+            setSkills(DEMO_DATA.skills);
+          }
+          if (templateFromUrl) {
+            setSelectedTemplate(templateFromUrl);
+          } else if (parsed.selectedTemplate) {
+            setSelectedTemplate(parsed.selectedTemplate);
+          }
           setLastSavedTime('Loaded from Local Storage');
           loadedFromLocal = true;
         }
@@ -233,6 +321,9 @@ export default function BuilderPage(props: { params: Promise<{ resumeId: string 
       fetch(`/api/resumes/${resumeId}`)
         .then((res) => res.json())
         .then((data) => {
+          if (data.resume?.template) {
+            setSelectedTemplate(data.resume.template as TemplateId);
+          }
           if (data.resume?.sections) {
             const pi = data.resume.sections.find((s: any) => s.sectionType === 'personal_info');
             const exp = data.resume.sections.find((s: any) => s.sectionType === 'experience');
@@ -309,6 +400,17 @@ export default function BuilderPage(props: { params: Promise<{ resumeId: string 
     { id: 'skills', title: 'Skills & Tech Stack', icon: Wrench, count: skills.length },
   ];
 
+  const sectionIds = sectionsList.map((s) => s.id);
+  const currentSectionIdx = sectionIds.indexOf(activeSection);
+  const handleNextSection = () => {
+    const nextIdx = (currentSectionIdx + 1) % sectionIds.length;
+    setActiveSection(sectionIds[nextIdx]);
+  };
+  const handlePrevSection = () => {
+    const prevIdx = (currentSectionIdx - 1 + sectionIds.length) % sectionIds.length;
+    setActiveSection(sectionIds[prevIdx]);
+  };
+
   const handleClearData = () => {
     setPersonalInfo(EMPTY_DATA.personalInfo);
     setExperiences([]);
@@ -376,6 +478,14 @@ export default function BuilderPage(props: { params: Promise<{ resumeId: string 
   };
 
   const handleDownloadLocalFile = (format: 'html' | 'txt' | 'json' = 'html') => {
+    if (!isSignedIn) {
+      setAuthModalTitle('Save & Download');
+      setAuthModalSubtitle('Sign in or create a free account to download.');
+      setPendingAction(() => () => handleDownloadLocalFile(format));
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     try {
       const candidateNameClean = personalInfo.fullName ? personalInfo.fullName.replace(/\s+/g, '_') : 'Resume';
       let fileContent = '';
@@ -412,7 +522,7 @@ ${skills.join(', ')}
 <html>
 <head>
   <meta charset="utf-8">
-  <title>${personalInfo.fullName || 'Resume'} — Callback AI Export</title>
+  <title>${personalInfo.fullName || 'Resume'} — Callback Export</title>
   <style>
     body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 40px; color: #111827; line-height: 1.6; }
     h1 { font-size: 26px; margin-bottom: 4px; color: #111827; text-transform: uppercase; }
@@ -485,9 +595,89 @@ ${skills.join(', ')}
     }
   };
 
-  const [previewModalZoom, setPreviewModalZoom] = useState<number>(65);
+  const handleFinishResume = () => {
+    // 1. Force save to Local Storage & Global Client Resume Store
+    const candidateNameClean = personalInfo.fullName ? personalInfo.fullName.replace(/\s+/g, ' ') : 'Candidate';
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(
+          'callback_ai_saved_resume_' + resumeId,
+          JSON.stringify({
+            personalInfo,
+            experiences,
+            education,
+            projects,
+            skills,
+            activeSection,
+            selectedTemplate,
+            zoomLevel,
+            savedAt: new Date().toISOString(),
+          })
+        );
+        localStorage.setItem('has_onboarded', 'true');
+        localStorage.setItem('active_resume_id', resumeId);
+        saveResumeToStore({
+          id: resumeId,
+          title: `${candidateNameClean}'s Resume`,
+          candidateName: personalInfo.fullName || 'Candidate',
+          candidateTitle: experiences[0]?.role || 'Software Engineer',
+          candidateEmail: personalInfo.email || '',
+          candidatePhone: personalInfo.phone || '',
+          candidateLocation: personalInfo.location || '',
+          atsScore: 96,
+          trustScore: 98,
+          updatedAt: 'Just now',
+          isActive: true,
+          template: selectedTemplate,
+          parsedSections: {
+            personalInfo,
+            experience: experiences,
+            education,
+            projects,
+            skills,
+          },
+        });
+        window.dispatchEvent(new Event('active_resume_changed'));
+        setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      } catch (e) {
+        console.error('Failed to save resume locally:', e);
+      }
+    }
+
+    if (!isUserAuthenticated) {
+      setAuthModalTitle('Save Your Resume');
+      setAuthModalSubtitle('Sign in or create a free account to continue.');
+      setPendingAction(() => () => {
+        setDownloadSuccessMsg('Resume linked to your account! Navigating to Dashboard...');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1200);
+      });
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    setDownloadSuccessMsg('Resume saved successfully! Navigating to Dashboard...');
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 1000);
+  };
+
+  const [previewModalZoom, setPreviewModalZoom] = useState<number | 'fit'>('fit');
+
+  const handleOpenExportPreview = () => {
+    setIsExportPreviewModalOpen(true);
+  };
 
   const handleExportPDF = async () => {
+    if (!isUserAuthenticated) {
+      setAuthModalTitle('Save & Download');
+      setAuthModalSubtitle('Sign in or create a free account to download.');
+      setPendingAction(() => () => handleExportPDF());
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     setIsExportingPDF(true);
     setDownloadSuccessMsg(null);
 
@@ -600,6 +790,17 @@ ${skills.join(', ')}
     }
   };
 
+  // Automatically trigger PDF export after returning from sign-in with ?auto_download=true
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('auto_download') === 'true' && isSignedIn) {
+        handleExportPDF();
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+  }, [isSignedIn]);
+
   const resumeData: ResumeData = {
     personalInfo,
     experiences,
@@ -609,7 +810,260 @@ ${skills.join(', ')}
   };
 
   const templatesGallery = [
-    // 1-6: Executive & Fortune 500
+    // =========================================================================
+    // TOP: Former Bottom Templates Moved to the Top (Unique Items 1-4)
+    // =========================================================================
+    {
+      id: 'split_duo',
+      name: 'Balanced Symmetrical Duo',
+      tag: 'FULL STACK',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Clean cobalt blue accents with structured balance between engineering history and technical skills.',
+      previewImg: '/images/templates/template-1.png',
+    },
+    {
+      id: 'prestige_gold',
+      name: 'Executive VP & Chief Officer Gold',
+      tag: 'C-SUITE EXEC',
+      category: 'Executive & Finance',
+      ats: '98% ATS',
+      desc: 'Dark obsidian top banner with refined warm gold accents for executive and boardroom candidates.',
+      previewImg: '/images/templates/template-2.png',
+    },
+    {
+      id: 'ai_ml_lead',
+      name: 'PyTorch ML & Autonomous Swarms',
+      tag: 'AI / LLM LEAD',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Advanced machine learning systems with distributed training throughput metrics and model benchmarking.',
+      previewImg: '/images/templates/template-3.png',
+    },
+    {
+      id: 'graphite_compact',
+      name: 'Dense 1-Page High-Density',
+      tag: '10+ YRS EXP',
+      category: 'Executive & Finance',
+      ats: '99% ATS',
+      desc: 'Maximum information density engineered to fit comprehensive 10-year careers cleanly onto 1 page.',
+      previewImg: '/images/templates/enhancv-8.png',
+    },
+
+    // =========================================================================
+    // CORE ATS SPECIALIZED TEMPLATES (Unique Items 5-27)
+    // =========================================================================
+    {
+      id: 'cpa_audit_lead',
+      name: 'Scarlett Anderson — CPA & Audit',
+      tag: 'FINANCE / CPA',
+      category: 'Executive & Finance',
+      ats: '99% ATS',
+      desc: 'Classic centered serif header with horizontal rules and maximum corporate parser compatibility.',
+      previewImg: '/images/templates/enhancv-extra-1.png',
+    },
+    {
+      id: 'global_director_ops',
+      name: 'Isaac Hall — Global Director',
+      tag: 'BOARD & ADVISOR',
+      category: 'Executive & Finance',
+      ats: '98% ATS',
+      desc: 'Refined serif typography with right-aligned tabular numerals and leadership highlights.',
+      previewImg: '/images/templates/enhancv-extra-2.png',
+    },
+    {
+      id: 'backend_distributed_arch',
+      name: 'Elise Carter — Backend & ML',
+      tag: 'TECH ARCHITECT',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Monospace terminal section tags, visual skills matrix chart, and dense metrics formatting.',
+      previewImg: '/images/templates/enhancv-extra-3.png',
+    },
+    {
+      id: 'vp_product_strategy',
+      name: 'Carrie Jones — Product Lead',
+      tag: 'PRODUCT LEAD',
+      category: 'Product & Design',
+      ats: '97% ATS',
+      desc: 'Nordic emerald headers, clean divider borders, and categorized domain competencies.',
+      previewImg: '/images/templates/enhancv-extra-4.png',
+    },
+    {
+      id: 'strategic_sourcing_ops',
+      name: 'Maeve Delaney — Strategic Sourcing',
+      tag: 'GLOBAL OPS',
+      category: 'Executive & Finance',
+      ats: '97% ATS',
+      desc: 'Deep dark slate console styling with bright emerald syntax highlights and terminal tags.',
+      previewImg: '/images/templates/enhancv-extra-5.png',
+    },
+    {
+      id: 'growth_marketing_dir',
+      name: 'Ellen Johnson — Growth Marketing',
+      tag: 'GTM / MARKETING',
+      category: 'Startups & YC',
+      ats: '98% ATS',
+      desc: 'Sky blue accent geometry with structured infrastructure competencies and cloud metrics.',
+      previewImg: '/images/templates/enhancv-extra-6.png',
+    },
+    {
+      id: 'data_science_ml_lead',
+      name: 'Grace Jackson — Data Scientist',
+      tag: 'DATA / ML',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Copper orange accent borders with dense monospace code tags and performance metrics.',
+      previewImg: '/images/templates/enhancv-extra-7.png',
+    },
+    {
+      id: 'enterprise_bizdev',
+      name: 'Austin Adams — Business Dev Lead',
+      tag: 'ENTERPRISE B2B',
+      category: 'Executive & Finance',
+      ats: '98% ATS',
+      desc: 'Scholarly preprint typography with abstract summary box and partnership pedigree.',
+      previewImg: '/images/templates/enhancv-extra-8.png',
+    },
+    {
+      id: 'staff_ml_systems',
+      name: 'David Miller — Staff ML Engineer',
+      tag: 'AI / SYSTEMS',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Warm amber section dividers and structured dual-column matrix for AI researchers.',
+      previewImg: '/images/templates/enhancv-extra-9.png',
+    },
+    {
+      id: 'startup_founder_pitch',
+      name: 'Elena Rostova — VP of Marketing',
+      tag: 'YC FOUNDER',
+      category: 'Startups & YC',
+      ats: '98% ATS',
+      desc: 'Punchy orange accents, prominent fundraising and traction milestones, and high-signal metrics.',
+      previewImg: '/images/templates/enhancv-extra-10.png',
+    },
+    {
+      id: 'cloud_infra_sre',
+      name: 'Marcus Vance — Cloud Architect',
+      tag: 'CLOUD / SRE',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Crisp AWS/GCP infrastructure certifications and production SLA metrics formatting.',
+      previewImg: '/images/templates/enhancv-extra-11.png',
+    },
+    {
+      id: 'biotech_pharma_lead',
+      name: 'Sophia Chen — Biotech Director',
+      tag: 'BIOTECH / CLINICAL',
+      category: 'Executive & Finance',
+      ats: '98% ATS',
+      desc: 'Indigo top banner with translational medicine milestones, patent portfolio filings, and FDA progression.',
+      previewImg: '/images/templates/enhancv-extra-12.png',
+    },
+    {
+      id: 'cybersecurity_soc2',
+      name: 'Liam O’Connor — Cybersecurity Lead',
+      tag: 'SECURITY / SOC-2',
+      category: 'Tech & AI',
+      ats: '99% ATS',
+      desc: 'Electric indigo divider lines with zero-trust architecture, audit compliance, and response SLAs.',
+      previewImg: '/images/templates/enhancv-extra-13.png',
+    },
+    {
+      id: 'head_of_ux_design',
+      name: 'Rachel Green — Head of UX & Design',
+      tag: 'DESIGN SYSTEMS',
+      category: 'Product & Design',
+      ats: '98% ATS',
+      desc: 'Sophisticated typography with portfolio prominence and design system governance.',
+      previewImg: '/images/templates/enhancv-extra-14.png',
+    },
+    {
+      id: 'quant_research_fund',
+      name: 'Alexander Wright — Quant Research',
+      tag: 'QUANT / HEDGE FUND',
+      category: 'Executive & Finance',
+      ats: '99% ATS',
+      desc: 'Deep burgundy executive headers, pedigree split, and high-impact accomplishment bullets.',
+      previewImg: '/images/templates/enhancv-extra-15.png',
+    },
+    {
+      id: 'corporate_counsel_lead',
+      name: 'Claire Dupont — Corporate Counsel',
+      tag: 'LEGAL & STRATEGY',
+      category: 'Executive & Finance',
+      ats: '99% ATS',
+      desc: 'Rigorous single-column case structure with quantitative business impacts and C-suite advisory.',
+      previewImg: '/images/templates/enhancv-extra-16.png',
+    },
+    {
+      id: 'swiss_bauhaus_grid',
+      name: 'Helvetica Swiss Bauhaus Grid',
+      tag: 'SWISS DESIGN',
+      category: 'Product & Design',
+      ats: '98% ATS',
+      desc: 'Ultra-clean black & red geometric alignment inspired by international typographic style.',
+      previewImg: '/images/templates/enhancv-1.png',
+    },
+    {
+      id: 'oxford_academic_fellow',
+      name: 'Cambridge & Oxford Fellow',
+      tag: 'ACADEMIC / R&D',
+      category: 'Academic & Strategy',
+      ats: '99% ATS',
+      desc: 'Timeless scholarly typography with honorable distinctions, credentials, and fellowships.',
+      previewImg: '/images/templates/enhancv-2.png',
+    },
+    {
+      id: 'tokyo_zen_minimal',
+      name: 'Tokyo Minimalist Zen',
+      tag: 'MINIMALIST',
+      category: 'Product & Design',
+      ats: '98% ATS',
+      desc: 'Subtle hairline dividers, generous white space balance, and muted charcoal hierarchy.',
+      previewImg: '/images/templates/enhancv-3.png',
+    },
+    {
+      id: 'scandinavian_frost',
+      name: 'Scandinavian Frost Clean',
+      tag: 'NORDIC TECH',
+      category: 'Tech & AI',
+      ats: '97% ATS',
+      desc: 'Frost blue accents with clean border dividers and functional human-centric layout.',
+      previewImg: '/images/templates/enhancv-4.png',
+    },
+    {
+      id: 'neo_brutalist_tech',
+      name: 'Neo-Brutalist Engineering',
+      tag: 'CREATIVE TECH',
+      category: 'Product & Design',
+      ats: '95% ATS',
+      desc: 'Bold black border boxes with punchy drop shadows and high-contrast yellow headers.',
+      previewImg: '/images/templates/enhancv-5.png',
+    },
+    {
+      id: 'coral_sunset_product',
+      name: 'Coral Sunset Product Designer',
+      tag: 'DESIGN LEAD',
+      category: 'Product & Design',
+      ats: '96% ATS',
+      desc: 'Warm rose coral accents with modern card backdrops and design system highlights.',
+      previewImg: '/images/templates/enhancv-6.png',
+    },
+    {
+      id: 'deep_teal_biotech',
+      name: 'Deep Teal Biotech & Hardware',
+      tag: 'BIO / HARDWARE',
+      category: 'Tech & AI',
+      ats: '97% ATS',
+      desc: 'Rich teal headers with dual-column precision engineering and patent accomplishments.',
+      previewImg: '/images/templates/enhancv-7.png',
+    },
+
+    // =========================================================================
+    // BOTTOM: Former Top Templates Moved to the Bottom (Unique Items 28-31)
+    // =========================================================================
     {
       id: 'classic_ats',
       name: 'Executive Leader Standard',
@@ -622,7 +1076,7 @@ ${skills.join(', ')}
     {
       id: 'modern_executive',
       name: 'Agile Tech Architect',
-      tag: 'YC FOUNDER',
+      tag: 'STARTUP CTO',
       category: 'Startups & YC',
       ats: '98% ATS',
       desc: 'Warm terracotta accent border, executive summary backdrop, and structured leadership cards.',
@@ -646,306 +1100,173 @@ ${skills.join(', ')}
       desc: 'Top navy header banner with dual-column grid body and prominent technical credentials.',
       previewImg: '/images/templates/tpl-4.png',
     },
-    {
-      id: 'fortune500_single',
-      name: 'Scarlett Anderson — CPA & Audit',
-      tag: 'FINANCE / CPA',
-      category: 'Executive & Finance',
-      ats: '99% ATS',
-      desc: 'Classic centered serif header with horizontal rules and maximum corporate parser compatibility.',
-      previewImg: '/images/templates/enhancv-extra-1.png',
-    },
-    {
-      id: 'boardroom_serif',
-      name: 'Isaac Hall — Global Director',
-      tag: 'BOARD & ADVISOR',
-      category: 'Executive & Finance',
-      ats: '98% ATS',
-      desc: 'Refined serif typography with right-aligned tabular numerals and leadership highlights.',
-      previewImg: '/images/templates/enhancv-extra-2.png',
-    },
 
-    // 7-12: Tech & Systems Engineering
+    // =========================================================================
+    // FLOWCV SIGNATURE SCRAPED TEMPLATES
+    // =========================================================================
     {
-      id: 'minimalist_tech',
-      name: 'Elise Carter — Backend & ML',
-      tag: 'TECH ARCHITECT',
-      category: 'Tech & AI',
-      ats: '98% ATS',
-      desc: 'Monospace terminal section tags, visual skills matrix chart, and dense metrics formatting.',
-      previewImg: '/images/templates/enhancv-extra-3.png',
-    },
-    {
-      id: 'soft_green_pill',
-      name: 'Carrie Jones — Product Lead',
-      tag: 'PRODUCT / STRATEGY',
-      category: 'Product & Design',
-      ats: '97% ATS',
-      desc: 'Nordic emerald headers, clean divider borders, and categorized domain competencies.',
-      previewImg: '/images/templates/enhancv-extra-4.png',
-    },
-    {
-      id: 'cyber_terminal',
-      name: 'Maeve Delaney — Strategic Sourcing',
-      tag: 'OPERATIONS',
-      category: 'Executive & Finance',
-      ats: '97% ATS',
-      desc: 'Deep dark slate console styling with bright emerald syntax highlights and terminal tags.',
-      previewImg: '/images/templates/enhancv-extra-5.png',
-    },
-    {
-      id: 'cloud_architect',
-      name: 'Ellen Johnson — Growth Marketing',
-      tag: 'MARKETING / TECH',
-      category: 'Startups & YC',
-      ats: '98% ATS',
-      desc: 'Sky blue accent geometry with structured infrastructure competencies and cloud metrics.',
-      previewImg: '/images/templates/enhancv-extra-6.png',
-    },
-    {
-      id: 'rust_systems',
-      name: 'Grace Jackson — Data Scientist',
-      tag: 'DATA / AI',
-      category: 'Tech & AI',
+      id: 'flowcv_atlantic_blue',
+      name: 'FlowCV Atlantic Blue Sidebar',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV FLAGSHIP',
       ats: '99% ATS',
-      desc: 'Copper orange accent borders with dense monospace code tags and performance metrics.',
-      previewImg: '/images/templates/enhancv-extra-7.png',
+      desc: 'Deep Atlantic navy left sidebar with high-contrast credentials, modern sans typography, and ATS parsing.',
+      previewImg: '/images/templates/tpl-3.png',
     },
     {
-      id: 'ai_researcher',
-      name: 'Austin Adams — Business Dev Lead',
-      tag: 'ENTERPRISE B2B',
-      category: 'Executive & Finance',
-      ats: '98% ATS',
-      desc: 'Scholarly preprint typography with abstract summary box and publication pedigree.',
-      previewImg: '/images/templates/enhancv-extra-8.png',
-    },
-
-    // 13-18: YC Startups & High Growth
-    {
-      id: 'yellow_creative',
-      name: 'David Miller — Staff ML Engineer',
-      tag: 'AI / SYSTEMS',
-      category: 'Tech & AI',
+      id: 'flowcv_mercury_flow',
+      name: 'FlowCV Mercury Minimal Flow',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV MINIMAL',
       ats: '99% ATS',
-      desc: 'Warm amber section dividers and structured dual-column matrix for product innovators.',
-      previewImg: '/images/templates/enhancv-extra-9.png',
-    },
-    {
-      id: 'yc_founder_pitch',
-      name: 'Elena Rostova — VP of Marketing',
-      tag: 'STARTUP FOUNDER',
-      category: 'Startups & YC',
-      ats: '98% ATS',
-      desc: 'Punchy orange accents, prominent fundraising and traction milestones, and high-signal metrics.',
-      previewImg: '/images/templates/enhancv-extra-10.png',
-    },
-    {
-      id: 'stealth_scale',
-      name: 'Marcus Vance — Cloud Architect',
-      tag: 'CLOUD / DEVOPS',
-      category: 'Tech & AI',
-      ats: '98% ATS',
-      desc: 'Deep violet accent banners with clean domain badges and rapid shipping highlights.',
-      previewImg: '/images/templates/enhancv-extra-11.png',
-    },
-    {
-      id: 'fintech_lead',
-      name: 'Sophia Chen — Biotech Director',
-      tag: 'BIOTECH / CLINICAL',
-      category: 'Executive & Finance',
-      ats: '98% ATS',
-      desc: 'Indigo top banner with tabular transaction metrics, ledger reconciliation, and high reliability.',
-      previewImg: '/images/templates/enhancv-extra-12.png',
-    },
-    {
-      id: 'crypto_web3',
-      name: 'Liam O’Connor — Cybersecurity',
-      tag: 'SECURITY / SOC',
-      category: 'Tech & AI',
-      ats: '97% ATS',
-      desc: 'Electric indigo divider lines with smart contract security and consensus mechanisms.',
-      previewImg: '/images/templates/enhancv-extra-13.png',
-    },
-    {
-      id: 'saas_operator',
-      name: 'Rachel Green — Head of UX & Design',
-      tag: 'UX / PRODUCT',
-      category: 'Product & Design',
-      ats: '97% ATS',
-      desc: 'Royal sapphire blue cards with ARR expansion, retention, and enterprise sales highlights.',
-      previewImg: '/images/templates/enhancv-extra-14.png',
-    },
-
-    // 19-24: Editorial & Strategy
-    {
-      id: 'right_sidebar',
-      name: 'Alexander Wright — Quant Research',
-      tag: 'QUANT / HEDGE FUND',
-      category: 'Executive & Finance',
-      ats: '99% ATS',
-      desc: 'Deep burgundy executive headers, pedigree split, and high-impact accomplishment bullets.',
-      previewImg: '/images/templates/enhancv-extra-15.png',
-    },
-    {
-      id: 'mckinsey_consulting',
-      name: 'Claire Dupont — Corporate Counsel',
-      tag: 'LEGAL & STRATEGY',
-      category: 'Academic & Strategy',
-      ats: '99% ATS',
-      desc: 'Rigorous single-column case structure with quantitative business impacts and C-suite advisory.',
-      previewImg: '/images/templates/enhancv-extra-16.png',
-    },
-    {
-      id: 'swiss_grid',
-      name: 'Helvetica Swiss Bauhaus Grid',
-      tag: 'SWISS DESIGN',
-      category: 'Product & Design',
-      ats: '98% ATS',
-      desc: 'Ultra-clean black & red geometric alignment inspired by international typographic style.',
-      previewImg: '/images/templates/enhancv-1.png',
-    },
-    {
-      id: 'oxford_academic',
-      name: 'Cambridge & Oxford Fellow',
-      tag: 'ACADEMIC',
-      category: 'Academic & Strategy',
-      ats: '99% ATS',
-      desc: 'Timeless scholarly typography with honorable distinctions, credentials, and fellowships.',
-      previewImg: '/images/templates/enhancv-2.png',
-    },
-    {
-      id: 'tokyo_minimal',
-      name: 'Tokyo Minimalist Zen',
-      tag: 'MINIMALIST',
-      category: 'Product & Design',
-      ats: '98% ATS',
-      desc: 'Subtle hairline dividers, generous white space balance, and muted charcoal hierarchy.',
+      desc: 'Fluid single-column layout with clean centered header and generous whitespace for modern engineers.',
       previewImg: '/images/templates/enhancv-3.png',
     },
     {
-      id: 'nordic_clean',
-      name: 'Scandinavian Frost Clean',
-      tag: 'NORDIC TECH',
-      category: 'Tech & AI',
-      ats: '97% ATS',
-      desc: 'Frost blue accents with clean border dividers and functional human-centric layout.',
-      previewImg: '/images/templates/enhancv-4.png',
-    },
-
-    // 25-32: Specialized & High Demand Roles
-    {
-      id: 'neo_brutalist',
-      name: 'Neo-Brutalist Engineering',
-      tag: 'CREATIVE TECH',
-      category: 'Product & Design',
-      ats: '95% ATS',
-      desc: 'Bold black border boxes with punchy drop shadows and high-contrast yellow headers.',
-      previewImg: '/images/templates/enhancv-5.png',
-    },
-    {
-      id: 'coral_modern',
-      name: 'Coral Sunset Product Designer',
-      tag: 'DESIGN LEAD',
-      category: 'Product & Design',
-      ats: '96% ATS',
-      desc: 'Warm rose coral accents with modern card backdrops and design system highlights.',
-      previewImg: '/images/templates/enhancv-6.png',
-    },
-    {
-      id: 'teal_innovator',
-      name: 'Deep Teal Biotech & Hardware',
-      tag: 'BIO / HARDWARE',
-      category: 'Tech & AI',
-      ats: '97% ATS',
-      desc: 'Rich teal headers with dual-column precision engineering and patent accomplishments.',
-      previewImg: '/images/templates/enhancv-7.png',
-    },
-    {
-      id: 'graphite_compact',
-      name: 'Dense 1-Page High-Density',
-      tag: '10+ YRS EXP',
-      category: 'Executive & Finance',
-      ats: '99% ATS',
-      desc: 'Maximum information density engineered to fit comprehensive 10-year careers onto 1 page.',
-      previewImg: '/images/templates/enhancv-8.png',
-    },
-    {
-      id: 'split_duo',
-      name: 'Balanced Symmetrical Duo',
-      tag: 'FULL STACK',
-      category: 'Tech & AI',
-      ats: '96% ATS',
-      desc: 'Clean cobalt blue accents with structured balance between history and technical skills.',
+      id: 'flowcv_steady_form',
+      name: 'FlowCV Steady Form Grid',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV BALANCED',
+      ats: '98% ATS',
+      desc: 'Symmetrical 60/40 two-column split with slate dividers and organized competencies sidebar.',
       previewImg: '/images/templates/template-1.png',
     },
     {
-      id: 'prestige_gold',
-      name: 'Executive VP & Chief Officer Gold',
-      tag: 'C-SUITE EXEC',
-      category: 'Executive & Finance',
-      ats: '97% ATS',
-      desc: 'Dark obsidian top banner with refined warm gold accents for executive candidates.',
-      previewImg: '/images/templates/template-2.png',
-    },
-    {
-      id: 'ai_ml_lead',
-      name: 'PyTorch ML & Autonomous Swarms',
-      tag: 'AI / LLM LEAD',
-      category: 'Tech & AI',
+      id: 'flowcv_classic_serif',
+      name: 'FlowCV Classic Serif Formal',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV SERIF',
       ats: '99% ATS',
-      desc: 'Advanced machine learning systems with distributed training throughput metrics.',
-      previewImg: '/images/templates/template-3.png',
+      desc: 'Monochrome editorial serif typography with dual horizontal rules for corporate and legal distinction.',
+      previewImg: '/images/templates/enhancv-extra-1.png',
     },
     {
-      id: 'quantum_research',
-      name: 'Quantum & Hardware Researcher',
-      tag: 'QUANTUM R&D',
-      category: 'Academic & Strategy',
+      id: 'flowcv_leaves',
+      name: 'FlowCV Forest Leaves Accent',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV GREEN',
       ats: '98% ATS',
-      desc: 'Specialized layout for hardware engineers, quantum algorithms, and experimental physics.',
-      previewImg: '/images/templates/tpl-3.png',
+      desc: 'Signature forest emerald headers and accents designed for healthcare, life sciences, and sustainability.',
+      previewImg: '/images/templates/enhancv-extra-12.png',
+    },
+    {
+      id: 'flowcv_editorial_rule',
+      name: 'FlowCV Editorial Divider Rule',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV EDITORIAL',
+      ats: '98% ATS',
+      desc: 'Minimalist hairline section dividers with wide uppercase tracking and clean bullet alignment.',
+      previewImg: '/images/templates/enhancv-2.png',
+    },
+    {
+      id: 'flowcv_precision_line',
+      name: 'FlowCV Precision Tech Grid',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV TECH',
+      ats: '99% ATS',
+      desc: 'Dark header badge, monospace technical chips, and high-density engineering accomplishments.',
+      previewImg: '/images/templates/enhancv-8.png',
+    },
+    {
+      id: 'flowcv_silver_banner',
+      name: 'FlowCV Silver Slate Banner',
+      category: 'FlowCV & Teal',
+      tag: 'FLOWCV CORPORATE',
+      ats: '98% ATS',
+      desc: 'Sleek slate-gray header banner with dual-column grid body and prominent technical credentials.',
+      previewImg: '/images/templates/tpl-4.png',
+    },
+
+    // =========================================================================
+    // TEALHQ SIGNATURE SCRAPED TEMPLATES
+    // =========================================================================
+    {
+      id: 'teal_modern',
+      name: 'TealHQ Signature Modern Teal',
+      category: 'FlowCV & Teal',
+      tag: 'TEALHQ MODERN',
+      ats: '99% ATS',
+      desc: 'TealHQ signature deep teal accents, verified ATS callout badges, and two-column balanced layout.',
+      previewImg: '/images/templates/enhancv-7.png',
+    },
+    {
+      id: 'teal_clean_ats',
+      name: 'TealHQ High-Density Single Column',
+      category: 'FlowCV & Teal',
+      tag: 'TEALHQ ATS 100',
+      ats: '100% ATS',
+      desc: 'Maximum ATS parser pass-rate with teal headers, clean chronology, and high-impact metric bullets.',
+      previewImg: '/images/templates/tpl-1.png',
+    },
+    {
+      id: 'teal_executive',
+      name: 'TealHQ Executive C-Suite Banner',
+      category: 'FlowCV & Teal',
+      tag: 'TEALHQ EXEC',
+      ats: '99% ATS',
+      desc: 'Deep dark teal header masthead with executive summary callout and structured leadership highlights.',
+      previewImg: '/images/templates/template-2.png',
     },
   ];
 
   return (
-    <div className="h-screen flex flex-col bg-slate-100/60 overflow-hidden select-none">
-      {/* Top Builder Toolbar */}
-      <header className="h-16 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 px-6 flex items-center justify-between shrink-0 no-print shadow-xs relative z-20">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2.5 mr-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#024959] to-[#048BA2] text-white flex items-center justify-center shadow-xs">
+    <div className="h-screen flex flex-col bg-[#ECEEF2] overflow-hidden select-none">
+      {/* Top Builder Toolbar (Desktop only - mobile uses unified top app bar) */}
+      <header className="hidden md:flex h-14 sm:h-16 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 px-3 sm:px-6 items-center justify-between shrink-0 no-print shadow-xs relative z-20">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 mr-1 sm:mr-2">
+            <div className="w-8 h-8 rounded-full bg-[#1C152E] text-white flex items-center justify-center shadow-xs shrink-0">
               <FileText className="w-4 h-4" />
             </div>
             <div className="flex flex-col hidden sm:flex">
-              <span className="font-black text-xs text-slate-900 leading-tight">
-                {personalInfo.fullName ? `${personalInfo.fullName}` : 'New Blank Resume'}
+              <span className="font-black text-xs text-slate-900 leading-tight truncate max-w-[140px] md:max-w-none">
+                {personalInfo.fullName ? `${personalInfo.fullName}` : 'New Resume'}
               </span>
-              <span className="text-[10px] font-bold text-slate-400">3-Zone Studio</span>
+              <span className="text-[10px] font-bold text-slate-400">
+                {isMobileSimulator || isMobileScreen ? 'Mobile Optimized' : '3-Zone Studio'}
+              </span>
             </div>
           </div>
 
-          <div className="h-6 w-px bg-slate-200 hidden sm:block" />
+          <div className="h-6 w-px bg-slate-200 hidden md:block" />
 
           {/* Templates Button */}
           <button
             type="button"
             onClick={() => setIsTemplateModalOpen(true)}
-            className="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200/90 hover:border-[#048BA2]/60 text-slate-800 hover:text-[#048BA2] text-xs font-black rounded-xl shadow-2xs hover:shadow-xs flex items-center gap-2 transition-all cursor-pointer group"
+            className="px-3 sm:px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200/90 hover:border-[#1C152E] text-slate-800 hover:text-[#1C152E] text-xs font-bold rounded-full shadow-2xs hover:shadow-xs flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer group"
             title="Choose from 40+ ATS-ready executive templates"
           >
-            <Layout className="w-3.5 h-3.5 text-[#048BA2] group-hover:scale-110 transition-transform" />
-            <span>Templates</span>
-            <span className="px-1.5 py-0.5 bg-slate-100 group-hover:bg-[#E6F5F8] text-[9.5px] font-bold text-slate-600 group-hover:text-[#048BA2] rounded-md transition-colors capitalize">
+            <Layout className="w-3.5 h-3.5 text-[#FF4B5E] group-hover:scale-110 transition-transform" />
+            <span className="hidden xs:inline">Templates</span>
+            <span className="px-2 py-0.5 bg-[#FFF0F3] text-[9.5px] font-bold text-[#FF4B5E] border border-[#FFCCD5] rounded-full transition-colors capitalize truncate max-w-[80px] sm:max-w-none">
               {selectedTemplate.replace(/_/g, ' ')}
             </span>
+          </button>
+
+          {/* Mobile Simulator Toggle Button (Desktop & Tablet) */}
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileSimulator(!isMobileSimulator);
+              if (!isMobileSimulator) setMobileTab('form');
+            }}
+            className={`px-3 sm:px-4 py-2 border text-xs font-bold rounded-full shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer ${
+              isMobileSimulator
+                ? 'bg-[#1C152E] text-white border-[#1C152E] ring-2 ring-[#1C152E]/20 shadow-xs'
+                : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-[#1C152E]'
+            }`}
+            title={isMobileSimulator ? 'Return to Desktop 3-Zone View' : 'Toggle Smartphone Simulator View'}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">{isMobileSimulator ? 'Desktop Mode' : 'Mobile Simulator'}</span>
           </button>
 
           {/* Start Fresh Button */}
           <button
             type="button"
             onClick={handleClearData}
-            className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 text-xs font-bold rounded-xl shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer"
+            className="hidden lg:flex px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 text-xs font-bold rounded-xl shadow-2xs items-center gap-1.5 transition-all cursor-pointer"
             title="Clear all fields to start completely fresh"
           >
             <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
@@ -957,23 +1278,23 @@ ${skills.join(', ')}
             <button
               type="button"
               onClick={handleLoadDemo}
-              className="px-3 py-1.5 bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-indigo-700 text-xs font-bold rounded-xl shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer"
+              className="hidden xl:flex px-3 py-1.5 bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-indigo-700 text-xs font-bold rounded-xl shadow-2xs items-center gap-1.5 transition-all cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Load Demo Data</span>
+              <span>Demo</span>
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Local Storage Auto-Save Live Badge */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-emerald-50/90 border border-emerald-200/80 rounded-full text-[10.5px] font-extrabold text-emerald-800 shadow-2xs">
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 bg-emerald-50/90 border border-emerald-200/80 rounded-full text-[10.5px] font-extrabold text-emerald-800 shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Auto-saved locally ({lastSavedTime})</span>
+            <span>Auto-saved locally</span>
           </div>
 
-          {/* Precision Zoom Controls */}
-          <div className="flex items-center gap-1 bg-white border border-slate-200/90 rounded-xl p-1 shadow-2xs">
+          {/* Precision Zoom Controls (Desktop only) */}
+          <div className="hidden md:flex items-center gap-1 bg-white border border-slate-200/90 rounded-xl p-1 shadow-2xs">
             <button
               onClick={() => setZoomLevel((z) => Math.max(70, z - 10))}
               className="w-6 h-6 flex items-center justify-center hover:bg-slate-100 rounded-lg text-slate-600 transition-colors cursor-pointer"
@@ -997,21 +1318,32 @@ ${skills.join(', ')}
           <button
             type="button"
             onClick={() => handleDownloadLocalFile('json')}
-            className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200/90 hover:border-slate-300 text-slate-700 text-xs font-bold rounded-xl shadow-2xs flex items-center gap-2 transition-all cursor-pointer"
+            className="hidden sm:flex h-10 px-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 text-xs font-semibold rounded-full shadow-2xs items-center gap-2 transition-all cursor-pointer"
             title="Save raw JSON resume file to your device"
           >
             <Save className="w-3.5 h-3.5 text-slate-500" />
-            <span>Save .JSON</span>
+            <span className="hidden md:inline">Save .JSON</span>
           </button>
 
           {/* Preview & Export PDF Flagship Button */}
           <button
             type="button"
-            onClick={() => setIsExportPreviewModalOpen(true)}
-            className="px-4 py-2 bg-gradient-to-r from-[#024959] via-[#048BA2] to-[#0FA5BF] hover:from-[#013541] hover:to-[#037488] active:scale-[0.98] text-white font-black text-xs rounded-xl shadow-md shadow-[#048BA2]/25 hover:shadow-lg flex items-center gap-2 transition-all cursor-pointer"
+            onClick={handleOpenExportPreview}
+            className="h-10 px-4 sm:px-5 bg-[#1c152e] hover:bg-[#2b1f45] active:scale-[0.98] text-white font-bold text-xs rounded-full shadow-sm hover:shadow flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Download className="w-4 h-4 text-white" />
-            <span>Preview & Export PDF</span>
+            <Download className="w-3.5 h-3.5 text-white" />
+            <span><span className="hidden sm:inline">Preview & </span>Export PDF</span>
+          </button>
+
+          {/* Finish & Save Resume Flagship Button */}
+          <button
+            type="button"
+            onClick={handleFinishResume}
+            className="h-10 px-4 sm:px-5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold text-xs rounded-full shadow-sm hover:shadow flex items-center gap-2 transition-all cursor-pointer"
+            title="Complete your resume and save it to your candidate account"
+          >
+            <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+            <span>Finish & Save</span>
           </button>
         </div>
       </header>
@@ -1024,624 +1356,685 @@ ${skills.join(', ')}
             <span className="text-xs font-bold">{downloadSuccessMsg}</span>
             <span className="text-[10px] text-slate-300">File is saved in your device Downloads folder & Local Storage</span>
           </div>
-          <button onClick={() => setDownloadSuccessMsg(null)} className="ml-2 text-slate-400 hover:text-white text-xs">✕</button>
+          <button onClick={() => setDownloadSuccessMsg(null)} className="ml-2 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer" aria-label="Close notification"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
 
-      {/* 3-Zone Full Viewport Studio Layout */}
-      <div className="flex-1 flex min-h-0 overflow-hidden">
-        {/* Zone 1 (Left): Section List Navigation */}
-        <aside
-          className={`${
-            isSidebarCollapsed ? 'w-16 p-2 items-center' : 'w-48 xl:w-52 p-3'
-          } bg-slate-50/95 border-r border-slate-200/90 flex flex-col gap-1 overflow-y-auto shrink-0 select-none no-print transition-all duration-300`}
-        >
-          <div className="flex items-center justify-between px-2 py-2 mb-1">
-            {!isSidebarCollapsed && (
-              <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
-                Sections
-              </span>
-            )}
-            <button
-              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-1 hover:bg-slate-200/70 rounded-lg text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
-              title={isSidebarCollapsed ? 'Expand Sections Sidebar' : 'Collapse Sections Sidebar'}
-            >
-              {isSidebarCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
-            </button>
-          </div>
+      {/* Helper Render Functions */}
+      {(() => null)()}
 
-          {sectionsList.map((sec) => {
-            const Icon = sec.icon;
-            const isActive = activeSection === sec.id;
-            return (
-              <button
-                key={sec.id}
-                onClick={() => setActiveSection(sec.id)}
-                title={sec.title}
-                className={`flex items-center ${
-                  isSidebarCollapsed ? 'justify-center p-2.5' : 'justify-between px-3 py-2'
-                } rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#024959] via-[#048BA2] to-[#0FA5BF] text-white shadow-md shadow-[#048BA2]/25'
-                    : 'text-slate-700 hover:bg-white border border-transparent hover:border-slate-200'
-                }`}
-              >
+      {/* Main Studio Area (Desktop 3-Zone vs Mobile Simulator) */}
+      {(isMobileScreen || isMobileSimulator) ? (
+        <div className="flex-1 flex overflow-hidden bg-slate-900/95 relative">
+          {/* If desktop user simulating phone: Render interactive iPhone mockup */}
+          {(!isMobileScreen && isMobileSimulator) ? (
+            <div className="flex-1 flex flex-col items-center justify-start py-5 px-4 overflow-y-auto w-full">
+              {/* Simulator Top Controls Ribbon */}
+              <div className="w-full max-w-[420px] mb-3 flex items-center justify-between px-4 py-2 bg-slate-800/90 rounded-2xl border border-slate-700/80 text-white text-xs shadow-lg shrink-0">
                 <div className="flex items-center gap-2">
-                  {!isSidebarCollapsed && (
-                    <GripVertical className={`w-3 h-3 ${isActive ? 'text-white/70' : 'text-slate-400'}`} />
-                  )}
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>{sec.title}</span>}
+                  <Smartphone className="w-4 h-4 text-cyan-400" />
+                  <span className="font-extrabold tracking-wide">iPhone 15 Pro Simulator</span>
                 </div>
-                {!isSidebarCollapsed && typeof sec.count === 'number' && (
-                  <span
-                    className={`px-1.5 py-0.5 rounded-full text-[9.5px] font-bold ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-700 border border-slate-200'
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] text-slate-400 font-mono">390 × 844 px</span>
+                  <button
+                    onClick={() => setIsMobileSimulator(false)}
+                    className="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 rounded-lg text-[11px] font-bold transition-colors cursor-pointer"
+                  >
+                    Exit Simulator
+                  </button>
+                </div>
+              </div>
+
+              {/* iPhone 15 Pro Titanium Mockup Shell */}
+              <div className="w-[390px] h-[810px] bg-slate-950 rounded-[52px] p-3 shadow-2xl border-4 border-slate-700/80 ring-1 ring-slate-600/50 relative flex flex-col shrink-0">
+                {/* Dynamic Island */}
+                <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-40 flex items-center justify-end px-3 pointer-events-none">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800" />
+                </div>
+
+                {/* Simulated Phone Screen */}
+                <div className="w-full h-full rounded-[42px] overflow-hidden bg-[#F5F9FB] flex flex-col relative pt-7">
+                  {/* Minimal Segmented Tab Switcher */}
+                  <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-3 py-2 flex items-center justify-between gap-2 shrink-0 z-20">
+                    <div className="flex-1 flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/60">
+                      <button
+                        type="button"
+                        onClick={() => setMobileTab('sections')}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          mobileTab === 'sections' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        <Layers className="w-3.5 h-3.5" />
+                        <span>Sections</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMobileTab('form')}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          mobileTab === 'form' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Editor</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMobileTab('preview')}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          mobileTab === 'preview' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Preview</span>
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleOpenExportPreview}
+                      className="h-8 px-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-1 border border-slate-200/80 transition-all cursor-pointer shrink-0"
+                      title="Export PDF"
+                    >
+                      <Download className="w-3.5 h-3.5 text-slate-600" />
+                      <span>PDF</span>
+                    </button>
+                  </div>
+
+                  {/* Body Container */}
+                  <div className="flex-1 overflow-y-auto">
+                    {mobileTab === 'sections' && (
+                      <div className="p-4 flex flex-col gap-2.5 pb-12">
+                        <div className="flex items-center justify-between mb-0.5 px-0.5">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Sections</span>
+                          <span className="text-[11px] text-[#10B981] font-medium">Tap to edit</span>
+                        </div>
+                        {sectionsList.map((sec) => {
+                          const Icon = sec.icon;
+                          const isActive = activeSection === sec.id;
+                          return (
+                            <button
+                              key={sec.id}
+                              onClick={() => {
+                                setActiveSection(sec.id);
+                                setMobileTab('form');
+                              }}
+                              className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                                isActive ? 'bg-emerald-50/50 border-[#10B981] ring-1 ring-[#10B981]/25' : 'bg-white border-slate-200/80 hover:border-slate-300'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isActive ? 'bg-[#10B981] text-white shadow-xs' : 'bg-slate-100 text-slate-600'}`}>
+                                  <Icon className="w-4 h-4" />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs font-semibold text-slate-900">{sec.title}</span>
+                                  <span className="text-[10.5px] text-slate-500">
+                                    {sec.id === 'personal_info' ? (personalInfo.fullName || 'Tap to fill details') : `${sec.count || 0} entries added`}
+                                  </span>
+                                </div>
+                              </div>
+                              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {mobileTab === 'form' && (
+                      <div className="p-4">
+                        <ResumeSectionEditor
+                          activeSection={activeSection}
+                          sectionTitle={sectionsList.find((s) => s.id === activeSection)?.title}
+                          personalInfo={personalInfo}
+                          setPersonalInfo={setPersonalInfo}
+                          experiences={experiences}
+                          setExperiences={setExperiences}
+                          projects={projects}
+                          setProjects={setProjects}
+                          education={education}
+                          setEducation={setEducation}
+                          skills={skills}
+                          setSkills={setSkills}
+                          newSkillInput={newSkillInput}
+                          setNewSkillInput={setNewSkillInput}
+                          handleAddSkill={handleAddSkill}
+                          handleRemoveSkill={handleRemoveSkill}
+                          handleEnhanceBullet={handleEnhanceBullet}
+                          isEnhancing={isEnhancing}
+                          isMobileView={true}
+                          handlePrevSection={handlePrevSection}
+                          handleNextSection={handleNextSection}
+                          onFinishResume={handleFinishResume}
+                          onPreviewClick={() => setMobileTab('preview')}
+                        />
+                      </div>
+                    )}
+
+                    {/* Preview Tab (Always mounted in DOM so PDF capture works seamlessly from any tab) */}
+                    <div className={mobileTab === 'preview' ? 'flex flex-col h-full pb-20' : 'fixed -left-[9999px] top-0 pointer-events-none opacity-0 -z-50'}>
+                      {/* Templates ribbon */}
+                      <div className="bg-white border-b border-slate-200 px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+                        <span className="text-[10px] font-bold text-slate-400 shrink-0">Template:</span>
+                        {[
+                          { id: 'split_duo', label: 'Balanced Duo' },
+                          { id: 'prestige_gold', label: 'Prestige Gold' },
+                          { id: 'ai_ml_lead', label: 'AI/ML Lead' },
+                          { id: 'graphite_compact', label: '1-Page Compact' },
+                          { id: 'classic_ats', label: 'Classic ATS' },
+                          { id: 'navy_sidebar', label: 'Navy Split' },
+                        ].map((tpl) => (
+                          <button
+                            key={tpl.id}
+                            onClick={() => setSelectedTemplate(tpl.id as TemplateId)}
+                            className={`px-2.5 py-1 text-[10.5px] font-bold rounded-full shrink-0 cursor-pointer ${
+                              selectedTemplate === tpl.id ? 'bg-[#1C152E] text-white' : 'bg-slate-100 text-slate-700'
+                            }`}
+                          >
+                            {tpl.label}
+                          </button>
+                        ))}
+                        <button
+                          onClick={() => setIsTemplateModalOpen(true)}
+                          className="px-2.5 py-1 text-[10.5px] font-bold text-[#FF4B5E] bg-[#FFF0F3] border border-[#FFCCD5] rounded-full shrink-0"
+                        >
+                          More ▾
+                        </button>
+                      </div>
+
+                      {/* Scale controls */}
+                      <div className="px-3 py-1 bg-slate-100 border-b border-slate-200 flex items-center justify-between text-xs shrink-0">
+                        <span className="text-[10.5px] font-bold text-slate-500">A4 Printable Sheet</span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setMobilePreviewZoom('fit')}
+                            className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
+                              mobilePreviewZoom === 'fit' ? 'bg-[#1C152E] text-white' : 'bg-white text-slate-700 border border-slate-200'
+                            }`}
+                          >
+                            Fit Screen
+                          </button>
+                          <button
+                            onClick={() => setMobilePreviewZoom('100')}
+                            className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
+                              mobilePreviewZoom === '100' ? 'bg-[#1C152E] text-white' : 'bg-white text-slate-700 border border-slate-200'
+                            }`}
+                          >
+                            100%
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Scaled Preview Canvas */}
+                      <div className="flex-1 overflow-y-auto p-3 flex justify-center items-start">
+                        <div
+                          style={{
+                            width: mobilePreviewZoom === 'fit' ? `${794 * 0.44}px` : '794px',
+                            height: mobilePreviewZoom === 'fit' ? `${1123 * 0.44}px` : '1123px',
+                            position: 'relative',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <div
+                            style={{
+                              transform: mobilePreviewZoom === 'fit' ? 'scale(0.44)' : 'scale(1)',
+                              transformOrigin: 'top left',
+                              width: '794px',
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                            }}
+                          >
+                            <ResumeTemplateRenderer
+                              templateId={selectedTemplate}
+                              data={resumeData}
+                              zoomLevel={100}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Native Real Mobile View (Fills smartphone display 100%) */
+            <div className="flex-1 flex flex-col bg-[#F5F9FB] overflow-hidden select-none relative w-full h-full">
+              {/* Minimal YC-Style Segmented Tab Switcher */}
+              <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-3 py-2 flex items-center justify-between gap-2 shrink-0 z-20">
+                <div className="flex-1 max-w-sm mx-auto flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/60">
+                  <button
+                    type="button"
+                    onClick={() => setMobileTab('sections')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      mobileTab === 'sections'
+                        ? 'bg-white text-slate-900 shadow-xs'
+                        : 'text-slate-500 hover:text-slate-800'
                     }`}
                   >
-                    {sec.count}
-                  </span>
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Sections</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMobileTab('form')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      mobileTab === 'form'
+                        ? 'bg-white text-slate-900 shadow-xs'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Editor</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMobileTab('preview')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      mobileTab === 'preview'
+                        ? 'bg-white text-slate-900 shadow-xs'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Preview</span>
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleOpenExportPreview}
+                  className="h-8 px-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-1 border border-slate-200/80 transition-all cursor-pointer shrink-0"
+                  title="Export PDF"
+                >
+                  <Download className="w-3.5 h-3.5 text-slate-600" />
+                  <span>PDF</span>
+                </button>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="flex-1 overflow-y-auto">
+                {mobileTab === 'sections' && (
+                  <div className="p-4 flex flex-col gap-2.5 pb-12">
+                    <div className="flex items-center justify-between mb-0.5 px-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Sections</span>
+                      <span className="text-[11px] text-[#10B981] font-medium">Tap to edit</span>
+                    </div>
+                    {sectionsList.map((sec) => {
+                      const Icon = sec.icon;
+                      const isActive = activeSection === sec.id;
+                      return (
+                        <button
+                          key={sec.id}
+                          onClick={() => {
+                            setActiveSection(sec.id);
+                            setMobileTab('form');
+                          }}
+                          className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                            isActive ? 'bg-emerald-50/50 border-[#10B981] ring-1 ring-[#10B981]/25' : 'bg-white border-slate-200/80 hover:border-slate-300'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isActive ? 'bg-[#10B981] text-white shadow-xs' : 'bg-slate-100 text-slate-600'}`}>
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-xs font-semibold text-slate-900">{sec.title}</span>
+                              <span className="text-[10.5px] text-slate-500">
+                                {sec.id === 'personal_info' ? (personalInfo.fullName || 'Tap to fill details') : `${sec.count || 0} entries added`}
+                              </span>
+                            </div>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
-              </button>
-            );
-          })}
-        </aside>
 
-        {/* Zone 2 (Center Hero): Live Printable A4 Resume Preview Document */}
-        <section
-          className={`flex-1 min-w-0 bg-[#EBF1F5] flex flex-col overflow-hidden relative transition-all duration-300`}
-        >
-          {/* Quick Template Switcher & Width Controls Ribbon Bar */}
-          <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 py-2 flex items-center justify-between gap-3 shrink-0 shadow-2xs no-print">
-            {/* Left: Templates Quick Ribbon */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-              <span className="text-[10.5px] font-black text-slate-500 uppercase tracking-wider flex items-center gap-1 shrink-0 mr-1">
-                <Layout className="w-3.5 h-3.5 text-[#048BA2]" /> Templates:
-              </span>
-              {[
-                { id: 'classic_ats', label: 'Classic Single-Column' },
-                { id: 'modern_executive', label: 'Modern Executive' },
-                { id: 'minimalist_tech', label: 'Tech Monospace' },
-                { id: 'navy_sidebar', label: 'Navy Two-Column' },
-                { id: 'split_duo', label: 'Dual-Column Grid' },
-                { id: 'yc_founder_pitch', label: 'YC Pitch' },
-              ].map((tpl) => (
-                <button
-                  key={tpl.id}
-                  onClick={() => setSelectedTemplate(tpl.id as TemplateId)}
-                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border transition-all shrink-0 cursor-pointer ${
-                    selectedTemplate === tpl.id
-                      ? 'bg-[#048BA2] text-white border-[#048BA2] shadow-xs'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#048BA2] hover:bg-white'
-                  }`}
-                >
-                  {tpl.label}
-                </button>
-              ))}
-              <button
-                onClick={() => setIsTemplateModalOpen(true)}
-                className="px-2.5 py-1 text-[11px] font-bold text-[#048BA2] bg-[#E6F5F8] border border-[#048BA2]/30 hover:bg-[#E6F5F8]/80 rounded-lg transition-all shrink-0 flex items-center gap-1 cursor-pointer"
-              >
-                Browse 40+ ▾
-              </button>
-            </div>
+                {mobileTab === 'form' && (
+                  <div className="p-4">
+                    <ResumeSectionEditor
+                      activeSection={activeSection}
+                      sectionTitle={sectionsList.find((s) => s.id === activeSection)?.title}
+                      personalInfo={personalInfo}
+                      setPersonalInfo={setPersonalInfo}
+                      experiences={experiences}
+                      setExperiences={setExperiences}
+                      projects={projects}
+                      setProjects={setProjects}
+                      education={education}
+                      setEducation={setEducation}
+                      skills={skills}
+                      setSkills={setSkills}
+                      newSkillInput={newSkillInput}
+                      setNewSkillInput={setNewSkillInput}
+                      handleAddSkill={handleAddSkill}
+                      handleRemoveSkill={handleRemoveSkill}
+                      handleEnhanceBullet={handleEnhanceBullet}
+                      isEnhancing={isEnhancing}
+                      isMobileView={true}
+                      handlePrevSection={handlePrevSection}
+                      handleNextSection={handleNextSection}
+                      onFinishResume={handleFinishResume}
+                      onPreviewClick={() => setMobileTab('preview')}
+                    />
+                  </div>
+                )}
 
-            {/* Right: Width Adjustment & Layout Presets Toolbar */}
-            <div className="flex items-center gap-2 shrink-0">
-              {/* Width Presets */}
-              <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPreviewWidthPreset('standard');
-                    setIsSidebarCollapsed(false);
-                    setIsEditorCollapsed(false);
-                  }}
-                  className={`px-2 py-1 rounded-lg text-[10.5px] font-extrabold transition-all cursor-pointer ${
-                    previewWidthPreset === 'standard' && !isEditorCollapsed
-                      ? 'bg-white text-slate-900 shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  title="Standard 3-Column Layout"
-                >
-                  Standard
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPreviewWidthPreset('wide');
-                    setIsSidebarCollapsed(true);
-                    setIsEditorCollapsed(false);
-                  }}
-                  className={`px-2 py-1 rounded-lg text-[10.5px] font-extrabold transition-all cursor-pointer ${
-                    previewWidthPreset === 'wide' && !isEditorCollapsed
-                      ? 'bg-[#048BA2] text-white shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  title="Wide Hero Preview Mode (Compact Sidebars)"
-                >
-                  Wide Preview
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPreviewWidthPreset('expanded');
-                    setIsSidebarCollapsed(true);
-                    setIsEditorCollapsed(true);
-                  }}
-                  className={`px-2 py-1 rounded-lg text-[10.5px] font-extrabold transition-all cursor-pointer ${
-                    isEditorCollapsed
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  title="Focus Preview (Max Width Canvas)"
-                >
-                  Max View
-                </button>
+                {/* Preview Tab (Always mounted in DOM so PDF capture works seamlessly from any tab) */}
+                <div className={mobileTab === 'preview' ? 'flex flex-col h-full pb-24' : 'fixed -left-[9999px] top-0 pointer-events-none opacity-0 -z-50'}>
+                  {/* Templates ribbon */}
+                  <div className="bg-white border-b border-slate-200 px-3 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
+                    <span className="text-[10px] font-bold text-slate-400 shrink-0">Template:</span>
+                    {[
+                      { id: 'split_duo', label: 'Balanced Duo' },
+                      { id: 'prestige_gold', label: 'Prestige Gold' },
+                      { id: 'ai_ml_lead', label: 'AI/ML Lead' },
+                      { id: 'graphite_compact', label: '1-Page Compact' },
+                      { id: 'classic_ats', label: 'Classic ATS' },
+                      { id: 'navy_sidebar', label: 'Navy Split' },
+                    ].map((tpl) => (
+                      <button
+                        key={tpl.id}
+                        onClick={() => setSelectedTemplate(tpl.id as TemplateId)}
+                        className={`px-3.5 py-1.5 text-xs font-bold rounded-full shrink-0 cursor-pointer ${
+                          selectedTemplate === tpl.id ? 'bg-[#1C152E] text-white' : 'bg-slate-100 text-slate-700'
+                        }`}
+                      >
+                        {tpl.label}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setIsTemplateModalOpen(true)}
+                      className="px-3.5 py-1.5 text-xs font-bold text-[#FF4B5E] bg-[#FFF0F3] border border-[#FFCCD5] rounded-full shrink-0"
+                    >
+                      Browse 40+ ▾
+                    </button>
+                  </div>
+
+                  {/* Scale controls */}
+                  <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 flex items-center justify-between text-xs shrink-0">
+                    <span className="text-[11px] font-bold text-slate-500">A4 Single-Page Format</span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => setMobilePreviewZoom('fit')}
+                        className={`px-3 py-1 text-[11px] font-bold rounded-full ${
+                          mobilePreviewZoom === 'fit' ? 'bg-[#1C152E] text-white' : 'bg-white text-slate-700 border border-slate-200'
+                        }`}
+                      >
+                        Fit Screen
+                      </button>
+                      <button
+                        onClick={() => setMobilePreviewZoom('100')}
+                        className={`px-3 py-1 text-[11px] font-bold rounded-full ${
+                          mobilePreviewZoom === '100' ? 'bg-[#1C152E] text-white' : 'bg-white text-slate-700 border border-slate-200'
+                        }`}
+                      >
+                        100%
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Scaled Preview Canvas */}
+                  <div className="flex-1 overflow-y-auto p-4 flex justify-center items-start">
+                    {(() => {
+                      const scaleVal = Math.min(0.9, Math.max(0.38, (mobileContainerWidth - 32) / 794));
+                      return (
+                        <div
+                          style={{
+                            width: mobilePreviewZoom === 'fit' ? `${794 * scaleVal}px` : '794px',
+                            height: mobilePreviewZoom === 'fit' ? `${1123 * scaleVal}px` : '1123px',
+                            position: 'relative',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <div
+                            style={{
+                              transform: mobilePreviewZoom === 'fit' ? `scale(${scaleVal})` : 'scale(1)',
+                              transformOrigin: 'top left',
+                              width: '794px',
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                            }}
+                          >
+                            <ResumeTemplateRenderer
+                              templateId={selectedTemplate}
+                              data={resumeData}
+                              zoomLevel={100}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
               </div>
-
-              {/* Editor Toggle */}
-              <button
-                type="button"
-                onClick={() => setIsEditorCollapsed(!isEditorCollapsed)}
-                className={`p-1.5 border rounded-xl transition-all cursor-pointer ${
-                  isEditorCollapsed
-                    ? 'bg-[#E6F5F8] text-[#048BA2] border-[#048BA2]/40 shadow-xs'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                }`}
-                title={isEditorCollapsed ? 'Open Editor Panel' : 'Hide Editor Panel (Expand Preview)'}
-              >
-                {isEditorCollapsed ? <PanelRightOpen className="w-4 h-4" /> : <PanelRightClose className="w-4 h-4" />}
-              </button>
             </div>
-          </div>
-
-          {/* Centered Canvas Scroll Area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex justify-center items-start">
-            <ResumeTemplateRenderer
-              templateId={selectedTemplate}
-              data={resumeData}
-              zoomLevel={zoomLevel}
-            />
-          </div>
-
-          {/* Floating Re-open Editor Pill when collapsed */}
-          {isEditorCollapsed && (
-            <button
-              onClick={() => setIsEditorCollapsed(false)}
-              className="absolute top-14 right-6 z-30 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-2xl shadow-xl flex items-center gap-2 cursor-pointer transition-all hover:scale-105 border border-slate-700"
-            >
-              <PanelRightOpen className="w-4 h-4 text-teal-400" />
-              <span>Edit {sectionsList.find((s) => s.id === activeSection)?.title || 'Section'}</span>
-            </button>
           )}
-        </section>
-
-        {/* Zone 3 (Right): Active Section Editor Form & AI Tools */}
-        {!isEditorCollapsed && (
-          <main
+        </div>
+      ) : (
+        /* Standard Full Desktop 3-Zone Studio Layout */
+        <div className="flex-1 flex min-h-0 overflow-hidden">
+          {/* Zone 1 (Left): Section List Navigation */}
+          <aside
             className={`${
-              previewWidthPreset === 'expanded'
-                ? 'w-[320px]'
-                : previewWidthPreset === 'wide'
-                ? 'w-[360px] xl:w-[390px]'
-                : 'w-[420px] xl:w-[460px]'
-            } shrink-0 bg-white border-l border-slate-200/90 flex flex-col overflow-y-auto p-5 gap-6 no-print transition-all duration-300`}
+              isSidebarCollapsed ? 'w-16 p-2 items-center' : 'w-48 xl:w-52 p-3'
+            } bg-slate-50/95 border-r border-slate-200/90 flex flex-col gap-1 overflow-y-auto shrink-0 select-none no-print transition-all duration-300`}
           >
-          {activeSection === 'personal_info' && (
-            <div className="flex flex-col gap-5">
-              <h2 className="text-lg font-black text-slate-900 border-b border-slate-200 pb-2">Personal Details</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <Input placeholder="John Doe" label="Full Name" value={personalInfo.fullName} onChange={(e) => setPersonalInfo({ ...personalInfo, fullName: e.target.value })} />
-                <Input placeholder="john@example.com" label="Email Address" value={personalInfo.email} onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })} />
-                <Input placeholder="+1 (555) 000-0000" label="Phone Number" value={personalInfo.phone} onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })} />
-                <Input placeholder="City, State" label="Location" value={personalInfo.location} onChange={(e) => setPersonalInfo({ ...personalInfo, location: e.target.value })} />
-                <Input placeholder="linkedin.com/in/username" label="LinkedIn URL" value={personalInfo.linkedin} onChange={(e) => setPersonalInfo({ ...personalInfo, linkedin: e.target.value })} />
-                <Input placeholder="github.com/username" label="GitHub URL" value={personalInfo.github} onChange={(e) => setPersonalInfo({ ...personalInfo, github: e.target.value })} />
+            <div className="flex items-center justify-between px-2 py-2 mb-1">
+              {!isSidebarCollapsed && (
+                <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
+                  Sections
+                </span>
+              )}
+              <button
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                className="p-1 hover:bg-slate-200/70 rounded-lg text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                title={isSidebarCollapsed ? 'Expand Sections Sidebar' : 'Collapse Sections Sidebar'}
+              >
+                {isSidebarCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {sectionsList.map((sec) => {
+              const Icon = sec.icon;
+              const isActive = activeSection === sec.id;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => setActiveSection(sec.id)}
+                  title={sec.title}
+                  className={`flex items-center ${
+                    isSidebarCollapsed ? 'justify-center p-2.5' : 'justify-between px-3.5 py-2'
+                  } rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-[#1C152E] text-white shadow-sm'
+                      : 'text-slate-700 hover:bg-white border border-transparent hover:border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {!isSidebarCollapsed && (
+                      <GripVertical className={`w-3 h-3 ${isActive ? 'text-white/70' : 'text-slate-400'}`} />
+                    )}
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                    {!isSidebarCollapsed && <span>{sec.title}</span>}
+                  </div>
+                  {!isSidebarCollapsed && typeof sec.count === 'number' && (
+                    <span
+                      className={`px-1.5 py-0.5 rounded-full text-[9.5px] font-bold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-700 border border-slate-200'
+                      }`}
+                    >
+                      {sec.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </aside>
+
+          {/* Zone 2 (Center Hero): Live Printable A4 Resume Preview Document */}
+          <section className="flex-1 min-w-0 bg-[#ECEEF2] flex flex-col overflow-hidden relative transition-all duration-300">
+            {/* Quick Template Switcher & Width Controls Ribbon Bar */}
+            <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 py-2 flex items-center justify-between gap-3 shrink-0 shadow-2xs no-print">
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                <span className="text-[10.5px] font-black text-slate-500 uppercase tracking-wider flex items-center gap-1 shrink-0 mr-1">
+                  <Layout className="w-3.5 h-3.5 text-[#FF4B5E]" /> Templates:
+                </span>
+                {[
+                  { id: 'flowcv_atlantic_blue', label: 'FlowCV Atlantic' },
+                  { id: 'teal_modern', label: 'TealHQ Modern' },
+                  { id: 'split_duo', label: 'Balanced Duo' },
+                  { id: 'prestige_gold', label: 'Prestige Gold' },
+                  { id: 'classic_ats', label: 'Classic ATS' },
+                  { id: 'navy_sidebar', label: 'Navy Split' },
+                  { id: 'swiss_bauhaus_grid', label: 'Swiss Grid' },
+                ].map((tpl) => (
+                  <button
+                    key={tpl.id}
+                    onClick={() => setSelectedTemplate(tpl.id as TemplateId)}
+                    className={`px-3 py-1 text-[11px] font-bold rounded-full border transition-all shrink-0 cursor-pointer ${
+                      selectedTemplate === tpl.id
+                        ? 'bg-[#1C152E] text-white border-[#1C152E] shadow-xs'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-[#1C152E] hover:bg-slate-50'
+                    }`}
+                  >
+                    {tpl.label}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setIsTemplateModalOpen(true)}
+                  className="px-3 py-1 text-[11px] font-bold text-[#FF4B5E] bg-[#FFF0F3] border border-[#FFCCD5] hover:bg-[#FFE5EB] rounded-full transition-all shrink-0 flex items-center gap-1 cursor-pointer"
+                >
+                  Browse 40+ ▾
+                </button>
               </div>
-              <Textarea
-                placeholder="Briefly describe your career background and key achievements..."
-                label="Professional Summary"
-                rows={4}
-                value={personalInfo.summary}
-                onChange={(e) => setPersonalInfo({ ...personalInfo, summary: e.target.value })}
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center bg-slate-100 p-0.5 rounded-full border border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreviewWidthPreset('standard');
+                      setIsSidebarCollapsed(false);
+                      setIsEditorCollapsed(false);
+                    }}
+                    className={`px-3 py-1 rounded-full text-[10.5px] font-extrabold transition-all cursor-pointer ${
+                      previewWidthPreset === 'standard' && !isEditorCollapsed ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                  >
+                    Standard
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreviewWidthPreset('wide');
+                      setIsSidebarCollapsed(true);
+                      setIsEditorCollapsed(false);
+                    }}
+                    className={`px-3 py-1 rounded-full text-[10.5px] font-extrabold transition-all cursor-pointer ${
+                      previewWidthPreset === 'wide' && !isEditorCollapsed ? 'bg-[#1C152E] text-white shadow-2xs' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                  >
+                    Wide Preview
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreviewWidthPreset('expanded');
+                      setIsSidebarCollapsed(true);
+                      setIsEditorCollapsed(true);
+                    }}
+                    className={`px-3 py-1 rounded-full text-[10.5px] font-extrabold transition-all cursor-pointer ${
+                      isEditorCollapsed ? 'bg-slate-900 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                  >
+                    Max View
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsEditorCollapsed(!isEditorCollapsed)}
+                  className={`p-1.5 border rounded-full transition-all cursor-pointer ${
+                    isEditorCollapsed
+                      ? 'bg-[#FFF0F3] text-[#FF4B5E] border-[#FFCCD5] shadow-xs'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  }`}
+                  title={isEditorCollapsed ? 'Open Editor Panel' : 'Hide Editor Panel (Expand Preview)'}
+                >
+                  {isEditorCollapsed ? <PanelRightOpen className="w-4 h-4" /> : <PanelRightClose className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Centered Canvas Scroll Area */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex flex-col items-center">
+              {/* Text-Editable Resume Notification Pill */}
+              <div className="mb-3 inline-flex items-center gap-2 text-xs font-semibold text-[#1C152E] bg-white border border-slate-200/90 shadow-2xs px-4 py-1.5 rounded-full select-none shrink-0">
+                <span className="w-2 h-2 rounded-full bg-[#FF4B5E] animate-pulse" />
+                <Pencil className="w-3.5 h-3.5 text-[#FF4B5E]" />
+                <span>Live Text-Editable Resume — Click any heading, bullet, or text directly on the page to type & edit</span>
+              </div>
+              <ResumeTemplateRenderer
+                templateId={selectedTemplate}
+                data={resumeData}
+                zoomLevel={zoomLevel}
               />
             </div>
+
+            {isEditorCollapsed && (
+              <button
+                onClick={() => setIsEditorCollapsed(false)}
+                className="absolute top-14 right-6 z-30 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-2xl shadow-xl flex items-center gap-2 cursor-pointer transition-all hover:scale-105 border border-slate-700"
+              >
+                <PanelRightOpen className="w-4 h-4 text-teal-400" />
+                <span>Edit {sectionsList.find((s) => s.id === activeSection)?.title || 'Section'}</span>
+              </button>
+            )}
+          </section>
+
+          {/* Zone 3 (Right): Active Section Editor Form & AI Tools */}
+          {!isEditorCollapsed && (
+            <main
+              className={`${
+                previewWidthPreset === 'expanded'
+                  ? 'w-[320px]'
+                  : previewWidthPreset === 'wide'
+                  ? 'w-[360px] xl:w-[390px]'
+                  : 'w-[420px] xl:w-[460px]'
+              } shrink-0 bg-white border-l border-slate-200/90 flex flex-col overflow-y-auto p-5 gap-6 no-print transition-all duration-300`}
+            >
+              <ResumeSectionEditor
+                activeSection={activeSection}
+                personalInfo={personalInfo}
+                setPersonalInfo={setPersonalInfo}
+                experiences={experiences}
+                setExperiences={setExperiences}
+                projects={projects}
+                setProjects={setProjects}
+                education={education}
+                setEducation={setEducation}
+                skills={skills}
+                setSkills={setSkills}
+                newSkillInput={newSkillInput}
+                setNewSkillInput={setNewSkillInput}
+                handleAddSkill={handleAddSkill}
+                handleRemoveSkill={handleRemoveSkill}
+                handleEnhanceBullet={handleEnhanceBullet}
+                isEnhancing={isEnhancing}
+                isMobileView={false}
+                handlePrevSection={handlePrevSection}
+                handleNextSection={handleNextSection}
+                onFinishResume={handleFinishResume}
+              />
+            </main>
           )}
-
-          {activeSection === 'experience' && (
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <h2 className="text-lg font-black text-slate-900">Work Experience</h2>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  leftIcon={<Plus className="w-3.5 h-3.5" />}
-                  onClick={() =>
-                    setExperiences([
-                      ...experiences,
-                      {
-                        id: `exp-${Date.now()}`,
-                        role: '',
-                        company: '',
-                        location: '',
-                        startDate: '',
-                        endDate: 'Present',
-                        bullets: [''],
-                      },
-                    ])
-                  }
-                >
-                  Add Experience
-                </Button>
-              </div>
-
-              {experiences.map((exp, expIdx) => (
-                <div key={exp.id || expIdx} className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90 flex flex-col gap-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-black text-slate-800">Experience #{expIdx + 1}</span>
-                    <button
-                      onClick={() => setExperiences(experiences.filter((_, i) => i !== expIdx))}
-                      className="text-xs text-rose-500 hover:text-rose-700 font-bold cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      label="Job Title / Role"
-                      placeholder="Senior Engineer"
-                      value={exp.role}
-                      onChange={(e) => {
-                        const updated = [...experiences];
-                        updated[expIdx].role = e.target.value;
-                        setExperiences(updated);
-                      }}
-                    />
-                    <Input
-                      label="Company Name"
-                      placeholder="Acme Corp"
-                      value={exp.company}
-                      onChange={(e) => {
-                        const updated = [...experiences];
-                        updated[expIdx].company = e.target.value;
-                        setExperiences(updated);
-                      }}
-                    />
-                    <Input
-                      label="Start Date"
-                      placeholder="Jan 2022"
-                      value={exp.startDate}
-                      onChange={(e) => {
-                        const updated = [...experiences];
-                        updated[expIdx].startDate = e.target.value;
-                        setExperiences(updated);
-                      }}
-                    />
-                    <Input
-                      label="End Date"
-                      placeholder="Present"
-                      value={exp.endDate}
-                      onChange={(e) => {
-                        const updated = [...experiences];
-                        updated[expIdx].endDate = e.target.value;
-                        setExperiences(updated);
-                      }}
-                    />
-                  </div>
-
-                  {/* Bullet Points */}
-                  <div className="flex flex-col gap-2 pt-2 border-t border-slate-200/80">
-                    <span className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">Accomplishment Bullets</span>
-                    {exp.bullets.map((b, bIdx) => (
-                      <div key={bIdx} className="flex gap-2 items-start">
-                        <textarea
-                          rows={2}
-                          value={b}
-                          onChange={(e) => {
-                            const updated = [...experiences];
-                            updated[expIdx].bullets[bIdx] = e.target.value;
-                            setExperiences(updated);
-                          }}
-                          placeholder="Architected distributed backend pipelines delivering 40% latency reduction..."
-                          className="flex-1 text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2] leading-relaxed resize-y"
-                        />
-                        <button
-                          type="button"
-                          title="Enhance with AI"
-                          onClick={() => handleEnhanceBullet('experience', expIdx, bIdx, b)}
-                          disabled={isEnhancing === `experience-${expIdx}-${bIdx}`}
-                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl border border-indigo-200/80 transition-colors cursor-pointer shrink-0"
-                        >
-                          {isEnhancing === `experience-${expIdx}-${bIdx}` ? (
-                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Sparkles className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = [...experiences];
-                            updated[expIdx].bullets = updated[expIdx].bullets.filter((_, i) => i !== bIdx);
-                            setExperiences(updated);
-                          }}
-                          className="p-2 text-slate-400 hover:text-rose-500 rounded-xl cursor-pointer"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = [...experiences];
-                        updated[expIdx].bullets.push('');
-                        setExperiences(updated);
-                      }}
-                      className="text-xs font-bold text-[#048BA2] hover:text-[#037488] self-start flex items-center gap-1 cursor-pointer mt-1"
-                    >
-                      <Plus className="w-3 h-3" /> Add Bullet Point
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeSection === 'projects' && (
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <h2 className="text-lg font-black text-slate-900">Projects & Work</h2>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  leftIcon={<Plus className="w-3.5 h-3.5" />}
-                  onClick={() =>
-                    setProjects([
-                      ...projects,
-                      {
-                        id: `proj-${Date.now()}`,
-                        title: '',
-                        techStack: '',
-                        link: '',
-                        bullets: [''],
-                      },
-                    ])
-                  }
-                >
-                  Add Project
-                </Button>
-              </div>
-
-              {projects.map((proj, projIdx) => (
-                <div key={proj.id || projIdx} className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90 flex flex-col gap-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-black text-slate-800">Project #{projIdx + 1}</span>
-                    <button
-                      onClick={() => setProjects(projects.filter((_, i) => i !== projIdx))}
-                      className="text-xs text-rose-500 hover:text-rose-700 font-bold cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      label="Project Name"
-                      placeholder="Autonomous Agent Orchestrator"
-                      value={proj.title}
-                      onChange={(e) => {
-                        const updated = [...projects];
-                        updated[projIdx].title = e.target.value;
-                        setProjects(updated);
-                      }}
-                    />
-                    <Input
-                      label="Technologies Used"
-                      placeholder="Next.js 16, TypeScript, pgvector"
-                      value={proj.techStack || ''}
-                      onChange={(e) => {
-                        const updated = [...projects];
-                        updated[projIdx].techStack = e.target.value;
-                        setProjects(updated);
-                      }}
-                    />
-                  </div>
-                  <Input
-                    label="Project Link / GitHub"
-                    placeholder="github.com/org/repo"
-                    value={proj.link || ''}
-                    onChange={(e) => {
-                      const updated = [...projects];
-                      updated[projIdx].link = e.target.value;
-                      setProjects(updated);
-                    }}
-                  />
-
-                  {/* Bullet Points */}
-                  <div className="flex flex-col gap-2 pt-2 border-t border-slate-200/80">
-                    <span className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">Accomplishment Bullets</span>
-                    {proj.bullets.map((b, bIdx) => (
-                      <div key={bIdx} className="flex gap-2 items-start">
-                        <textarea
-                          rows={2}
-                          value={b}
-                          onChange={(e) => {
-                            const updated = [...projects];
-                            updated[projIdx].bullets[bIdx] = e.target.value;
-                            setProjects(updated);
-                          }}
-                          placeholder="Designed real-time state synchronization across distributed worker nodes..."
-                          className="flex-1 text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2] leading-relaxed resize-y"
-                        />
-                        <button
-                          type="button"
-                          title="Enhance with AI"
-                          onClick={() => handleEnhanceBullet('projects', projIdx, bIdx, b)}
-                          disabled={isEnhancing === `projects-${projIdx}-${bIdx}`}
-                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl border border-indigo-200/80 transition-colors cursor-pointer shrink-0"
-                        >
-                          {isEnhancing === `projects-${projIdx}-${bIdx}` ? (
-                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Sparkles className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = [...projects];
-                            updated[projIdx].bullets = updated[projIdx].bullets.filter((_, i) => i !== bIdx);
-                            setProjects(updated);
-                          }}
-                          className="p-2 text-slate-400 hover:text-rose-500 rounded-xl cursor-pointer"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = [...projects];
-                        updated[projIdx].bullets.push('');
-                        setProjects(updated);
-                      }}
-                      className="text-xs font-bold text-[#048BA2] hover:text-[#037488] self-start flex items-center gap-1 cursor-pointer mt-1"
-                    >
-                      <Plus className="w-3 h-3" /> Add Bullet Point
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeSection === 'education' && (
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <h2 className="text-lg font-black text-slate-900">Education</h2>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  leftIcon={<Plus className="w-3.5 h-3.5" />}
-                  onClick={() =>
-                    setEducation([
-                      ...education,
-                      {
-                        id: `edu-${Date.now()}`,
-                        institution: '',
-                        degree: '',
-                        location: '',
-                        startDate: '',
-                        endDate: '',
-                        gpa: '',
-                      },
-                    ])
-                  }
-                >
-                  Add Education
-                </Button>
-              </div>
-
-              {education.map((edu, eduIdx) => (
-                <div key={edu.id || eduIdx} className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90 flex flex-col gap-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-black text-slate-800">Degree #{eduIdx + 1}</span>
-                    <button
-                      onClick={() => setEducation(education.filter((_, i) => i !== eduIdx))}
-                      className="text-xs text-rose-500 hover:text-rose-700 font-bold cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      label="University / Institution"
-                      placeholder="Stanford University"
-                      value={edu.institution}
-                      onChange={(e) => {
-                        const updated = [...education];
-                        updated[eduIdx].institution = e.target.value;
-                        setEducation(updated);
-                      }}
-                    />
-                    <Input
-                      label="Degree (B.S., M.S., Ph.D.)"
-                      placeholder="M.S."
-                      value={edu.degree}
-                      onChange={(e) => {
-                        const updated = [...education];
-                        updated[eduIdx].degree = e.target.value;
-                        setEducation(updated);
-                      }}
-                    />
-                    <Input
-                      label="Location / Campus"
-                      placeholder="Stanford, CA"
-                      value={edu.location || ''}
-                      onChange={(e) => {
-                        const updated = [...education];
-                        updated[eduIdx].location = e.target.value;
-                        setEducation(updated);
-                      }}
-                    />
-                    <Input
-                      label="Graduation Year / Dates"
-                      placeholder="2020 - 2022"
-                      value={edu.endDate || edu.startDate}
-                      onChange={(e) => {
-                        const updated = [...education];
-                        updated[eduIdx].endDate = e.target.value;
-                        setEducation(updated);
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeSection === 'skills' && (
-            <div className="flex flex-col gap-5">
-              <h2 className="text-lg font-black text-slate-900 border-b border-slate-200 pb-2">Skills & Tech Stack</h2>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="e.g. Next.js 16, TypeScript, pgvector"
-                  value={newSkillInput}
-                  onChange={(e) => setNewSkillInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleAddSkill();
-                    }
-                  }}
-                  className="flex-1"
-                />
-                <Button variant="primary" size="md" onClick={handleAddSkill}>
-                  Add Skill
-                </Button>
-              </div>
-
-              <div className="flex flex-wrap gap-2 pt-2">
-                {skills.map((sk) => (
-                  <span
-                    key={sk}
-                    className="px-3 py-1.5 bg-indigo-50 border border-indigo-200/80 text-indigo-900 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs"
-                  >
-                    {sk}
-                    <button onClick={() => handleRemoveSkill(sk)} className="text-indigo-400 hover:text-indigo-700 font-normal cursor-pointer">
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </main>
-        )}
-      </div>
+        </div>
+      )}
       
       {/* Interactive 30+ Resume Templates Gallery Modal with Real Photos & Search */}
       <Modal
@@ -1656,20 +2049,20 @@ ${skills.join(', ')}
             {/* Category Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
               {[
-                { id: 'All', label: 'All Templates (32)' },
+                { id: 'All', label: 'All Templates' },
+                { id: 'FlowCV & Teal', label: 'FlowCV & Teal' },
                 { id: 'Executive & Finance', label: 'Executive & Finance' },
                 { id: 'Tech & AI', label: 'Tech & AI' },
                 { id: 'Product & Design', label: 'Product & Design' },
                 { id: 'Startups & YC', label: 'Startups & YC' },
-                { id: 'Academic & Strategy', label: 'Academic & Strategy' },
               ].map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setTemplateCategory(cat.id)}
-                  className={`px-3 py-1 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs font-bold rounded-full border transition-all shrink-0 cursor-pointer ${
                     templateCategory === cat.id
-                      ? 'bg-[#048BA2] text-white border-[#048BA2] shadow-xs'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#048BA2] hover:bg-white'
+                      ? 'bg-[#1C152E] text-white border-[#1C152E] shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-[#1C152E] hover:bg-slate-50'
                   }`}
                 >
                   {cat.label}
@@ -1684,21 +2077,22 @@ ${skills.join(', ')}
                 value={templateSearchQuery}
                 onChange={(e) => setTemplateSearchQuery(e.target.value)}
                 placeholder="Search by role or style..."
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#048BA2] focus:bg-white"
+                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-full focus:outline-none focus:border-[#1C152E] focus:bg-white"
               />
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
               {templateSearchQuery && (
                 <button
                   onClick={() => setTemplateSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs cursor-pointer"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
+                  aria-label="Clear search"
                 >
-                  ✕
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
           </div>
 
-          {/* 32+ Real Photographic Template Cards Grid */}
+          {/* 40+ Real Photographic Template Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto pr-1 flex-1">
             {templatesGallery
               .filter((tpl) => {
@@ -1719,32 +2113,31 @@ ${skills.join(', ')}
                   }}
                   className={`group relative bg-white rounded-2xl border p-3 flex flex-col justify-between gap-3 transition-all duration-200 cursor-pointer shadow-xs hover:shadow-xl ${
                     selectedTemplate === tpl.id
-                      ? 'border-[#048BA2] ring-2 ring-[#048BA2]/40 shadow-md'
-                      : 'border-slate-200 hover:border-[#048BA2]'
+                      ? 'border-[#1C152E] ring-2 ring-[#1C152E]/30 shadow-md'
+                      : 'border-slate-200 hover:border-[#1C152E]'
                   }`}
                 >
                   {/* Header Badges */}
                   <div className="flex justify-between items-center gap-1">
-                    <span className="text-[9px] font-black uppercase text-[#048BA2] bg-[#E6F5F8] border border-[#048BA2]/30 px-2 py-0.5 rounded-full truncate max-w-[120px]">
-                      ★ {tpl.tag}
+                    <span className="text-[9px] font-black uppercase text-[#FF4B5E] bg-[#FFF0F3] border border-[#FFCCD5] px-2.5 py-0.5 rounded-full truncate max-w-[120px] flex items-center gap-1">
+                      <Star className="w-2.5 h-2.5 text-[#FF4B5E] fill-[#FF4B5E]" />
+                      <span>{tpl.tag}</span>
                     </span>
-                    <span className="text-[9px] font-extrabold text-teal-800 bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded-full shrink-0">
+                    <span className="text-[9px] font-extrabold text-[#1C152E] bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full shrink-0">
                       {tpl.ats}
                     </span>
                   </div>
 
-                  {/* REAL PHOTOGRAPHIC TEMPLATE PREVIEW */}
-                  <div className="h-44 w-full bg-slate-50 rounded-xl border border-slate-100 overflow-hidden relative shadow-2xs group-hover:shadow-md transition-all">
-                    <img
-                      src={tpl.previewImg}
-                      alt={tpl.name}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
+                  {/* REAL AUTHENTIC MINI-DOM TEMPLATE PREVIEW */}
+                  <div className="h-44 w-full bg-slate-50 rounded-xl border border-slate-100 overflow-hidden relative shadow-2xs group-hover:shadow-md transition-all flex items-center justify-center p-0">
+                    <TemplateMicroPreview
+                      templateId={tpl.id}
+                      className="w-full h-full"
                     />
 
                     {/* Hover Overlay Button */}
                     <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-2 backdrop-blur-[2px]">
-                      <span className="px-3 py-1.5 bg-[#048BA2] text-white text-[11px] font-black rounded-lg shadow-md">
+                      <span className="px-4 py-2 bg-[#1C152E] text-white text-xs font-bold rounded-full shadow-md">
                         Select Template
                       </span>
                     </div>
@@ -1755,7 +2148,7 @@ ${skills.join(', ')}
                     <span className="text-xs font-bold text-slate-900 flex items-center justify-between">
                       <span className="truncate">{tpl.name}</span>
                       {selectedTemplate === tpl.id && (
-                        <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0 ml-1" />
+                        <CheckCircle2 className="w-4 h-4 text-[#1C152E] shrink-0 ml-1" />
                       )}
                     </span>
                     <span className="text-[10px] text-slate-500 leading-tight line-clamp-2">{tpl.desc}</span>
@@ -1763,10 +2156,10 @@ ${skills.join(', ')}
 
                   {/* Action Button */}
                   <div
-                    className={`w-full py-1.5 text-xs font-bold rounded-xl text-center shadow-xs transition-all ${
+                    className={`w-full py-2 text-xs font-bold rounded-full text-center shadow-xs transition-all ${
                       selectedTemplate === tpl.id
-                        ? 'bg-[#048BA2] text-white'
-                        : 'bg-slate-100 text-slate-800 group-hover:bg-[#048BA2] group-hover:text-white'
+                        ? 'bg-[#1C152E] text-white'
+                        : 'bg-slate-100 text-slate-800 group-hover:bg-[#1C152E] group-hover:text-white'
                     }`}
                   >
                     {selectedTemplate === tpl.id ? 'Active Template' : 'Use Template'}
@@ -1786,38 +2179,39 @@ ${skills.join(', ')}
       >
         <div className="flex flex-col gap-4 max-h-[85vh] overflow-hidden p-1">
           {/* Top Control Bar */}
-          <div className="bg-[#E6F5F8]/60 border border-[#048BA2]/20 rounded-2xl p-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 shrink-0 shadow-2xs">
-            <div className="flex flex-col">
+          <div className="bg-white border-b border-slate-200/90 pb-3.5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 shrink-0">
+            <div className="flex flex-col text-left">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-slate-900">
+                <span className="text-sm font-bold text-slate-900 tracking-tight">
                   {personalInfo.fullName ? personalInfo.fullName.trim().replace(/\s+/g, '_') : 'Candidate'}_Resume_ATS.pdf
                 </span>
-                <span className="text-[9px] font-black uppercase text-teal-800 bg-teal-100 border border-teal-300 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
                   100% ATS Vector
                 </span>
               </div>
-              <span className="text-[11px] text-slate-500 mt-0.5">
-                Standard A4 (210 × 297 mm) • Native crisp typography • Saved in Downloads & Local Storage
+              <span className="text-xs text-slate-500 mt-0.5 font-normal">
+                Standard A4 (210 × 297 mm) • Native crisp vector typography
               </span>
             </div>
 
             {/* Modal Controls & Action Buttons */}
             <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
               {/* Preview Scale Zoom Bar */}
-              <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 mr-1">
+              <div className="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200/90 mr-1">
                 {[
+                  { label: 'Fit', value: 'fit' },
                   { label: '50%', value: 50 },
-                  { label: '65% (Fit)', value: 65 },
-                  { label: '80%', value: 80 },
+                  { label: '75%', value: 75 },
                   { label: '100%', value: 100 },
                 ].map((z) => (
                   <button
-                    key={z.value}
-                    onClick={() => setPreviewModalZoom(z.value)}
-                    className={`px-2 py-0.5 text-[10.5px] font-bold rounded-lg transition-all cursor-pointer ${
+                    key={String(z.value)}
+                    type="button"
+                    onClick={() => setPreviewModalZoom(z.value as any)}
+                    className={`px-3 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
                       previewModalZoom === z.value
-                        ? 'bg-[#048BA2] text-white shadow-2xs'
-                        : 'text-slate-600 hover:bg-slate-100'
+                        ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                        : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
                     {z.label}
@@ -1825,29 +2219,42 @@ ${skills.join(', ')}
                 ))}
               </div>
 
-              {/* 1. Direct PDF File Download (Primary) */}
-              <Button
-                variant="primary"
-                size="sm"
+              {/* 1. Direct PDF File Download (FlowCV Obsidian Pill) */}
+              <button
+                type="button"
                 disabled={isExportingPDF}
                 onClick={handleExportPDF}
-                leftIcon={
-                  isExportingPDF ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                  ) : (
-                    <Download className="w-4 h-4 text-white" />
-                  )
-                }
-                className="shadow-md"
+                className="h-10 px-5 rounded-full font-bold text-xs bg-[#1c152e] hover:bg-[#2b1f45] active:scale-[0.98] text-white shadow-sm flex items-center gap-2 transition-all cursor-pointer disabled:opacity-60"
               >
-                {isExportingPDF ? 'Downloading PDF...' : 'Download PDF File'}
-              </Button>
+                {isExportingPDF ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
+                ) : (
+                  <Download className="w-3.5 h-3.5 text-white" />
+                )}
+                <span>{isExportingPDF ? 'Downloading...' : 'Download PDF File'}</span>
+              </button>
 
-              {/* 2. Native Print / Vector PDF Option */}
-              <Button
-                variant="secondary"
-                size="sm"
+              {/* 2. Native Print / Vector PDF Option (FlowCV White Pill) */}
+              <button
+                type="button"
                 onClick={() => {
+                  if (!isUserAuthenticated) {
+                    setAuthModalTitle('Save & Print Your Resume');
+                    setAuthModalSubtitle('Create a free account or sign in to print and export your resume.');
+                    setPendingAction(() => () => {
+                      const cleanName = personalInfo.fullName
+                        ? personalInfo.fullName.replace(/[^a-zA-Z0-9_\s-]/g, '').trim().replace(/\s+/g, '_')
+                        : 'Candidate';
+                      const originalTitle = document.title;
+                      document.title = `${cleanName}_Resume_ATS`;
+                      window.print();
+                      setTimeout(() => {
+                        document.title = originalTitle;
+                      }, 1000);
+                    });
+                    setIsAuthModalOpen(true);
+                    return;
+                  }
                   const cleanName = personalInfo.fullName
                     ? personalInfo.fullName.replace(/[^a-zA-Z0-9_\s-]/g, '').trim().replace(/\s+/g, '_')
                     : 'Candidate';
@@ -1858,36 +2265,94 @@ ${skills.join(', ')}
                     document.title = originalTitle;
                   }, 1000);
                 }}
-                leftIcon={<FileText className="w-3.5 h-3.5 text-indigo-600" />}
+                className="h-10 px-4 rounded-full font-semibold text-xs bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-2xs flex items-center gap-2 transition-all cursor-pointer"
               >
-                Print / Save
-              </Button>
+                <Printer className="w-3.5 h-3.5 text-slate-600" />
+                <span>Print / Save</span>
+              </button>
 
-              {/* 3. JSON Backup */}
-              <Button
-                variant="tertiary"
-                size="sm"
-                onClick={() => handleDownloadLocalFile('json')}
-                leftIcon={<Save className="w-3.5 h-3.5 text-slate-600" />}
+              {/* 3. JSON Backup (FlowCV White Pill) */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isUserAuthenticated) {
+                    setAuthModalTitle('Export Resume Data');
+                    setAuthModalSubtitle('Create a free account or sign in to export your resume data file.');
+                    setPendingAction(() => () => handleDownloadLocalFile('json'));
+                    setIsAuthModalOpen(true);
+                    return;
+                  }
+                  handleDownloadLocalFile('json');
+                }}
+                className="h-10 px-4 rounded-full font-semibold text-xs bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-2xs flex items-center gap-2 transition-all cursor-pointer"
                 title="Save .JSON file"
               >
-                Save .JSON
-              </Button>
+                <Save className="w-3.5 h-3.5 text-slate-600" />
+                <span>Save .JSON</span>
+              </button>
             </div>
           </div>
 
-          {/* Full Centered A4 Scaled Preview Container */}
-          <div className="flex-1 overflow-y-auto bg-slate-200/70 rounded-2xl p-4 sm:p-8 flex justify-center items-start border border-slate-200 min-h-[500px]">
-            <div className="shadow-2xl rounded-sm overflow-hidden bg-white">
-              <ResumeTemplateRenderer
-                templateId={selectedTemplate}
-                data={resumeData}
-                zoomLevel={previewModalZoom}
-              />
-            </div>
-          </div>
+          {/* Full Centered A4 Scaled Preview Container with Exact Bounding Box */}
+          {(() => {
+            const effectiveScale =
+              previewModalZoom === 'fit'
+                ? 0.58
+                : typeof previewModalZoom === 'number'
+                ? previewModalZoom / 100
+                : 0.58;
+            const scaledWidth = Math.round(794 * effectiveScale);
+            const scaledHeight = Math.round(1123 * effectiveScale);
+
+            return (
+              <div className="flex-1 overflow-auto bg-[#F4F5F7] rounded-2xl p-4 sm:p-8 flex justify-center items-start border border-slate-200/80 min-h-[460px]">
+                <div
+                  style={{
+                    width: `${scaledWidth}px`,
+                    height: `${scaledHeight}px`,
+                  }}
+                  className="relative shadow-[0_20px_50px_rgba(0,0,0,0.13)] rounded-sm overflow-hidden bg-white shrink-0 mx-auto transition-all"
+                >
+                  <div
+                    style={{
+                      width: '794px',
+                      minHeight: '1123px',
+                      transform: `scale(${effectiveScale})`,
+                      transformOrigin: 'top left',
+                    }}
+                    className="bg-white"
+                  >
+                    <ResumeTemplateRenderer
+                      templateId={selectedTemplate}
+                      data={resumeData}
+                      zoomLevel={100}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </Modal>
+
+      {/* Sign In / Sign Up Gate Modal on Download or Export */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => {
+          setIsAuthModalOpen(false);
+          setPendingAction(null);
+        }}
+        onSuccess={() => {
+          setIsAuthModalOpen(false);
+          if (pendingAction) {
+            const nextAction = pendingAction;
+            setPendingAction(null);
+            nextAction();
+          }
+        }}
+        title={authModalTitle}
+        subtitle={authModalSubtitle}
+      />
     </div>
   );
 }
