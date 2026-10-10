@@ -1,128 +1,883 @@
 'use client';
 
-import React from 'react';
-import { useUser } from '@clerk/nextjs';
+import React, { useState, useRef } from 'react';
+import { useUser } from '@/components/auth/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/Logo';
-import { Sparkles, Bot, ShieldCheck, ArrowRight, Layers, CheckCircle2, ChevronRight, Zap } from 'lucide-react';
+import {
+  Sparkles,
+  Upload,
+  Plus,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle2,
+  FileText,
+  Loader2,
+  Check,
+  Search,
+} from 'lucide-react';
 import Link from 'next/link';
-import { ResumeAtmosphereCanvas } from '@/components/common/ResumeAtmosphereCanvas';
+import { saveResumeToStore } from '@/lib/client-resume-store';
+import { TemplateMicroPreview } from '@/components/builder/TemplateMicroPreview';
+import { MOCK_PERSONA } from '@/components/builder/ResumeTemplates';
+
+interface TemplateOption {
+  id: string;
+  name: string;
+  category: string;
+  tag: string;
+  ats: string;
+  desc: string;
+  previewImg: string;
+}
+
+const TEMPLATES_GALLERY: TemplateOption[] = [
+  // =========================================================================
+  // TOP: Former Bottom Templates Moved to the Top (Unique Items 1-4)
+  // =========================================================================
+  {
+    id: 'split_duo',
+    name: 'Balanced Symmetrical Duo',
+    category: 'Tech & AI',
+    tag: 'FULL STACK',
+    ats: '99% ATS',
+    desc: 'Clean cobalt blue accents with structured balance between engineering history and technical skills.',
+    previewImg: '/images/templates/template-1.png',
+  },
+  {
+    id: 'prestige_gold',
+    name: 'Executive VP & Chief Officer Gold',
+    category: 'Executive & Finance',
+    tag: 'C-SUITE EXEC',
+    ats: '98% ATS',
+    desc: 'Dark obsidian top banner with refined warm gold accents for executive and boardroom candidates.',
+    previewImg: '/images/templates/template-2.png',
+  },
+  {
+    id: 'ai_ml_lead',
+    name: 'PyTorch ML & Autonomous Swarms',
+    category: 'Tech & AI',
+    tag: 'AI / LLM LEAD',
+    ats: '99% ATS',
+    desc: 'Advanced machine learning systems with distributed training throughput metrics and model benchmarking.',
+    previewImg: '/images/templates/template-3.png',
+  },
+  {
+    id: 'graphite_compact',
+    name: 'Dense 1-Page High-Density',
+    category: 'Executive & Finance',
+    tag: '10+ YRS EXP',
+    ats: '99% ATS',
+    desc: 'Maximum information density engineered to fit comprehensive 10-year careers cleanly onto 1 page.',
+    previewImg: '/images/templates/enhancv-8.png',
+  },
+
+  // =========================================================================
+  // CORE ATS SPECIALIZED TEMPLATES (Unique Items 5-27)
+  // =========================================================================
+  {
+    id: 'cpa_audit_lead',
+    name: 'Scarlett Anderson — CPA & Audit',
+    category: 'Executive & Finance',
+    tag: 'FINANCE / CPA',
+    ats: '99% ATS',
+    desc: 'Classic centered serif header with horizontal rules and maximum corporate parser compatibility.',
+    previewImg: '/images/templates/enhancv-extra-1.png',
+  },
+  {
+    id: 'global_director_ops',
+    name: 'Isaac Hall — Global Director',
+    category: 'Executive & Finance',
+    tag: 'BOARD & ADVISOR',
+    ats: '98% ATS',
+    desc: 'Refined serif typography with right-aligned tabular numerals and leadership highlights.',
+    previewImg: '/images/templates/enhancv-extra-2.png',
+  },
+  {
+    id: 'backend_distributed_arch',
+    name: 'Elise Carter — Backend & ML',
+    category: 'Tech & AI',
+    tag: 'TECH ARCHITECT',
+    ats: '99% ATS',
+    desc: 'Monospace terminal section tags, visual skills matrix chart, and dense metrics formatting.',
+    previewImg: '/images/templates/enhancv-extra-3.png',
+  },
+  {
+    id: 'vp_product_strategy',
+    name: 'Carrie Jones — Product Lead',
+    category: 'Product & Design',
+    tag: 'PRODUCT LEAD',
+    ats: '97% ATS',
+    desc: 'Nordic emerald headers, clean divider borders, and categorized domain competencies.',
+    previewImg: '/images/templates/enhancv-extra-4.png',
+  },
+  {
+    id: 'strategic_sourcing_ops',
+    name: 'Maeve Delaney — Strategic Sourcing',
+    category: 'Executive & Finance',
+    tag: 'GLOBAL OPS',
+    ats: '97% ATS',
+    desc: 'Deep dark slate console styling with bright emerald syntax highlights and terminal tags.',
+    previewImg: '/images/templates/enhancv-extra-5.png',
+  },
+  {
+    id: 'growth_marketing_dir',
+    name: 'Ellen Johnson — Growth Marketing',
+    category: 'Startups & YC',
+    tag: 'GTM / MARKETING',
+    ats: '98% ATS',
+    desc: 'Sky blue accent geometry with structured infrastructure competencies and cloud metrics.',
+    previewImg: '/images/templates/enhancv-extra-6.png',
+  },
+  {
+    id: 'data_science_ml_lead',
+    name: 'Grace Jackson — Data Scientist',
+    category: 'Tech & AI',
+    tag: 'DATA / ML',
+    ats: '99% ATS',
+    desc: 'Copper orange accent borders with dense monospace code tags and performance metrics.',
+    previewImg: '/images/templates/enhancv-extra-7.png',
+  },
+  {
+    id: 'enterprise_bizdev',
+    name: 'Austin Adams — Business Dev Lead',
+    category: 'Executive & Finance',
+    tag: 'ENTERPRISE B2B',
+    ats: '98% ATS',
+    desc: 'Scholarly preprint typography with abstract summary box and partnership pedigree.',
+    previewImg: '/images/templates/enhancv-extra-8.png',
+  },
+  {
+    id: 'staff_ml_systems',
+    name: 'David Miller — Staff ML Engineer',
+    category: 'Tech & AI',
+    tag: 'AI / SYSTEMS',
+    ats: '99% ATS',
+    desc: 'Warm amber section dividers and structured dual-column matrix for AI researchers.',
+    previewImg: '/images/templates/enhancv-extra-9.png',
+  },
+  {
+    id: 'startup_founder_pitch',
+    name: 'Elena Rostova — VP of Marketing',
+    category: 'Startups & YC',
+    tag: 'YC FOUNDER',
+    ats: '98% ATS',
+    desc: 'Punchy orange accents, prominent fundraising and traction milestones, and high-signal metrics.',
+    previewImg: '/images/templates/enhancv-extra-10.png',
+  },
+  {
+    id: 'cloud_infra_sre',
+    name: 'Marcus Vance — Cloud Architect',
+    category: 'Tech & AI',
+    tag: 'CLOUD / SRE',
+    ats: '99% ATS',
+    desc: 'Crisp AWS/GCP infrastructure certifications and production SLA metrics formatting.',
+    previewImg: '/images/templates/enhancv-extra-11.png',
+  },
+  {
+    id: 'biotech_pharma_lead',
+    name: 'Sophia Chen — Biotech Director',
+    category: 'Executive & Finance',
+    tag: 'BIOTECH / CLINICAL',
+    ats: '98% ATS',
+    desc: 'Indigo top banner with translational medicine milestones, patent portfolio filings, and FDA progression.',
+    previewImg: '/images/templates/enhancv-extra-12.png',
+  },
+  {
+    id: 'cybersecurity_soc2',
+    name: 'Liam O’Connor — Cybersecurity Lead',
+    category: 'Tech & AI',
+    tag: 'SECURITY / SOC-2',
+    ats: '99% ATS',
+    desc: 'Electric indigo divider lines with zero-trust architecture, audit compliance, and response SLAs.',
+    previewImg: '/images/templates/enhancv-extra-13.png',
+  },
+  {
+    id: 'head_of_ux_design',
+    name: 'Rachel Green — Head of UX & Design',
+    category: 'Product & Design',
+    tag: 'DESIGN SYSTEMS',
+    ats: '98% ATS',
+    desc: 'Sophisticated typography with portfolio prominence and design system governance.',
+    previewImg: '/images/templates/enhancv-extra-14.png',
+  },
+  {
+    id: 'quant_research_fund',
+    name: 'Alexander Wright — Quant Research',
+    category: 'Executive & Finance',
+    tag: 'QUANT / HEDGE FUND',
+    ats: '99% ATS',
+    desc: 'Deep burgundy executive headers, pedigree split, and high-impact accomplishment bullets.',
+    previewImg: '/images/templates/enhancv-extra-15.png',
+  },
+  {
+    id: 'corporate_counsel_lead',
+    name: 'Claire Dupont — Corporate Counsel',
+    category: 'Executive & Finance',
+    tag: 'LEGAL & STRATEGY',
+    ats: '99% ATS',
+    desc: 'Rigorous single-column case structure with quantitative business impacts and C-suite advisory.',
+    previewImg: '/images/templates/enhancv-extra-16.png',
+  },
+  {
+    id: 'swiss_bauhaus_grid',
+    name: 'Helvetica Swiss Bauhaus Grid',
+    category: 'Product & Design',
+    tag: 'SWISS DESIGN',
+    ats: '98% ATS',
+    desc: 'Ultra-clean black & red geometric alignment inspired by international typographic style.',
+    previewImg: '/images/templates/enhancv-1.png',
+  },
+  {
+    id: 'oxford_academic_fellow',
+    name: 'Cambridge & Oxford Fellow',
+    category: 'Executive & Finance',
+    tag: 'ACADEMIC / R&D',
+    ats: '99% ATS',
+    desc: 'Timeless scholarly typography with honorable distinctions, credentials, and fellowships.',
+    previewImg: '/images/templates/enhancv-2.png',
+  },
+  {
+    id: 'tokyo_zen_minimal',
+    name: 'Tokyo Minimalist Zen',
+    category: 'Product & Design',
+    tag: 'MINIMALIST',
+    ats: '98% ATS',
+    desc: 'Subtle hairline dividers, generous white space balance, and muted charcoal hierarchy.',
+    previewImg: '/images/templates/enhancv-3.png',
+  },
+  {
+    id: 'scandinavian_frost',
+    name: 'Scandinavian Frost Clean',
+    category: 'Tech & AI',
+    tag: 'NORDIC TECH',
+    ats: '97% ATS',
+    desc: 'Frost blue accents with clean border dividers and functional human-centric layout.',
+    previewImg: '/images/templates/enhancv-4.png',
+  },
+  {
+    id: 'neo_brutalist_tech',
+    name: 'Neo-Brutalist Engineering',
+    category: 'Product & Design',
+    tag: 'CREATIVE TECH',
+    ats: '95% ATS',
+    desc: 'Bold black border boxes with punchy drop shadows and high-contrast yellow headers.',
+    previewImg: '/images/templates/enhancv-5.png',
+  },
+  {
+    id: 'coral_sunset_product',
+    name: 'Coral Sunset Product Designer',
+    category: 'Product & Design',
+    tag: 'DESIGN LEAD',
+    ats: '96% ATS',
+    desc: 'Warm rose coral accents with modern card backdrops and design system highlights.',
+    previewImg: '/images/templates/enhancv-6.png',
+  },
+  {
+    id: 'deep_teal_biotech',
+    name: 'Deep Teal Biotech & Hardware',
+    category: 'Tech & AI',
+    tag: 'BIO / HARDWARE',
+    ats: '97% ATS',
+    desc: 'Rich teal headers with dual-column precision engineering and patent accomplishments.',
+    previewImg: '/images/templates/enhancv-7.png',
+  },
+
+  // =========================================================================
+  // BOTTOM: Former Top Templates Moved to the Bottom (Unique Items 28-31)
+  // =========================================================================
+  {
+    id: 'classic_ats',
+    name: 'Executive Leader Standard',
+    category: 'Executive & Finance',
+    tag: 'FORTUNE 500',
+    ats: '99% ATS',
+    desc: 'Clean two-column split with tabular dates, categorized skills, and verified achievements grid.',
+    previewImg: '/images/templates/tpl-1.png',
+  },
+  {
+    id: 'modern_executive',
+    name: 'Agile Tech Architect',
+    category: 'Startups & YC',
+    tag: 'STARTUP CTO',
+    ats: '98% ATS',
+    desc: 'Warm terracotta accent border, executive summary backdrop, and structured leadership cards.',
+    previewImg: '/images/templates/tpl-2.png',
+  },
+  {
+    id: 'navy_sidebar',
+    name: 'ATS Match Check Standard',
+    category: 'Tech & AI',
+    tag: 'STAFF / PRINCIPAL',
+    ats: '99% ATS',
+    desc: 'Deep slate navy headers, high-contrast subheadings, and dense system engineering layout.',
+    previewImg: '/images/templates/tpl-3.png',
+  },
+  {
+    id: 'navy_header',
+    name: 'Product & Project Leader',
+    category: 'Product & Design',
+    tag: 'ENTERPRISE LEAD',
+    ats: '97% ATS',
+    desc: 'Top navy header banner with dual-column grid body and prominent technical credentials.',
+    previewImg: '/images/templates/tpl-4.png',
+  },
+
+  // =========================================================================
+  // FLOWCV SIGNATURE SCRAPED TEMPLATES
+  // =========================================================================
+  {
+    id: 'flowcv_atlantic_blue',
+    name: 'FlowCV Atlantic Blue Sidebar',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV FLAGSHIP',
+    ats: '99% ATS',
+    desc: 'Deep Atlantic navy left sidebar with high-contrast credentials, modern sans typography, and ATS parsing.',
+    previewImg: '/images/templates/tpl-3.png',
+  },
+  {
+    id: 'flowcv_mercury_flow',
+    name: 'FlowCV Mercury Minimal Flow',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV MINIMAL',
+    ats: '99% ATS',
+    desc: 'Fluid single-column layout with clean centered header and generous whitespace for modern engineers.',
+    previewImg: '/images/templates/enhancv-3.png',
+  },
+  {
+    id: 'flowcv_steady_form',
+    name: 'FlowCV Steady Form Grid',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV BALANCED',
+    ats: '98% ATS',
+    desc: 'Symmetrical 60/40 two-column split with slate dividers and organized competencies sidebar.',
+    previewImg: '/images/templates/template-1.png',
+  },
+  {
+    id: 'flowcv_classic_serif',
+    name: 'FlowCV Classic Serif Formal',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV SERIF',
+    ats: '99% ATS',
+    desc: 'Monochrome editorial serif typography with dual horizontal rules for corporate and legal distinction.',
+    previewImg: '/images/templates/enhancv-extra-1.png',
+  },
+  {
+    id: 'flowcv_leaves',
+    name: 'FlowCV Forest Leaves Accent',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV GREEN',
+    ats: '98% ATS',
+    desc: 'Signature forest emerald headers and accents designed for healthcare, life sciences, and sustainability.',
+    previewImg: '/images/templates/enhancv-extra-12.png',
+  },
+  {
+    id: 'flowcv_editorial_rule',
+    name: 'FlowCV Editorial Divider Rule',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV EDITORIAL',
+    ats: '98% ATS',
+    desc: 'Minimalist hairline section dividers with wide uppercase tracking and clean bullet alignment.',
+    previewImg: '/images/templates/enhancv-2.png',
+  },
+  {
+    id: 'flowcv_precision_line',
+    name: 'FlowCV Precision Tech Grid',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV TECH',
+    ats: '99% ATS',
+    desc: 'Dark header badge, monospace technical chips, and high-density engineering accomplishments.',
+    previewImg: '/images/templates/enhancv-8.png',
+  },
+  {
+    id: 'flowcv_silver_banner',
+    name: 'FlowCV Silver Slate Banner',
+    category: 'FlowCV & Teal',
+    tag: 'FLOWCV CORPORATE',
+    ats: '98% ATS',
+    desc: 'Sleek slate-gray header banner with dual-column grid body and prominent technical credentials.',
+    previewImg: '/images/templates/tpl-4.png',
+  },
+
+  // =========================================================================
+  // TEALHQ SIGNATURE SCRAPED TEMPLATES
+  // =========================================================================
+  {
+    id: 'teal_modern',
+    name: 'TealHQ Signature Modern Teal',
+    category: 'FlowCV & Teal',
+    tag: 'TEALHQ MODERN',
+    ats: '99% ATS',
+    desc: 'TealHQ signature deep teal accents, verified ATS callout badges, and two-column balanced layout.',
+    previewImg: '/images/templates/enhancv-7.png',
+  },
+  {
+    id: 'teal_clean_ats',
+    name: 'TealHQ High-Density Single Column',
+    category: 'FlowCV & Teal',
+    tag: 'TEALHQ ATS 100',
+    ats: '100% ATS',
+    desc: 'Maximum ATS parser pass-rate with teal headers, clean chronology, and high-impact metric bullets.',
+    previewImg: '/images/templates/tpl-1.png',
+  },
+  {
+    id: 'teal_executive',
+    name: 'TealHQ Executive C-Suite Banner',
+    category: 'FlowCV & Teal',
+    tag: 'TEALHQ EXEC',
+    ats: '99% ATS',
+    desc: 'Deep dark teal header masthead with executive summary callout and structured leadership highlights.',
+    previewImg: '/images/templates/template-2.png',
+  },
+];
 
 export default function WelcomePage() {
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const displayName = isLoaded && user ? (user.firstName || user.fullName || 'Candidate') : 'Candidate';
+  // Flow Step: 'choice' -> 'templates'
+  const [step, setStep] = useState<'choice' | 'templates'>('choice');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string>('');
+
+  const displayName = isLoaded && user ? (user.firstName || user.fullName || 'there') : '';
+
+  // 1. Action: Select Template and Create Resume -> Navigate to Builder Sections
+  const handleSelectTemplate = async (templateId: string, templateName: string) => {
+    setIsCreatingNew(true);
+    setSelectedTemplateId(templateId);
+
+    try {
+      const res = await fetch('/api/resumes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: `${displayName && displayName !== 'there' ? displayName : 'My'} Resume`,
+          template: templateId,
+          sections: [
+            {
+              sectionType: 'personal_info',
+              title: 'Personal Details',
+              orderIndex: 0,
+              content: {
+                fullName: displayName && displayName !== 'there' ? displayName : 'Alex Morgan',
+                email: 'alex.morgan@example.com',
+                headline: 'Software Engineer',
+                location: 'San Francisco, CA',
+              },
+            },
+          ],
+        }),
+      });
+
+      const data = await res.json();
+      const resumeId = data.resume?.id || data.id || `resume-${Date.now()}`;
+
+      // Save initial cache with selectedTemplate and full rich mock persona so builder opens fully filled
+      const cacheKey = 'callback_ai_saved_resume_' + resumeId;
+      const initialCache = {
+        personalInfo: {
+          fullName: displayName && displayName !== 'there' ? displayName : MOCK_PERSONA.fullName,
+          email: MOCK_PERSONA.email,
+          headline: MOCK_PERSONA.title,
+          location: MOCK_PERSONA.location,
+          phone: MOCK_PERSONA.phone,
+          linkedin: MOCK_PERSONA.linkedin,
+          github: MOCK_PERSONA.github,
+          website: MOCK_PERSONA.website,
+          summary: MOCK_PERSONA.summary,
+        },
+        experiences: MOCK_PERSONA.experiences,
+        education: MOCK_PERSONA.education,
+        projects: MOCK_PERSONA.projects,
+        skills: MOCK_PERSONA.skills,
+        selectedTemplate: templateId,
+      };
+      localStorage.setItem(cacheKey, JSON.stringify(initialCache));
+      localStorage.setItem('has_onboarded', 'true');
+      localStorage.setItem('active_resume_id', resumeId);
+      window.dispatchEvent(new Event('active_resume_changed'));
+
+      // Transition straight to the Builder section editor
+      router.push(`/builder/${resumeId}?template=${templateId}`);
+    } catch (err) {
+      console.error('Template creation error, using fallback:', err);
+      const fallbackId = `resume-${Date.now()}`;
+      const cacheKey = 'callback_ai_saved_resume_' + fallbackId;
+      const initialCache = {
+        personalInfo: {
+          fullName: displayName && displayName !== 'there' ? displayName : MOCK_PERSONA.fullName,
+          email: MOCK_PERSONA.email,
+          headline: MOCK_PERSONA.title,
+          location: MOCK_PERSONA.location,
+          phone: MOCK_PERSONA.phone,
+          linkedin: MOCK_PERSONA.linkedin,
+          github: MOCK_PERSONA.github,
+          website: MOCK_PERSONA.website,
+          summary: MOCK_PERSONA.summary,
+        },
+        experiences: MOCK_PERSONA.experiences,
+        education: MOCK_PERSONA.education,
+        projects: MOCK_PERSONA.projects,
+        skills: MOCK_PERSONA.skills,
+        selectedTemplate: templateId,
+      };
+      localStorage.setItem(cacheKey, JSON.stringify(initialCache));
+      localStorage.setItem('has_onboarded', 'true');
+      localStorage.setItem('active_resume_id', fallbackId);
+      window.dispatchEvent(new Event('active_resume_changed'));
+      router.push(`/builder/${fallbackId}?template=${templateId}`);
+    } finally {
+      setIsCreatingNew(false);
+    }
+  };
+
+  // 2. Action: Upload and Parse Existing Resume
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadStatus('Reading resume file...');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('customTitle', file.name.replace(/\.[^/.]+$/, ''));
+
+      setUploadStatus('AI parsing sections & experience...');
+
+      const response = await fetch('/api/resumes/import', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to parse resume');
+      }
+
+      setUploadStatus('Opening workspace...');
+
+      const importedId = data.resumeId;
+      localStorage.setItem('has_onboarded', 'true');
+      localStorage.setItem('active_resume_id', importedId);
+      if (data.parsedSections) {
+        saveResumeToStore({
+          id: importedId,
+          title: data.title || file.name,
+          candidateName: data.parsedSections.personalInfo?.fullName || 'Candidate',
+          candidateTitle: data.parsedSections.personalInfo?.title || 'Software Engineer',
+          candidateEmail: data.parsedSections.personalInfo?.email || '',
+          candidatePhone: data.parsedSections.personalInfo?.phone || '',
+          candidateLocation: data.parsedSections.personalInfo?.location || '',
+          atsScore: data.atsScore || 96,
+          trustScore: 98,
+          updatedAt: 'Just now',
+          isActive: true,
+          parsedSections: data.parsedSections,
+        });
+      }
+
+      router.push(`/builder/${importedId}`);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || 'Could not parse resume file. Opening template selector...');
+      setStep('templates');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // 3. Instant Demo Resume Load
+  const handleLoadDemoResume = () => {
+    const demoId = 'ayush-mishra-canonical';
+    localStorage.setItem('has_onboarded', 'true');
+    localStorage.setItem('active_resume_id', demoId);
+    window.dispatchEvent(new Event('active_resume_changed'));
+    router.push(`/builder/${demoId}`);
+  };
+
+  const filteredTemplates = TEMPLATES_GALLERY.filter((t) => {
+    const matchesCat = selectedCategory === 'All' || t.category === selectedCategory;
+    const matchesQuery = !searchQuery || t.name.toLowerCase().includes(searchQuery.toLowerCase()) || t.tag.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCat && matchesQuery;
+  });
 
   return (
-    <div className="min-h-screen bg-[#F5F9FB] flex flex-col justify-between font-sans relative overflow-hidden selection:bg-[#E6F5F8] selection:text-[#048BA2]">
-      {/* Corner-Framing 3D Resume Atmosphere Canvas */}
-      <ResumeAtmosphereCanvas />
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col justify-between font-sans selection:bg-[#FFF0F3] selection:text-[#FF4B5E]">
+      {/* Hidden File Input for Direct Upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf,.docx,.txt"
+        onChange={handleFileChange}
+        className="hidden"
+      />
 
-      {/* Ambient background mesh glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[850px] h-[550px] bg-gradient-to-b from-[#048BA2]/18 via-[#024959]/10 to-transparent blur-3xl pointer-events-none -z-10" />
-      <div className="absolute inset-0 bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-35 -z-10" />
+      {/* Top Header — Clean, Minimal */}
+      <header className="w-full px-4 sm:px-8 py-4 sm:py-5 flex items-center justify-between border-b border-slate-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-20">
+        <Logo size="sm" showTagline={false} />
 
-      {/* Header */}
-      <header className="w-full px-6 lg:px-12 py-6 flex items-center justify-between relative z-10">
-        <Logo size="md" showTagline />
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-slate-500 hidden sm:inline-block">Signed in as</span>
-          <div className="flex items-center gap-2 px-3.5 py-1.5 bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-full shadow-2xs">
-            {user?.imageUrl ? (
-              <img src={user.imageUrl} alt={displayName} className="w-5 h-5 rounded-full object-cover ring-1 ring-slate-200" />
-            ) : (
-              <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#008CA0] to-[#048BA2] text-white flex items-center justify-center text-[10px] font-black">
-                {displayName.charAt(0)}
-              </div>
-            )}
-            <span className="text-xs font-black text-slate-900 tracking-tight">{displayName}</span>
-          </div>
+          {step === 'templates' && (
+            <button
+              type="button"
+              onClick={() => setStep('choice')}
+              className="text-xs font-bold text-slate-600 hover:text-slate-950 px-3.5 py-2 rounded-full hover:bg-slate-100 transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
+          )}
+
+          {isSignedIn ? (
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+              <span className="w-2 h-2 rounded-full bg-[#FF4B5E]" />
+              <span>{user?.firstName || 'Account'}</span>
+            </div>
+          ) : (
+            <Link
+              href="/"
+              className="text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-full hover:bg-slate-100 transition-colors"
+            >
+              Home
+            </Link>
+          )}
         </div>
       </header>
 
-      {/* Main Content Stage */}
-      <main className="w-full max-w-4xl mx-auto px-6 py-6 sm:py-10 flex flex-col items-center text-center gap-8 relative z-10">
-        {/* Verification Success Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/95 backdrop-blur-md border border-emerald-300/80 rounded-full shadow-xs">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span className="text-xs font-extrabold text-emerald-900 tracking-tight">Account Verified & Ready</span>
-        </div>
-
-        {/* Welcome Headline */}
-        <div className="flex flex-col gap-3 max-w-2xl">
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight leading-[1.15]">
-            Welcome to CallBack.ai,{' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#008CA0] via-[#048BA2] to-[#2E75C4]">
-              {displayName}
-            </span>
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 max-w-lg mx-auto font-medium leading-relaxed">
-            Your career profile is transforming from a flat static document into an autonomous, verifiable AI candidate agent.
-          </p>
-        </div>
-
-        {/* Clean, Polished Feature Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full text-left">
-          {/* Card 1: Living Agent */}
-          <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl p-6 shadow-xs hover:shadow-lg hover:border-[#048BA2]/40 hover:-translate-y-1 transition-all duration-200 flex flex-col gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#E6F5F8] text-[#048BA2] border border-[#048BA2]/15 flex items-center justify-center">
-              <Bot className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <h3 className="text-base font-black text-slate-900 tracking-tight">Living Agent</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Recruiters can converse directly with your interactive AI avatar 24/7 to explore your skills and projects.
-              </p>
-            </div>
+      {/* ==================================================================== */}
+      {/* STAGE 1: CHOICE VIEW (Start from Scratch vs Upload) */}
+      {/* ==================================================================== */}
+      {step === 'choice' && (
+        <main className="w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-14 flex flex-col items-center text-center gap-6 sm:gap-8 my-auto animate-in fade-in duration-200">
+          
+          {/* Sub-header Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#FFF0F3] border border-[#FFCCD5] rounded-full text-[#FF4B5E] text-xs font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FF4B5E] animate-pulse" />
+            <span>No sign-up required • Free instant builder</span>
           </div>
 
-          {/* Card 2: Trust Score & ATS */}
-          <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl p-6 shadow-xs hover:shadow-lg hover:border-[#048BA2]/40 hover:-translate-y-1 transition-all duration-200 flex flex-col gap-4">
-            <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-500/15 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <h3 className="text-base font-black text-slate-900 tracking-tight">Trust Score & ATS</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Verify claims with live GitHub/LinkedIn proof and achieve 94%+ ATS keyword pass rates.
-              </p>
-            </div>
+          {/* Title */}
+          <div className="flex flex-col gap-2 max-w-xl">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#1C152E] tracking-tight leading-tight">
+              How would you like to start?
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed">
+              Create an ATS-proof resume from scratch or import your existing file to auto-populate sections.
+            </p>
           </div>
 
-          {/* Card 3: 3-Zone Studio */}
-          <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl p-6 shadow-xs hover:shadow-lg hover:border-[#048BA2]/40 hover:-translate-y-1 transition-all duration-200 flex flex-col gap-4">
-            <div className="w-11 h-11 rounded-xl bg-sky-50 text-[#008CA0] border border-sky-400/15 flex items-center justify-center">
-              <Layers className="w-5 h-5" />
+          {/* Uploading Status Overlay */}
+          {isUploading && (
+            <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex items-center justify-center gap-3">
+              <Loader2 className="w-5 h-5 text-[#1C152E] animate-spin" />
+              <span className="text-xs sm:text-sm font-semibold text-slate-700">{uploadStatus}</span>
             </div>
-            <div className="flex flex-col gap-1.5">
-              <h3 className="text-base font-black text-slate-900 tracking-tight">3-Zone Studio</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Live resume builder with auto-reordering, instant bullet enhancement, and print-perfect A4 PDF export.
-              </p>
-            </div>
-          </div>
-        </div>
+          )}
 
-        {/* Flagship Pushable Next Button */}
-        <div className="w-full max-w-sm mt-2 flex flex-col items-center gap-2">
-          <Link href="/get-started" className="w-full block">
+          {/* The Two Primary Action Cards */}
+          {!isUploading && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full text-left">
+              
+              {/* Card 1: Start from Scratch -> Opens Template Selection */}
+              <div
+                onClick={() => setStep('templates')}
+                className="bg-white border-2 border-slate-200 hover:border-[#1C152E] rounded-2xl p-5 sm:p-6 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between gap-5 cursor-pointer group active:scale-[0.99]"
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <Plus className="w-5 h-5 stroke-[2.5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-950 group-hover:text-[#1C152E] transition-colors">
+                      Start from Scratch
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Pick from 40+ ATS-certified templates and let AI generate optimized bullet points.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="w-full h-11 px-5 bg-[#1C152E] hover:bg-[#2B1F45] text-white text-xs sm:text-sm font-bold rounded-full shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <span>Create New Resume</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Card 2: Import Existing Resume */}
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="bg-white border-2 border-slate-200 hover:border-[#1C152E] rounded-2xl p-5 sm:p-6 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between gap-5 cursor-pointer group active:scale-[0.99]"
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <Upload className="w-5 h-5 stroke-[2.5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-950 group-hover:text-[#1C152E] transition-colors">
+                      Upload Existing Resume
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Upload your PDF or DOCX file to extract work history, skills, and get instant score.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="w-full h-11 px-5 bg-[#1C152E] hover:bg-[#2B1F45] text-white text-xs sm:text-sm font-bold rounded-full shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <Upload className="w-4 h-4" />
+                  <span>Upload PDF or DOCX</span>
+                </button>
+              </div>
+
+            </div>
+          )}
+
+          {/* Quick Demo Resume Option */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 text-xs text-slate-500">
+            <span>Looking to test first?</span>
             <button
               type="button"
-              className="w-full py-4 px-8 bg-gradient-to-r from-[#024959] via-[#048BA2] to-[#0FA5BF] hover:from-[#013541] hover:to-[#037488] active:scale-[0.98] text-white font-black text-sm rounded-2xl shadow-lg shadow-[#048BA2]/25 hover:shadow-xl hover:shadow-[#048BA2]/35 flex items-center justify-center gap-3 transition-all cursor-pointer group"
+              onClick={handleLoadDemoResume}
+              className="text-[#FF4B5E] font-bold hover:underline cursor-pointer flex items-center gap-1"
             >
-              <span>Next: Set Up Your Resume</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+              <Sparkles className="w-3.5 h-3.5 text-[#FF4B5E]" />
+              <span>Open pre-filled demo resume in builder</span>
             </button>
-          </Link>
-          <span className="text-[11px] text-slate-400 font-bold">Step 1 of 2 • Ready to initialize your profile</span>
-        </div>
-      </main>
+          </div>
+
+        </main>
+      )}
+
+      {/* ==================================================================== */}
+      {/* STAGE 2: TEMPLATE SELECTOR VIEW (Shown after clicking Create New) */}
+      {/* ==================================================================== */}
+      {step === 'templates' && (
+        <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col gap-6 animate-in fade-in duration-200">
+          
+          {/* Header & Title */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-5">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF4B5E] bg-[#FFF0F3] px-3 py-1 rounded-full border border-[#FFCCD5] mb-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#FF4B5E]" />
+                <span>Step 1 of 2 • Select Template</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1C152E] tracking-tight">
+                Select Your Resume Template
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                Choose a design to start building your sections. You can switch templates anytime in the builder.
+              </p>
+            </div>
+
+            {/* Back button */}
+            <button
+              type="button"
+              onClick={() => setStep('choice')}
+              className="self-start sm:self-auto text-xs font-bold text-slate-700 hover:text-[#1C152E] px-4 py-2 border border-slate-200 bg-white rounded-full shadow-2xs flex items-center gap-1.5 cursor-pointer hover:bg-slate-50"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Change Starting Method</span>
+            </button>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {['All', 'FlowCV & Teal', 'Executive & Finance', 'Startups & YC', 'Tech & AI', 'Product & Design'].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  selectedCategory === cat
+                    ? 'bg-[#1C152E] text-white shadow-xs'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Template Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filteredTemplates.map((template, idx) => (
+              <div
+                key={`${template.id}-${idx}`}
+                className="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#1C152E] overflow-hidden shadow-2xs hover:shadow-lg transition-all flex flex-col justify-between group"
+              >
+                {/* Authentic Scaled Mini-DOM Template Preview */}
+                <div className="relative aspect-[3/4] bg-slate-100 overflow-hidden flex items-center justify-center p-0">
+                  <TemplateMicroPreview
+                    templateId={template.id}
+                    className="w-full h-full"
+                  />
+                  
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-white/95 backdrop-blur-xs text-slate-800 shadow-2xs border border-slate-200/80">
+                      {template.tag}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#1C152E] text-white shadow-2xs">
+                      {template.ats}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Info & Select Button */}
+                <div className="p-4 flex flex-col gap-3 border-t border-slate-100 bg-white">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 truncate">
+                      {template.name}
+                    </h3>
+                    <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">
+                      {template.desc}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={isCreatingNew && selectedTemplateId === template.id}
+                    onClick={() => handleSelectTemplate(template.id, template.name)}
+                    className="w-full h-10 px-4 bg-[#1C152E] hover:bg-[#2B1F45] active:scale-[0.98] text-white text-xs font-bold rounded-full shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    {isCreatingNew && selectedTemplateId === template.id ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Opening Builder...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Use This Template</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </main>
+      )}
 
       {/* Footer */}
-      <footer className="w-full py-6 px-6 text-center text-xs text-slate-400 border-t border-slate-200/80 bg-white/40 backdrop-blur-xs relative z-10">
-        <span>CallBack.ai — Autonomous Candidate Agent Platform</span>
+      <footer className="w-full py-4 px-6 text-center text-xs text-slate-400 border-t border-slate-200/70 bg-white/40">
+        <span>Callback — Free ATS Resume Builder</span>
       </footer>
     </div>
   );

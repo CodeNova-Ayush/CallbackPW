@@ -15,7 +15,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
   const params = await props.params;
   try {
     const body = await request.json();
-    const { personalInfo, experiences, education, skills, projects, certifications, title } = body;
+    const { personalInfo, experiences, education, skills, projects, certifications, title, template } = body;
 
     const resumeTitle = title || `${personalInfo?.fullName || 'Candidate'} — ${personalInfo?.title || 'Software Engineer'}`;
     const sectionDefs = [
@@ -30,6 +30,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     const memoryRecord = {
       id: params.id,
       title: resumeTitle,
+      template: template || 'classic_ats',
       isActive: true,
       sections: sectionDefs.map((s) => ({
         id: s.id,

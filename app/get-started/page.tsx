@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/Logo';
 import {
@@ -59,6 +60,7 @@ export default function GetStartedChoicePage() {
       const resumeId = data.resume?.id || data.id || `resume-${Date.now()}`;
 
       // Set global active resume across all features
+      localStorage.setItem('has_onboarded', 'true');
       localStorage.setItem('active_resume_id', resumeId);
       window.dispatchEvent(new Event('active_resume_changed'));
 
@@ -67,6 +69,7 @@ export default function GetStartedChoicePage() {
       console.error('Failed to create resume:', err);
       // Fallback
       const fallbackId = `resume-${Date.now()}`;
+      localStorage.setItem('has_onboarded', 'true');
       localStorage.setItem('active_resume_id', fallbackId);
       window.dispatchEvent(new Event('active_resume_changed'));
       router.push(`/builder/${fallbackId}`);
@@ -113,6 +116,8 @@ export default function GetStartedChoicePage() {
 
       // Save globally to localStorage for all features
       const importedId = data.resumeId;
+      localStorage.setItem('has_onboarded', 'true');
+      localStorage.setItem('active_resume_id', importedId);
       if (data.parsedSections) {
         saveResumeToStore({
           id: importedId,
@@ -142,12 +147,12 @@ export default function GetStartedChoicePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F9FB] flex flex-col justify-between font-sans relative overflow-hidden selection:bg-[#E6F5F8] selection:text-[#048BA2]">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col justify-between font-sans relative overflow-hidden selection:bg-[#FFF0F3] selection:text-[#FF4B5E]">
       {/* Corner-Framing 3D Resume Atmosphere Canvas */}
       <ResumeAtmosphereCanvas />
 
       {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-[#048BA2]/15 via-[#024959]/10 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-[#FF4B5E]/6 via-[#1C152E]/4 to-transparent blur-3xl pointer-events-none -z-10" />
       <div className="absolute inset-0 bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-40 -z-10" />
 
       {/* Hidden File Input for Local Storage Picker */}
@@ -162,16 +167,16 @@ export default function GetStartedChoicePage() {
       {/* Top Navbar */}
       <header className="w-full px-6 lg:px-12 py-6 flex items-center justify-between relative z-10">
         <Logo size="md" showTagline />
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/90 backdrop-blur-md border border-slate-200 rounded-full shadow-2xs">
-          <span className="w-2 h-2 rounded-full bg-[#048BA2]" />
-          <span className="text-xs font-black text-slate-800">Step 2 of 2 • Resume Setup</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-200 rounded-full shadow-2xs">
+          <span className="w-2 h-2 rounded-full bg-[#FF4B5E]" />
+          <span className="text-xs font-bold text-slate-800">Step 2 of 2 • Resume Setup</span>
         </div>
       </header>
 
       {/* Main Choice Stage */}
       <main className="w-full max-w-4xl mx-auto px-6 py-8 flex flex-col items-center text-center gap-8 relative z-10">
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight leading-[1.15]">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1C152E] tracking-tight leading-[1.15]">
             Choose Your Starting Point
           </h1>
           <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto font-medium">
@@ -188,8 +193,8 @@ export default function GetStartedChoicePage() {
 
         {/* Loading / Uploading Overlay State */}
         {isUploading && (
-          <div className="w-full max-w-xl p-8 bg-white border-2 border-[#048BA2] rounded-3xl shadow-xl shadow-[#048BA2]/20 flex flex-col items-center gap-4 animate-in fade-in zoom-in-95 duration-300">
-            <div className="w-14 h-14 rounded-2xl bg-[#E6F5F8] text-[#048BA2] flex items-center justify-center animate-pulse">
+          <div className="w-full max-w-xl p-8 bg-white border-2 border-[#1C152E] rounded-3xl shadow-xl shadow-slate-900/10 flex flex-col items-center gap-4 animate-in fade-in zoom-in-95 duration-300">
+            <div className="w-14 h-14 rounded-2xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center animate-pulse">
               <Loader2 className="w-7 h-7 animate-spin" />
             </div>
             <div className="flex flex-col gap-1">
@@ -197,7 +202,7 @@ export default function GetStartedChoicePage() {
               <p className="text-xs text-slate-500 font-bold">{uploadStatus}</p>
             </div>
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-2">
-              <div className="bg-gradient-to-r from-[#008CA0] to-[#048BA2] h-full rounded-full w-4/5 animate-pulse" />
+              <div className="bg-[#1C152E] h-full rounded-full w-4/5 animate-pulse" />
             </div>
           </div>
         )}
@@ -208,22 +213,22 @@ export default function GetStartedChoicePage() {
             {/* Flagship Option 1: Create New Resume */}
             <div
               onClick={handleCreateNewResume}
-              className="group relative bg-white/95 backdrop-blur-md hover:bg-[#F8FDFF] border-2 border-slate-200/90 hover:border-[#048BA2] rounded-3xl p-8 shadow-md hover:shadow-xl hover:shadow-[#048BA2]/20 flex flex-col justify-between items-start text-left gap-6 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-slate-200/60 hover:ring-2 hover:ring-[#048BA2]/40"
+              className="group relative bg-white/95 backdrop-blur-md hover:bg-white border-2 border-slate-200/90 hover:border-[#1C152E] rounded-3xl p-8 shadow-md hover:shadow-xl hover:shadow-slate-900/10 flex flex-col justify-between items-start text-left gap-6 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-slate-200/60 hover:ring-2 hover:ring-[#1C152E]/20"
             >
               {/* Top badge */}
               <div className="absolute top-4 right-4">
-                <span className="px-3 py-1 bg-teal-50 text-[#048BA2] border border-[#048BA2]/30 text-[10px] font-black uppercase tracking-wider rounded-full shadow-2xs">
+                <span className="px-3 py-1 bg-[#FFF0F3] text-[#FF4B5E] border border-[#FFCCD5] text-[10px] font-bold uppercase tracking-wider rounded-full shadow-2xs">
                   Instant Setup
                 </span>
               </div>
 
               <div className="flex flex-col gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-[#024959] to-[#048BA2] text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md shadow-[#048BA2]/25">
+                <div className="w-14 h-14 rounded-2xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
                   <Plus className="w-7 h-7" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-black text-[#048BA2] uppercase tracking-wider">Start from Scratch</span>
-                  <h2 className="text-2xl font-black text-slate-950 group-hover:text-[#048BA2] transition-colors">
+                  <span className="text-[11px] font-black text-[#FF4B5E] uppercase tracking-wider">Start from Scratch</span>
+                  <h2 className="text-2xl font-black text-slate-950 group-hover:text-[#1C152E] transition-colors">
                     Create New Resume
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
@@ -236,7 +241,7 @@ export default function GetStartedChoicePage() {
               <button
                 type="button"
                 disabled={isCreatingNew}
-                className="w-full py-3.5 px-6 bg-gradient-to-r from-[#024959] via-[#048BA2] to-[#0FA5BF] hover:from-[#013541] hover:to-[#037488] active:scale-[0.98] text-white font-black text-xs rounded-2xl shadow-md shadow-[#048BA2]/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="w-full h-11 px-6 bg-[#1C152E] hover:bg-[#2B1F45] active:scale-[0.98] text-white font-bold text-xs rounded-full shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 {isCreatingNew ? (
                   <>
@@ -256,22 +261,22 @@ export default function GetStartedChoicePage() {
             {/* Flagship Option 2: Import Old Resume */}
             <div
               onClick={handleTriggerUpload}
-              className="group relative bg-white/95 backdrop-blur-md hover:bg-[#F8FDFF] border-2 border-slate-200/90 hover:border-[#048BA2] rounded-3xl p-8 shadow-md hover:shadow-xl hover:shadow-[#048BA2]/20 flex flex-col justify-between items-start text-left gap-6 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-slate-200/60 hover:ring-2 hover:ring-[#048BA2]/40"
+              className="group relative bg-white/95 backdrop-blur-md hover:bg-white border-2 border-slate-200/90 hover:border-[#1C152E] rounded-3xl p-8 shadow-md hover:shadow-xl hover:shadow-slate-900/10 flex flex-col justify-between items-start text-left gap-6 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-slate-200/60 hover:ring-2 hover:ring-[#1C152E]/20"
             >
               {/* Top badge */}
               <div className="absolute top-4 right-4">
-                <span className="px-3 py-1 bg-gradient-to-r from-[#024959] to-[#048BA2] text-white text-[10px] font-black uppercase tracking-wider rounded-full shadow-xs">
+                <span className="px-3 py-1 bg-[#1C152E] text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-xs">
                   Recommended
                 </span>
               </div>
 
               <div className="flex flex-col gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-[#024959] to-[#048BA2] text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md shadow-[#048BA2]/25">
+                <div className="w-14 h-14 rounded-2xl bg-[#FFF0F3] text-[#FF4B5E] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
                   <Upload className="w-7 h-7" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-black text-[#048BA2] uppercase tracking-wider">Sync Across All Features</span>
-                  <h2 className="text-2xl font-black text-slate-950 group-hover:text-[#048BA2] transition-colors">
+                  <span className="text-[11px] font-black text-[#FF4B5E] uppercase tracking-wider">Sync Across All Features</span>
+                  <h2 className="text-2xl font-black text-slate-950 group-hover:text-[#1C152E] transition-colors">
                     Import Old Resume
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
@@ -283,7 +288,7 @@ export default function GetStartedChoicePage() {
               {/* Action Button */}
               <button
                 type="button"
-                className="w-full py-3.5 px-6 bg-gradient-to-r from-[#024959] via-[#048BA2] to-[#0FA5BF] hover:from-[#013541] hover:to-[#037488] active:scale-[0.98] text-white font-black text-xs rounded-2xl shadow-md shadow-[#048BA2]/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="w-full h-11 px-6 bg-[#1C152E] hover:bg-[#2B1F45] active:scale-[0.98] text-white font-bold text-xs rounded-full shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <FileCheck className="w-4 h-4" />
                 <span>Upload Resume File (PDF / DOCX)</span>
@@ -295,14 +300,31 @@ export default function GetStartedChoicePage() {
 
         {/* Global Persistence Note */}
         <div className="flex items-center gap-2 text-xs text-slate-500 font-bold">
-          <ShieldCheck className="w-4 h-4 text-[#048BA2]" />
+          <ShieldCheck className="w-4 h-4 text-[#1C152E]" />
           <span>Uploaded once • Automatically powers Builder, Analyzer, Agent, JD Match, and Trust Score</span>
+        </div>
+
+        {/* Step Progression & Direct Dashboard Navigation */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-xs font-semibold text-slate-500 pt-1">
+          <Link href="/import-resume" className="hover:text-[#FF4B5E] hover:underline flex items-center gap-1">
+            <span>Prefer dedicated ATS file reviewer?</span>
+            <span className="font-bold text-[#FF4B5E]">Open Detailed Import Tool →</span>
+          </Link>
+          <span className="hidden sm:inline text-slate-300">•</span>
+          <Link
+            href="/dashboard"
+            onClick={() => localStorage.setItem('has_onboarded', 'true')}
+            className="hover:text-[#1C152E] hover:underline flex items-center gap-1"
+          >
+            <span>Proceed directly to</span>
+            <span className="font-bold text-[#1C152E]">Dashboard →</span>
+          </Link>
         </div>
       </main>
 
       {/* Footer */}
       <footer className="w-full py-6 px-6 text-center text-xs text-slate-400 border-t border-slate-200/80">
-        <span>CallBack.ai — Autonomous Candidate Agent Platform</span>
+        <span>Callback — Autonomous Candidate Agent Platform</span>
       </footer>
     </div>
   );

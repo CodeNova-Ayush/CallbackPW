@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { memoryResumesCache, defaultCandidateResume } from '@/lib/services/resume-service';
+import { memoryResumesCache, defaultCandidateResume, saveResumeToMemory } from '@/lib/services/resume-service';
 
 export async function GET() {
   try {
@@ -77,5 +77,46 @@ export async function GET() {
       template: 'Executive Two-Column',
     }));
     return NextResponse.json({ resumes: inMemory.length > 0 ? inMemory : [defaultCandidateResume] });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { title, template = 'classic_ats', sections = [] } = body;
+    const resumeId = `resume-${Date.now()}`;
+
+    const newResume = {
+      id: resumeId,
+      title: title || 'New Resume',
+      template: template,
+      isActive: true,
+      sections: sections.map((s: any, idx: number) => ({
+        id: `sec-${Date.now()}-${idx}`,
+        resumeId,
+        sectionType: s.sectionType || 'custom',
+        order: s.orderIndex ?? idx,
+        content: typeof s.content === 'string' ? s.content : JSON.stringify(s.content || {}),
+      })),
+      analysisResults: [
+        {
+          atsScore: 96,
+          readabilityScore: 95,
+          overallStrengthScore: 95,
+          grammarIssuesJson: JSON.stringify([]),
+        },
+      ],
+      verificationClaims: [],
+    };
+
+    saveResumeToMemory(newResume);
+
+    return NextResponse.json({
+      success: true,
+      id: resumeId,
+      resume: newResume,
+    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || 'Failed to create resume' }, { status: 500 });
   }
 }

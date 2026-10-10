@@ -54,11 +54,7 @@ export async function POST(request: Request) {
       flagshipUrls: {
         builder: `/builder/${result.resumeId}`,
         atsAudit: `/analyzer/${result.resumeId}`,
-        agentChat: `/agent/${result.resumeId}`,
         jdMatcher: `/jd-match/${result.resumeId}`,
-        trustScore: `/trust-score/${result.resumeId}`,
-        skillGraph: `/skill-graph`,
-        opportunities: `/opportunities`,
       },
     });
   } catch (error: any) {
