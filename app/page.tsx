@@ -39,6 +39,7 @@ import { Badge } from '@/components/ui/Card';
 import { Logo } from '@/components/ui/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserButton, useUser } from '@/components/auth/AuthProvider';
+import { HeroFeaturedResume } from '@/components/landing/HeroFeaturedResume';
 
 export default function LandingPage() {
   const { isSignedIn, isLoaded } = useUser();
@@ -184,7 +185,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed font-normal max-w-xl">
-              Create ATS-proof resumes with AI-enhanced achievement bullets, real-time keyword scoring, and 40+ recruiter-tested templates.
+              Create ATS-proof resumes with AI-enhanced achievement bullets, real-time keyword scoring, and 40+ recruiter-tested templates. Engineered to pass Workday, Greenhouse, and Lever filters while captivating hiring managers in under 6 seconds.
             </p>
 
             {/* Action Buttons */}
@@ -233,14 +234,17 @@ export default function LandingPage() {
               <div className="bg-white/80 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span className="text-lg sm:text-2xl font-black text-slate-950">40+</span>
                 <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-tight">ATS Library</span>
+                <span className="text-[9.5px] text-slate-400 font-medium hidden sm:inline mt-0.5">Battle-Tested Layouts</span>
               </div>
               <div className="bg-white/80 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span className="text-lg sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">94%</span>
                 <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-tight">Callback Rate</span>
+                <span className="text-[9.5px] text-slate-400 font-medium hidden sm:inline mt-0.5">Tier-1 Interviews</span>
               </div>
               <div className="bg-white/80 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span className="text-lg sm:text-2xl font-black text-slate-950">0%</span>
                 <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-tight">Hallucination</span>
+                <span className="text-[9.5px] text-slate-400 font-medium hidden sm:inline mt-0.5">Verified Career Truth</span>
               </div>
             </div>
 
@@ -263,19 +267,8 @@ export default function LandingPage() {
             {/* Ambient Multi-Color Gradient Backdrop Glow */}
             <div className="absolute w-[440px] h-[440px] bg-gradient-to-tr from-teal-400/30 via-sky-400/30 to-purple-500/30 rounded-full blur-3xl pointer-events-none -top-10 -right-10" />
 
-            {/* Single Clean Featured Resume Showcase */}
-            <div className="w-full relative z-10 flex flex-col items-center">
-              <Link
-                href="/welcome"
-                className="group relative w-full max-w-[340px] sm:max-w-[390px] md:max-w-[420px] rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl border border-slate-200/90 bg-white transition-all duration-300 hover:-translate-y-1 block"
-              >
-                <img
-                  src="/images/templates/catherine-bale.png"
-                  alt="Catherine Bale Resume Template"
-                  className="w-full h-auto object-contain block rounded-2xl"
-                />
-              </Link>
-            </div>
+            {/* Single Clean Featured Resume Showcase with Full Realistic Content */}
+            <HeroFeaturedResume />
           </div>
         </div>
       </section>
