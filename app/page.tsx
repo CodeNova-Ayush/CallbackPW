@@ -171,13 +171,25 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section — Full-Bleed Edge to Edge */}
-      <section className="min-h-[calc(100svh-4rem)] lg:min-h-[calc(100vh-4rem)] flex flex-col justify-center py-6 sm:py-10 px-4 sm:px-6 lg:px-12 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full max-w-7xl mx-auto">
-          {/* Left Column: Hero Content & Call to Actions (Fills Full 1st Screen on Mobile) */}
-          <div className="lg:col-span-6 min-h-[calc(100svh-5.5rem)] lg:min-h-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left gap-4 sm:gap-5 py-4">
+      {/* Hero Section — Full-Bleed Edge to Edge, Rich FlowCV / YC-Level Filled Canvas */}
+      <section className="min-h-[calc(100svh-4rem)] lg:min-h-[calc(100vh-4rem)] flex flex-col justify-center py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-12 w-full relative z-10 bg-gradient-to-b from-[#FAF9F7] via-white to-slate-50/70 overflow-hidden">
+        {/* Soft Ambient Mesh Glow Orbs for Depth */}
+        <div className="absolute top-12 left-1/4 w-[500px] h-[500px] bg-gradient-to-tr from-[#FFF0F3]/60 via-[#FDF4FF]/40 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-gradient-to-bl from-teal-100/40 via-sky-100/30 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center w-full max-w-7xl mx-auto my-auto">
+          {/* Left Column: Hero Content & Call to Actions */}
+          <div className="lg:col-span-6 flex flex-col justify-center items-center lg:items-start text-center lg:text-left gap-4 sm:gap-5 py-2">
+
+            {/* Top Announcement Pill */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 shadow-2xs text-[11px] font-bold text-slate-800">
+              <span className="w-2 h-2 rounded-full bg-[#FF4B5E] animate-pulse"></span>
+              <span className="text-[#1C152E]">Ranked #1 Resume Engine</span>
+              <span className="text-slate-400">•</span>
+              <span className="text-slate-500 font-medium">98.4% ATS First-Round Pass Rate</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.12]">
               Build a resume that gets you{' '}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1C152E] via-[#2B1F45] to-[#FF4B5E]">
                 the callback.
@@ -193,9 +205,10 @@ export default function LandingPage() {
               <Link href="/welcome" className="w-full sm:flex-1">
                 <button
                   type="button"
-                  className="w-full h-12 px-7 bg-[#1C152E] hover:bg-[#2B1F45] active:scale-[0.99] text-white text-sm font-bold rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center cursor-pointer"
+                  className="w-full h-12 px-7 bg-[#1C152E] hover:bg-[#2B1F45] active:scale-[0.99] text-white text-sm font-bold rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Build Your Resume</span>
+                  <ArrowRight className="w-4 h-4 text-[#FF4B5E]" />
                 </button>
               </Link>
               <Link href="/resume-checker" className="w-full sm:flex-1">
@@ -209,7 +222,7 @@ export default function LandingPage() {
             </div>
 
             {/* Social Proof Rating */}
-            <div className="flex flex-col sm:flex-row items-center gap-2 pt-2 text-xs text-slate-600">
+            <div className="flex flex-col sm:flex-row items-center gap-2 pt-1 text-xs text-slate-600">
               <div className="flex items-center gap-1 text-amber-400">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 drop-shadow-2xs" />
@@ -227,21 +240,23 @@ export default function LandingPage() {
               <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200/80 shadow-2xs">Stripe</span>
               <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200/80 shadow-2xs">Google</span>
               <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200/80 shadow-2xs">OpenAI</span>
+              <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200/80 shadow-2xs">Linear</span>
+              <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200/80 shadow-2xs">Figma</span>
             </div>
 
-            {/* Metrics 3-Card Bar (Fills 1st screen on mobile & desktop) */}
+            {/* Metrics 3-Card Bar (Fills width gracefully) */}
             <div className="grid grid-cols-3 gap-2.5 sm:gap-4 w-full pt-3 border-t border-slate-200/80">
-              <div className="bg-white/80 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="bg-white/90 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span className="text-lg sm:text-2xl font-black text-slate-950">40+</span>
                 <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-tight">ATS Library</span>
                 <span className="text-[9.5px] text-slate-400 font-medium hidden sm:inline mt-0.5">Battle-Tested Layouts</span>
               </div>
-              <div className="bg-white/80 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="bg-white/90 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span className="text-lg sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">94%</span>
                 <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-tight">Callback Rate</span>
                 <span className="text-[9.5px] text-slate-400 font-medium hidden sm:inline mt-0.5">Tier-1 Interviews</span>
               </div>
-              <div className="bg-white/80 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="bg-white/90 backdrop-blur-xs border border-slate-200/80 rounded-2xl p-2.5 sm:p-3 shadow-2xs flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span className="text-lg sm:text-2xl font-black text-slate-950">0%</span>
                 <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-tight">Hallucination</span>
                 <span className="text-[9.5px] text-slate-400 font-medium hidden sm:inline mt-0.5">Verified Career Truth</span>
@@ -251,21 +266,16 @@ export default function LandingPage() {
             {/* Key Feature Checks */}
             <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 text-[11px] sm:text-xs font-medium text-slate-600 flex-wrap">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Free to start</span>
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> No sign-up required</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> No credit card required</span>
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Instant PDF download</span>
-            </div>
-
-            {/* Mobile Scroll Indicator */}
-            <div className="lg:hidden flex items-center justify-center gap-1.5 text-[11px] font-semibold text-slate-400 pt-2 animate-bounce">
-              <span>Scroll to explore 40+ templates</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> 100% Private & Secure</span>
             </div>
           </div>
 
-          {/* Right Column: Enhancv-Style Revolving 3D Template Showcase (Scrollable Section on Mobile) */}
-          <div className="lg:col-span-6 w-full flex flex-col items-center justify-center relative mt-8 lg:mt-0 pt-8 lg:pt-0 border-t lg:border-t-0 border-slate-200/80">
+          {/* Right Column: FlowCV Featured Resume Showcase (Locked A4 Proportion, Never Stretched) */}
+          <div className="lg:col-span-6 w-full flex flex-col items-center justify-center relative mt-6 lg:mt-0">
             {/* Ambient Multi-Color Gradient Backdrop Glow */}
-            <div className="absolute w-[440px] h-[440px] bg-gradient-to-tr from-teal-400/30 via-sky-400/30 to-purple-500/30 rounded-full blur-3xl pointer-events-none -top-10 -right-10" />
+            <div className="absolute w-[440px] h-[440px] bg-gradient-to-tr from-teal-400/25 via-sky-400/20 to-purple-500/20 rounded-full blur-3xl pointer-events-none -top-10 -right-10" />
 
             {/* Single Clean Featured Resume Showcase with Full Realistic Content */}
             <HeroFeaturedResume />

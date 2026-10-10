@@ -1,27 +1,69 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Globe, Sparkles, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Sparkles, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 export function HeroFeaturedResume() {
+  const containerRef = useRef<HTMLAnchorElement>(null);
+  const [scale, setScale] = useState<number>(0.56);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const updateScale = () => {
+      if (containerRef.current) {
+        const cw = containerRef.current.clientWidth;
+        if (cw > 0) {
+          setScale(cw / 794);
+        }
+      }
+    };
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="w-full relative z-10 flex flex-col items-center">
+      {/* Floating Trust Floating Micro-Badges for Depth */}
+      <div className="absolute -top-3.5 -left-3 sm:-left-6 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-lg rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] font-bold text-slate-800 animate-bounce" style={{ animationDuration: '4s' }}>
+        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+        <span>98.4% ATS Pass Rate</span>
+      </div>
+
+      <div className="absolute -bottom-3 -right-2 sm:-right-4 z-20 bg-[#1C152E] text-white shadow-xl rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] font-bold">
+        <Sparkles className="w-3.5 h-3.5 text-[#FF4B5E] shrink-0" />
+        <span>FlowCV Signature Layout</span>
+      </div>
+
+      {/* Main A4 Locked Aspect Ratio Container */}
       <Link
         href="/welcome"
-        className="group relative w-full max-w-[360px] sm:max-w-[420px] md:max-w-[450px] lg:max-w-[480px] rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl border border-slate-200/90 bg-white transition-all duration-300 hover:-translate-y-1 block text-left"
+        ref={containerRef}
+        className="group relative w-full max-w-[380px] sm:max-w-[430px] lg:max-w-[470px] aspect-[794/1123] rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl border border-slate-200/90 bg-white transition-all duration-300 hover:-translate-y-1 block text-left cursor-pointer"
+        style={{ aspectRatio: '794 / 1123' }}
       >
-        {/* Subtle Hover Action Badge */}
-        <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-[#1C152E] text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 pointer-events-none">
-          <Sparkles className="w-3.5 h-3.5 text-[#FF4B5E]" />
-          <span>Customize This Template</span>
-          <ArrowRight className="w-3 h-3 text-white/80" />
+        {/* Hover Action Overlay Pill */}
+        <div className="absolute inset-0 z-30 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+          <div className="bg-[#1C152E] text-white text-xs font-bold px-4 py-2 rounded-full shadow-2xl flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+            <span>Use This Template</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#FF4B5E]" />
+          </div>
         </div>
 
-        {/* Resume Sheet Container */}
-        <div className="relative flex w-full bg-white text-slate-800 font-sans select-none">
+        {/* Fixed Standard A4 Canvas (794px x 1123px) perfectly scaled */}
+        <div
+          style={{
+            width: '794px',
+            height: '1123px',
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+          }}
+          className="relative flex bg-white text-slate-800 font-sans select-none overflow-hidden"
+        >
           {/* Left Foliage Accent Strip */}
-          <div className="w-8 sm:w-10 md:w-11 shrink-0 overflow-hidden relative">
+          <div className="w-[72px] shrink-0 overflow-hidden relative bg-[#1E3A2F]">
             <img
               src="/images/templates/leaves-strip.png"
               alt="Botanical Accent"
@@ -29,137 +71,139 @@ export function HeroFeaturedResume() {
             />
           </div>
 
-          {/* Right Main Resume Body */}
-          <div className="flex-1 p-4 sm:p-5 md:p-6 flex flex-col gap-3.5 leading-snug">
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex-1">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-slate-950 font-serif">
-                  Catherine Bale
-                </h2>
-                <p className="text-xs sm:text-[13px] text-slate-700 italic font-medium mt-0.5">
-                  Marketing Assistant & Growth Specialist
-                </p>
+          {/* Right Main Resume Body (722px wide) */}
+          <div className="flex-1 p-9 flex flex-col justify-between leading-normal text-slate-800">
+            {/* 1. Header */}
+            <div>
+              <div className="flex items-start justify-between gap-6">
+                <div className="flex-1">
+                  <h1 className="text-[32px] font-black tracking-tight text-slate-950 font-serif leading-none">
+                    Catherine Bale
+                  </h1>
+                  <p className="text-[16px] text-slate-700 italic font-semibold mt-1">
+                    Senior Marketing Manager & Growth Specialist
+                  </p>
 
-                {/* Contact Details */}
-                <div className="mt-2 flex flex-col gap-1 text-[10px] sm:text-[11px] text-slate-600">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="flex items-center gap-1">
-                      <Mail className="w-3 h-3 text-slate-400 shrink-0" />
-                      c.bale@bale.com
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Phone className="w-3 h-3 text-slate-400 shrink-0" />
-                      +1 541 754 3010
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
-                      Malibu, California 9022
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Globe className="w-3 h-3 text-slate-400 shrink-0" />
-                      linkedin.com/in/cbale
-                    </span>
+                  {/* Contact Row */}
+                  <div className="mt-3.5 flex flex-col gap-1.5 text-[13px] text-slate-600 font-medium">
+                    <div className="flex items-center gap-5 flex-wrap">
+                      <span className="flex items-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        c.bale@bale.com
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        +1 541 754 3010
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-5 flex-wrap">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        22611 Pacific Coast Hwy, Malibu CA 9022
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        linkedin.com/in/cbale
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Headshot */}
-              <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-md overflow-hidden border border-slate-200/90 shadow-2xs">
-                <img
-                  src="/images/templates/catherine-avatar.png"
-                  alt="Catherine Bale"
-                  className="w-full h-full object-cover block"
-                />
+                {/* Headshot */}
+                <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden border border-slate-200/90 shadow-xs">
+                  <img
+                    src="/images/templates/catherine-avatar.png"
+                    alt="Catherine Bale"
+                    className="w-full h-full object-cover block"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Profile Section */}
+            {/* 2. Profile Section */}
             <div>
-              <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-900">
+              <div className="border-b-2 border-slate-900 pb-1 mb-2">
+                <h2 className="text-[14px] font-extrabold uppercase tracking-wider text-slate-900">
                   Profile
-                </h3>
+                </h2>
               </div>
-              <p className="text-[10px] sm:text-[11px] text-slate-700 leading-relaxed">
-                Dynamic and data-driven marketing specialist with 6+ years of demonstrated success executing high-converting multichannel acquisition campaigns. Proven track record driving 38% organic revenue growth, optimizing customer acquisition loops, and orchestrating brand positioning initiatives.
+              <p className="text-[13px] text-slate-700 leading-relaxed font-normal">
+                Results-driven Senior Marketing Specialist with 6+ years spearheading multi-channel customer acquisition and product-led growth initiatives. Proven record driving 38% organic revenue growth, optimizing conversion funnels, and managing cross-functional teams to scale ARR from $2.4M to $8.1M across 14 product releases.
               </p>
             </div>
 
-            {/* Professional Experience */}
+            {/* 3. Professional Experience */}
             <div>
-              <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-900">
+              <div className="border-b-2 border-slate-900 pb-1 mb-2">
+                <h2 className="text-[14px] font-extrabold uppercase tracking-wider text-slate-900">
                   Professional Experience
-                </h3>
+                </h2>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3.5">
                 {/* Role 1 */}
                 <div>
-                  <div className="flex items-baseline justify-between text-[10.5px] sm:text-[11.5px] font-bold text-slate-900">
-                    <span>Acme Corporation, <span className="italic font-medium text-slate-700">Marketing Manager</span></span>
-                    <span className="text-[9.5px] sm:text-[10.5px] font-normal text-slate-500 shrink-0">2021 – Present • Milwaukee</span>
+                  <div className="flex items-baseline justify-between text-[13.5px] font-bold text-slate-900">
+                    <span>Acme Corporation, <span className="italic font-semibold text-slate-700">Senior Marketing Manager</span></span>
+                    <span className="text-[12.5px] font-medium text-slate-500 shrink-0">2021 – Present • Milwaukee, WI</span>
                   </div>
-                  <ul className="mt-1 list-disc list-outside ml-3.5 space-y-0.5 text-[9.5px] sm:text-[10.5px] text-slate-600 leading-relaxed">
-                    <li>Spearheaded integrated GTM strategies across digital channels, driving a 38% increase in marketing-qualified pipeline and $2.4M in incremental revenue.</li>
-                    <li>Orchestrated lifecycle email automation workflows, improving active user retention from 52% to 74%.</li>
-                    <li>Mentored and led a cross-functional marketing team of 5, reducing campaign turnaround time by 30%.</li>
+                  <ul className="mt-1 list-disc list-outside ml-4 space-y-1 text-[12.5px] text-slate-700 leading-relaxed">
+                    <li>Led integrated GTM campaigns across digital acquisition channels, delivering a 38% lift in marketing pipeline and $2.4M incremental revenue.</li>
+                    <li>Architected automated lifecycle email journeys and customer onboarding funnels, increasing active user retention from 52% to 74%.</li>
+                    <li>Managed a cross-functional marketing and design team of 6, reducing campaign cycle turnaround by 2 weeks.</li>
                   </ul>
                 </div>
 
                 {/* Role 2 */}
                 <div>
-                  <div className="flex items-baseline justify-between text-[10.5px] sm:text-[11.5px] font-bold text-slate-900">
-                    <span>Global Industries, <span className="italic font-medium text-slate-700">Marketing Coordinator</span></span>
-                    <span className="text-[9.5px] sm:text-[10.5px] font-normal text-slate-500 shrink-0">2018 – 2021 • Grand Island</span>
+                  <div className="flex items-baseline justify-between text-[13.5px] font-bold text-slate-900">
+                    <span>Global Industries, <span className="italic font-semibold text-slate-700">Growth Marketing Coordinator</span></span>
+                    <span className="text-[12.5px] font-medium text-slate-500 shrink-0">2018 – 2021 • Grand Island, NE</span>
                   </div>
-                  <ul className="mt-1 list-disc list-outside ml-3.5 space-y-0.5 text-[9.5px] sm:text-[10.5px] text-slate-600 leading-relaxed">
-                    <li>Managed end-to-end execution of 20+ inbound product campaigns, increasing qualified leads by 42%.</li>
-                    <li>Conducted weekly multivariate A/B testing on high-traffic landing pages to maximize conversion efficiency.</li>
+                  <ul className="mt-1 list-disc list-outside ml-4 space-y-1 text-[12.5px] text-slate-700 leading-relaxed">
+                    <li>Coordinated end-to-end execution of 20+ inbound campaigns, boosting qualified leads by 42% through targeted content syndication.</li>
+                    <li>Conducted weekly multivariate A/B testing on high-intent landing pages, achieving a 28% increase in visitor-to-signup conversion.</li>
                   </ul>
                 </div>
 
                 {/* Role 3 */}
                 <div>
-                  <div className="flex items-baseline justify-between text-[10.5px] sm:text-[11.5px] font-bold text-slate-900">
-                    <span>Apex Brand Media, <span className="italic font-medium text-slate-700">Growth Associate</span></span>
-                    <span className="text-[9.5px] sm:text-[10.5px] font-normal text-slate-500 shrink-0">2016 – 2018 • Chicago</span>
+                  <div className="flex items-baseline justify-between text-[13.5px] font-bold text-slate-900">
+                    <span>Apex Brand Media, <span className="italic font-semibold text-slate-700">Marketing Associate</span></span>
+                    <span className="text-[12.5px] font-medium text-slate-500 shrink-0">2016 – 2018 • Chicago, IL</span>
                   </div>
-                  <ul className="mt-1 list-disc list-outside ml-3.5 space-y-0.5 text-[9.5px] sm:text-[10.5px] text-slate-600 leading-relaxed">
-                    <li>Assisted in performance ad spend allocation ($400K annual budget) across Google Search and Meta Ads.</li>
+                  <ul className="mt-1 list-disc list-outside ml-4 space-y-1 text-[12.5px] text-slate-700 leading-relaxed">
+                    <li>Managed paid advertising budgets ($450K annual spend) across Google Search & Meta, reducing customer acquisition costs by 22%.</li>
                   </ul>
                 </div>
               </div>
             </div>
 
-            {/* Education */}
+            {/* 4. Education */}
             <div>
-              <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-900">
+              <div className="border-b-2 border-slate-900 pb-1 mb-2">
+                <h2 className="text-[14px] font-extrabold uppercase tracking-wider text-slate-900">
                   Education
-                </h3>
+                </h2>
               </div>
-              <div className="flex items-baseline justify-between text-[10.5px] sm:text-[11.5px] font-bold text-slate-900">
-                <span>University of Wisconsin, <span className="italic font-medium text-slate-700">B.S. in Business Marketing</span></span>
-                <span className="text-[9.5px] sm:text-[10.5px] font-normal text-slate-500 shrink-0">2012 – 2016 • Milwaukee</span>
+              <div className="flex items-baseline justify-between text-[13.5px] font-bold text-slate-900">
+                <span>University of Wisconsin, <span className="italic font-semibold text-slate-700">B.S. in Business Marketing</span></span>
+                <span className="text-[12.5px] font-medium text-slate-500 shrink-0">2012 – 2016 • Milwaukee, WI</span>
               </div>
-              <p className="text-[9.5px] sm:text-[10.5px] text-slate-600 mt-0.5">
-                Magna Cum Laude • Dean's List (All Semesters) • President of Marketing Association
+              <p className="text-[12.5px] text-slate-600 mt-0.5">
+                Magna Cum Laude • Dean's Honor Roll (All Semesters) • President of Student Marketing Association
               </p>
             </div>
 
-            {/* Certificates & Languages */}
-            <div className="grid grid-cols-2 gap-3 pt-0.5">
+            {/* 5. Certificates & Languages */}
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <div className="border-b border-slate-900 pb-0.5 mb-1">
-                  <h3 className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-900">
+                <div className="border-b-2 border-slate-900 pb-1 mb-2">
+                  <h2 className="text-[14px] font-extrabold uppercase tracking-wider text-slate-900">
                     Certificates
-                  </h3>
+                  </h2>
                 </div>
-                <p className="text-[9.5px] sm:text-[10px] text-slate-600 leading-snug">
+                <p className="text-[12.5px] text-slate-700 leading-snug">
                   • Google Analytics 4 (GA4) Certified<br />
                   • HubSpot Inbound Marketing Certified<br />
                   • Reforge Growth Series (2023)
@@ -167,12 +211,12 @@ export function HeroFeaturedResume() {
               </div>
 
               <div>
-                <div className="border-b border-slate-900 pb-0.5 mb-1">
-                  <h3 className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-900">
+                <div className="border-b-2 border-slate-900 pb-1 mb-2">
+                  <h2 className="text-[14px] font-extrabold uppercase tracking-wider text-slate-900">
                     Languages
-                  </h3>
+                  </h2>
                 </div>
-                <p className="text-[9.5px] sm:text-[10px] text-slate-600 leading-snug">
+                <p className="text-[12.5px] text-slate-700 leading-snug">
                   • English (Native C2)<br />
                   • Spanish (Bilingual C2)<br />
                   • French (Conversational B1)
@@ -180,28 +224,28 @@ export function HeroFeaturedResume() {
               </div>
             </div>
 
-            {/* Skills Grid */}
-            <div className="pt-0.5">
-              <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-900">
+            {/* 6. Skills & Core Competencies (Fills Bottom to Footer Margin) */}
+            <div>
+              <div className="border-b-2 border-slate-900 pb-1 mb-2">
+                <h2 className="text-[14px] font-extrabold uppercase tracking-wider text-slate-900">
                   Skills & Core Competencies
-                </h3>
+                </h2>
               </div>
-              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[9.5px] sm:text-[10px] text-slate-600 leading-snug">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[12px] text-slate-700 leading-snug">
                 <div>
-                  <strong className="text-slate-900 font-semibold block">Market Research & Strategy</strong>
-                  Competitive benchmarking, persona mapping, survey analytics, customer interviews.
+                  <strong className="text-slate-950 font-bold block">Market Research & Strategy</strong>
+                  Competitive benchmarking, persona mapping, quantitative surveys, TAM analysis.
                 </div>
                 <div>
-                  <strong className="text-slate-900 font-semibold block">Analytical Thinking & CRO</strong>
-                  Funnel drop-off optimization, A/B split testing, cohort retention, attribution.
+                  <strong className="text-slate-950 font-bold block">Analytical Thinking & CRO</strong>
+                  Funnel drop-off optimization, A/B split testing, cohort retention, multi-touch attribution.
                 </div>
                 <div>
-                  <strong className="text-slate-900 font-semibold block">Campaign Management</strong>
-                  Cross-functional leadership, product launches, budget management ($500K+).
+                  <strong className="text-slate-950 font-bold block">Campaign & Project Management</strong>
+                  Cross-functional leadership, product launches, agile sprints, budget allocation ($500K+).
                 </div>
                 <div>
-                  <strong className="text-slate-900 font-semibold block">Tools & Tech Stack</strong>
+                  <strong className="text-slate-950 font-bold block">Tools & Tech Stack</strong>
                   HubSpot CRM, Google Analytics 4, Meta Ads Manager, Looker, Webflow, Figma.
                 </div>
               </div>
